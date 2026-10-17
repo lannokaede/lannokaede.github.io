@@ -2,7 +2,9 @@
 
 本博客基于 [Fuwari](https://github.com/saicaca/fuwari)，保留上游 MIT 许可证，见根目录 `LICENSE`。
 
-目前保留模板默认头像，等待替换为站主提供的图片。原模板列出的图片来源：
+当前博客头像使用与 GitHub 账号 `lannokaede` 相同的头像，以后可在 `src/config.ts` 修改 `profileConfig.avatar`。
+
+以下保留 Fuwari 模板附带素材的图片来源说明，当前头像不使用这些模板图片：
 
 - [Unsplash](https://unsplash.com/)
 - [星と少女](https://www.pixiv.net/artworks/108916539)，作者 [Stella](https://www.pixiv.net/users/93273965)
