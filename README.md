@@ -4,7 +4,7 @@
 
 基于 [Fuwari](https://github.com/saicaca/fuwari) 和 Astro 的个人博客，以技术笔记为主，也记录生活、游戏和动漫。
 
-计划发布地址：<https://lannokaede.github.io/>。本地构建通过不代表 GitHub Pages 已上线，以仓库 Actions 的部署结果为准。
+访问博客：<https://lannokaede.github.io/>。
 
 ## 本地使用
 
@@ -81,3 +81,4 @@ draft: false
 博客原创文章使用 **CC BY-NC-SA 4.0**，转载和改编须署名、非商业使用，并以相同许可分享。
 
 主题代码保留上游 **MIT** 许可证，见 `LICENSE`。默认图片来源见 [主题与素材说明](docs/THEME.md)。
+
