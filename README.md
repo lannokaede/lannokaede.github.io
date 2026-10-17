@@ -1,99 +1,83 @@
-# 🍥Fuwari  
-![Node.js >= 20](https://img.shields.io/badge/node.js-%3E%3D20-brightgreen) 
-![pnpm >= 9](https://img.shields.io/badge/pnpm-%3E%3D9-blue) 
-[![DeepWiki](https://img.shields.io/badge/DeepWiki-saicaca%2Ffuwari-blue.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAyCAYAAAAnWDnqAAAAAXNSR0IArs4c6QAAA05JREFUaEPtmUtyEzEQhtWTQyQLHNak2AB7ZnyXZMEjXMGeK/AIi+QuHrMnbChYY7MIh8g01fJoopFb0uhhEqqcbWTp06/uv1saEDv4O3n3dV60RfP947Mm9/SQc0ICFQgzfc4CYZoTPAswgSJCCUJUnAAoRHOAUOcATwbmVLWdGoH//PB8mnKqScAhsD0kYP3j/Yt5LPQe2KvcXmGvRHcDnpxfL2zOYJ1mFwrryWTz0advv1Ut4CJgf5uhDuDj5eUcAUoahrdY/56ebRWeraTjMt/00Sh3UDtjgHtQNHwcRGOC98BJEAEymycmYcWwOprTgcB6VZ5JK5TAJ+fXGLBm3FDAmn6oPPjR4rKCAoJCal2eAiQp2x0vxTPB3ALO2CRkwmDy5WohzBDwSEFKRwPbknEggCPB/imwrycgxX2NzoMCHhPkDwqYMr9tRcP5qNrMZHkVnOjRMWwLCcr8ohBVb1OMjxLwGCvjTikrsBOiA6fNyCrm8V1rP93iVPpwaE+gO0SsWmPiXB+jikdf6SizrT5qKasx5j8ABbHpFTx+vFXp9EnYQmLx02h1QTTrl6eDqxLnGjporxl3NL3agEvXdT0WmEost648sQOYAeJS9Q7bfUVoMGnjo4AZdUMQku50McDcMWcBPvr0SzbTAFDfvJqwLzgxwATnCgnp4wDl6Aa+Ax283gghmj+vj7feE2KBBRMW3FzOpLOADl0Isb5587h/U4gGvkt5v60Z1VLG8BhYjbzRwyQZemwAd6cCR5/XFWLYZRIMpX39AR0tjaGGiGzLVyhse5C9RKC6ai42ppWPKiBagOvaYk8lO7DajerabOZP46Lby5wKjw1HCRx7p9sVMOWGzb/vA1hwiWc6jm3MvQDTogQkiqIhJV0nBQBTU+3okKCFDy9WwferkHjtxib7t3xIUQtHxnIwtx4mpg26/HfwVNVDb4oI9RHmx5WGelRVlrtiw43zboCLaxv46AZeB3IlTkwouebTr1y2NjSpHz68WNFjHvupy3q8TFn3Hos2IAk4Ju5dCo8B3wP7VPr/FGaKiG+T+v+TQqIrOqMTL1VdWV1DdmcbO8KXBz6esmYWYKPwDL5b5FA1a0hwapHiom0r/cKaoqr+27/XcrS5UwSMbQAAAABJRU5ErkJggg==)](https://deepwiki.com/saicaca/fuwari)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari?ref=badge_shield&issueType=license)
+# lannokaedeのBlog
 
-A static blog template built with [Astro](https://astro.build).
+保持好奇，持续折腾。
 
-[**🖥️ Live Demo (Vercel)**](https://fuwari.vercel.app)
+基于 [Fuwari](https://github.com/saicaca/fuwari) 和 Astro 的个人博客，以技术笔记为主，也记录生活、游戏和动漫。
 
-![Preview Image](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+计划发布地址：<https://lannokaede.github.io/>。本地构建通过不代表 GitHub Pages 已上线，以仓库 Actions 的部署结果为准。
 
-🌏 README in
-[**中文**](https://github.com/saicaca/fuwari/blob/main/docs/README.zh-CN.md) /
-[**日本語**](https://github.com/saicaca/fuwari/blob/main/docs/README.ja.md) /
-[**한국어**](https://github.com/saicaca/fuwari/blob/main/docs/README.ko.md) /
-[**Español**](https://github.com/saicaca/fuwari/blob/main/docs/README.es.md) /
-[**ไทย**](https://github.com/saicaca/fuwari/blob/main/docs/README.th.md) /
-[**Tiếng Việt**](https://github.com/saicaca/fuwari/blob/main/docs/README.vi.md) /
-[**Bahasa Indonesia**](https://github.com/saicaca/fuwari/blob/main/docs/README.id.md) (Provided by the community and may not always be up-to-date)
+## 本地使用
 
-## ✨ Features
+使用 Node.js 22 和 `package.json` 固定的 pnpm 9.14.4。通过 Corepack 调用可以避免电脑上全局 pnpm 版本不同造成的安装冲突。
 
-- [x] Built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com)
-- [x] Smooth animations and page transitions
-- [x] Light / dark mode
-- [x] Customizable theme colors & banner
-- [x] Responsive design
-- [x] Search functionality with [Pagefind](https://pagefind.app/)
-- [x] [Markdown extended features](https://github.com/saicaca/fuwari?tab=readme-ov-file#-markdown-extended-syntax)
-- [x] Table of contents
-- [x] RSS feed
+```sh
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
+```
 
-## 🚀 Getting Started
+开发地址以终端打印为准，默认是 <http://localhost:4321/>。
 
-1. Create your blog repository:
-    - [Generate a new repository](https://github.com/saicaca/fuwari/generate) from this template or fork this repository.
-    - Or run one of the following commands:
-       ```sh
-       npm create fuwari@latest
-       yarn create fuwari
-       pnpm create fuwari@latest
-       bun create fuwari@latest
-       deno run -A npm:create-fuwari@latest
-       ```
-2. To edit your blog locally, clone your repository, run `pnpm install` to install dependencies.
-    - Install [pnpm](https://pnpm.io) `npm install -g pnpm` if you haven't.
-3. Edit the config file `src/config.ts` to customize your blog.
-4. Run `pnpm new-post <filename>` to create a new post and edit it in `src/content/posts/`.
-5. Deploy your blog to Vercel, Netlify, GitHub Pages, etc. following [the guides](https://docs.astro.build/en/guides/deploy/). You need to edit the site configuration in `astro.config.mjs` before deployment.
+```sh
+corepack pnpm check
+corepack pnpm build
+corepack pnpm preview
+```
 
-## 📝 Frontmatter of Posts
+`build` 同时生成静态网站和 Pagefind 搜索索引。搜索功能应在 `build` 后用 `preview` 验证；开发模式中的搜索为主题演示数据。
+
+Windows PowerShell 若阻止 `.ps1` 命令，使用 `corepack.cmd pnpm ...` 即可，不需要修改系统执行策略。若 npm 遇到全局缓存目录权限错误，可为当前命令指定用户可写缓存：
+
+```powershell
+$env:npm_config_cache = "$env:LOCALAPPDATA\npm-cache"
+```
+
+## 写一篇文章
+
+```sh
+corepack pnpm new-post my-first-note
+```
+
+在 `src/content/posts/my-first-note.md` 编辑内容。新建文章默认是草稿，写完后将 `draft` 改为 `false`，提交到 GitHub 即可发布。
 
 ```yaml
 ---
-title: My First Blog Post
-published: 2023-09-09
-description: This is the first post of my new Astro blog.
-image: ./cover.jpg
-tags: [Foo, Bar]
-category: Front-end
+title: 我的第一篇技术笔记
+published: 2026-10-18
+description: 用一句话概括文章。
+tags: [技术笔记]
+category: 技术
 draft: false
-lang: jp      # Set only if the post's language differs from the site's language in `config.ts`
 ---
 ```
 
-## 🧩 Markdown Extended Syntax
+正文支持 Markdown、代码高亮、数学公式和自动目录。插入文章图片时可将图片和文章放在同一文件夹，以相对路径引用。
 
-In addition to Astro's default support for [GitHub Flavored Markdown](https://github.github.com/gfm/), several extra Markdown features are included:
+## 修改个人资料与图片
 
-- Admonitions ([Preview and Usage](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
-- GitHub repository cards ([Preview and Usage](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
-- Enhanced code blocks with Expressive Code ([Preview](https://fuwari.vercel.app/posts/expressive-code/) / [Docs](https://expressive-code.com/))
+- `src/config.ts`：博客名、副标题、作者简介、主题色、社交链接、文章转载许可。
+- `src/content/spec/about.md`：关于我。
+- `src/content/posts/`：文章。
+- `astro.config.mjs`：正式站点地址和部署路径。
+- `src/assets/images/`：头像、横幅及其他本地图片。
 
-## ⚡ Commands
+默认头像暂时保留。替换头像时，将图片放入 `src/assets/images/`，再修改 `profileConfig.avatar`；首页横幅目前关闭，如需启用，设置 `siteConfig.banner.enable: true` 并填写 `src`。图片路径 `assets/images/...` 相对于 `src/`。
 
-All commands are run from the root of the project, from a terminal:
+评论目前未启用。公开链接为 GitHub、邮箱和哔哩哔哩。
 
-| Command                    | Action                                              |
-|:---------------------------|:----------------------------------------------------|
-| `pnpm install`             | Installs dependencies                               |
-| `pnpm dev`                 | Starts local dev server at `localhost:4321`         |
-| `pnpm build`               | Build your production site to `./dist/`             |
-| `pnpm preview`             | Preview your build locally, before deploying        |
-| `pnpm check`               | Run checks for errors in your code                  |
-| `pnpm format`              | Format your code using Biome                        |
-| `pnpm new-post <filename>` | Create a new post                                   |
-| `pnpm astro ...`           | Run CLI commands like `astro add`, `astro check`    |
-| `pnpm astro --help`        | Get help using the Astro CLI                        |
+## GitHub Pages 部署
 
-## ✏️ Contributing
+1. 在 `lannokaede` 账号下创建公开仓库 `lannokaede.github.io`。
+2. 上传本项目源码到 `main` 分支。
+3. 在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
+4. 工作流 **Build and Deploy to GitHub Pages** 会检查、构建、生成搜索索引并发布网站。首次设置 Pages 后，如果没有自动运行，可在 **Actions** 中手动运行工作流。
+5. 部署任务成功后访问 <https://lannokaede.github.io/>。
 
-Check out the [Contributing Guide](https://github.com/saicaca/fuwari/blob/main/CONTRIBUTING.md) for details on how to contribute to this project.
+`main` 分支每次推送会自动更新网站。Pull Request 只执行检查和构建，不发布。
 
-## 📄 License
+当前使用用户站点根路径：`site: "https://lannokaede.github.io/"`、`base: "/"`。若以后改用独立域名，需要同步修改站点地址和 GitHub Pages 域名设置。
 
-This project is licensed under the MIT License.
+## 授权与来源
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaicaca%2Ffuwari?ref=badge_large&issueType=license)
+博客原创文章使用 **CC BY-NC-SA 4.0**，转载和改编须署名、非商业使用，并以相同许可分享。
+
+主题代码保留上游 **MIT** 许可证，见 `LICENSE`。默认图片来源见 [主题与素材说明](docs/THEME.md)。
