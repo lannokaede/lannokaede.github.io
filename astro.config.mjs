@@ -29,19 +29,24 @@ export default defineConfig({
 	site: "https://lannokaede.github.io/",
 	base: "/",
 	trailingSlash: "always",
+	// Ship each static page with its styles, avoiding stale hashed CSS after a Pages deployment.
+	build: { inlineStylesheets: "always" },
 	integrations: [
 		tailwind({
 			nesting: true,
 		}),
 		swup({
+			// Keep the instance for existing setup hooks, but use document navigation.
+			// Partial head replacement can mix cached pages with a newer persistent shell.
+			ignore: () => true,
 			theme: false,
 			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
 			// the default value `transition-` cause transition delay
 			// when the Tailwind class `transition-all` is used
 			containers: ["main", "#toc"],
 			smoothScrolling: true,
-			cache: true,
-			preload: true,
+			cache: false,
+			preload: false,
 			accessibility: true,
 			updateHead: true,
 			updateBodyClass: false,
