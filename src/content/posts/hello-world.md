@@ -8,7 +8,7 @@ draft: false
 lang: zh_CN
 ---
 
-欢迎来到 **lannokaedeのBlog**。
+欢迎来到 **LANNOKAEDE // FIELD NOTES**。
 
 想给零散的笔记和想法找一个长期安放的地方，于是有了这个博客。
 

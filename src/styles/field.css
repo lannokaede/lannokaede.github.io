@@ -116,6 +116,16 @@ body { background-image: radial-gradient(var(--field-rule) .6px, transparent .6p
 #display-settings-switch, #display-setting { display: none !important; }
 
 /* Indexed navigation and a compact archive identity. */
+.field-count { border-radius:0 !important; border:1px solid var(--field-rule); background:transparent !important; color:var(--field-ink) !important; font:12px Consolas,monospace; box-shadow:inset 2px 0 var(--field-signal); }
+.field-pagination > a, .field-pagination > div, .field-pagination > div > * { border-radius:0 !important; }
+.field-pagination > a, .field-pagination > div { border:1px solid var(--field-rule); }
+.field-pagination [aria-current=page] { color:#191c1a !important; background:var(--field-signal) !important; font-family:Consolas,monospace; }
+.meta-icon { border-radius:0 !important; border:1px solid var(--field-rule); background:transparent !important; }
+#tags .btn-regular, .field-profile .btn-regular { border:1px solid var(--field-rule); background:transparent; }
+.field-brand-name { font:700 14px Consolas,monospace; letter-spacing:.06em; }
+.field-hero h1.field-logotype { font-size:clamp(30px,4vw,52px); letter-spacing:-.045em; line-height:1.05; max-width:100%; }
+.field-logotype > span { font-size:.68em; letter-spacing:.12em; margin-top:10px; color:var(--field-muted); }
+.field-hero h1.field-logotype b { font-size:12px; letter-spacing:.2em; margin-top:20px; }
 .field-nav-mark { width:30px; height:30px; flex-shrink:0; margin-right:12px; color:var(--field-ink); }
 .field-nav-brand > div { color:var(--field-ink); }
 .field-brand-caption { display:block; font:8px Consolas,monospace; letter-spacing:.18em; color:var(--field-muted); margin-top:5px; }

@@ -1,6 +1,6 @@
 # 关于我
 
-你好，我是 **lannokaede**，欢迎来到 **lannokaedeのBlog**。
+你好，我是 **lannokaede**，欢迎来到 **LANNOKAEDE // FIELD NOTES**。
 
 这里主要记录技术学习中的笔记、实践和思考。把遇到的问题、尝试过的方法和有用的经验写下来，也方便未来的自己回头查阅。
 

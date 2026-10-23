@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "lannokaedeのBlog",
+	title: "LANNOKAEDE // FIELD NOTES",
 	subtitle: "保持好奇，持续折腾",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
