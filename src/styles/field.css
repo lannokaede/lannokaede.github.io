@@ -1,0 +1,116 @@
+/* Original industrial editorial skin. No game artwork or third-party components. */
+:root {
+  --radius-large: 0px;
+  --field-signal: #f1ef00;
+  --field-ink: #191c1a;
+  --field-muted: #60655f;
+  --field-rule: #c9ccc5;
+  --primary: #706700;
+  --page-bg: #e9eae4;
+  --card-bg: #f7f8f3;
+  --btn-content: #34382f;
+  --btn-regular-bg: #e4e6dd;
+  --btn-regular-bg-hover: #f1ef00;
+  --btn-regular-bg-active: #dedc00;
+  --btn-plain-bg-hover: #e4e6dd;
+  --btn-plain-bg-active: #d7dacd;
+  --btn-card-bg-hover: #eff0e7;
+  --btn-card-bg-active: #e4e6dd;
+  --enter-btn-bg: #e4e6dd;
+  --enter-btn-bg-hover: #f1ef00;
+  --enter-btn-bg-active: #dedc00;
+  --title-active: #756c00;
+  --line-divider: #c9ccc5;
+  --line-color: #c9ccc5;
+  --inline-code-bg: #e4e6dd;
+  --inline-code-color: #514d00;
+  --selection-bg: #e4e353;
+  --link-underline: #b6b000;
+  --link-hover: #e8e892;
+  --float-panel-bg: #f7f8f3;
+  --toc-badge-bg: #e4e6dd;
+  --toc-btn-hover: #e4e6dd;
+  --toc-item-active: #e4e353;
+}
+:root.dark {
+  --field-ink: #e7e9df;
+  --field-muted: #a2a89c;
+  --field-rule: #3c4239;
+  --primary: #e5e600;
+  --page-bg: #141713;
+  --card-bg: #1c201b;
+  --btn-content: #e5e600;
+  --btn-regular-bg: #30362b;
+  --btn-regular-bg-hover: #414934;
+  --btn-regular-bg-active: #4c5437;
+  --btn-plain-bg-hover: #30362b;
+  --btn-plain-bg-active: #414934;
+  --btn-card-bg-hover: #242a21;
+  --btn-card-bg-active: #30362b;
+  --enter-btn-bg: #30362b;
+  --enter-btn-bg-hover: #414934;
+  --enter-btn-bg-active: #4c5437;
+  --title-active: #f1ef00;
+  --line-divider: #3c4239;
+  --line-color: #3c4239;
+  --inline-code-bg: #30362b;
+  --inline-code-color: #e5e600;
+  --selection-bg: #53571f;
+  --link-underline: #858900;
+  --link-hover: #3c421f;
+  --float-panel-bg: #1c201b;
+  --toc-badge-bg: #30362b;
+  --toc-btn-hover: #30362b;
+  --toc-item-active: #414934;
+}
+body { background-image: radial-gradient(var(--field-rule) .6px, transparent .6px); background-size: 8px 8px; }
+.card-base { border: 1px solid var(--field-rule); box-shadow: none; }
+#navbar { border-bottom: 3px solid var(--field-ink); }
+#navbar-wrapper .card-base { border-top: 4px solid var(--field-signal); }
+.btn-regular, .btn-plain, .float-panel, .card-base a, .card-base button { border-radius: 0 !important; }
+.field-hero { color: var(--field-ink); background: var(--card-bg); border: 1px solid var(--field-rule); margin-bottom: 24px; position: relative; overflow: hidden; }
+.field-kicker { display:flex; align-items:center; gap:9px; padding:12px 22px; background:var(--field-ink); color:var(--card-bg); font:11px ui-monospace,monospace; letter-spacing:.1em; }
+.field-kicker > span:last-child { margin-left:auto; opacity:.65; }
+.field-dot { width:7px; height:7px; background:var(--field-signal); }
+.field-hero-body { position:relative; padding:38px 28px 36px; isolation:isolate; }
+.field-eyebrow { font:10px ui-monospace,monospace; letter-spacing:.17em; margin-bottom:20px; }
+.field-hero h1 { font-size:clamp(38px,5vw,68px); line-height:.94; font-weight:900; letter-spacing:-.065em; max-width:85%; }
+.field-hero h1 > span { display:block; }
+.field-hero h1 b { display:block; font-size:20px; letter-spacing:.04em; margin-top:13px; font-weight:500; }
+.field-motto { margin:25px 0 22px; font-size:17px; font-weight:600; }
+.field-motto > span { display:block; color:var(--field-muted); font-weight:400; font-size:12px; margin-top:7px; }
+.field-action { display:inline-flex; align-items:center; justify-content:space-between; gap:34px; padding:12px 18px; color:#191c1a; background:var(--field-signal); font-size:13px; font-weight:700; clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%); }
+.field-action:hover { background:#dedc00; }
+.field-action:focus-visible { outline:3px solid var(--field-ink); outline-offset:4px; clip-path:none; }
+.field-geometry { position:absolute; width:43%; max-width:250px; right:15px; top:55px; color:var(--field-rule); z-index:-1; }
+.field-topics { display:flex; flex-wrap:wrap; border-top:1px solid var(--field-rule); font:11px ui-monospace,monospace; }
+.field-topics span { padding:12px 18px; flex:1; white-space:nowrap; border-right:1px solid var(--field-rule); }
+.field-topics span:last-child { border:0; }
+.field-section { color:var(--field-ink); display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid var(--field-ink); }
+.field-section > span:first-child { background:var(--field-signal); color:#191c1a; padding:5px 9px; font:12px ui-monospace,monospace; }
+.field-section h2 { font-size:18px; font-weight:700; }
+.field-section small { font:9px ui-monospace,monospace; letter-spacing:.06em; color:var(--field-muted); margin-left:8px; }
+.field-section > span:last-child { margin-left:auto; font-size:25px; }
+.field-post { border-left:4px solid var(--field-rule); transition:border-color .2s; }
+.field-post:hover { border-left-color:var(--field-signal); }
+.field-post a.font-bold { font-size:1.6rem; letter-spacing:-.035em; }
+.field-post a.font-bold:before { display:none; }
+.field-profile > a { max-width:112px !important; margin:20px auto !important; border:1px solid var(--field-rule); padding:5px; }
+.field-profile:before { content:'AUTHOR / 001'; display:block; font:10px ui-monospace,monospace; letter-spacing:.1em; border-bottom:1px solid var(--field-rule); padding:4px 3px 12px; color:var(--field-muted); }
+.prose { line-height:1.85; }
+.prose h2 { border-bottom:1px solid var(--field-rule); padding-bottom:.5em; }
+@media (max-width:640px) {
+ .field-hero-body { padding:28px 20px; }
+ .field-kicker { padding:11px 16px; font-size:9px; }
+ .field-hero h1 { font-size:48px; }
+ .field-geometry { right:-18px; opacity:.65; top:42px; }
+ .field-topics span { padding:12px 10px; font-size:10px; }
+ .field-section small { font-size:8px; }
+ .field-post a.font-bold { font-size:1.4rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+ *, *:before, *:after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-delay:0ms !important; transition-duration:.01ms !important; }
+}
+
+/* The industrial palette is fixed; the separate light/dark switch remains available. */
+#display-settings-switch, #display-setting { display: none !important; }
