@@ -114,3 +114,18 @@ body { background-image: radial-gradient(var(--field-rule) .6px, transparent .6p
 
 /* The industrial palette is fixed; the separate light/dark switch remains available. */
 #display-settings-switch, #display-setting { display: none !important; }
+
+/* Indexed navigation and a compact archive identity. */
+.field-nav-mark { width:30px; height:30px; flex-shrink:0; margin-right:12px; color:var(--field-ink); }
+.field-nav-brand > div { color:var(--field-ink); }
+.field-brand-caption { display:block; font:8px Consolas,monospace; letter-spacing:.18em; color:var(--field-muted); margin-top:5px; }
+.field-nav-links { align-self:stretch; align-items:stretch; }
+.field-nav-link { position:relative; height:auto; padding:0 19px; border-left:1px solid var(--field-rule); font-size:14px; }
+.field-nav-number { font:9px Consolas,monospace; color:var(--field-muted); align-self:flex-start; margin:0 8px 0 0; }
+.field-nav-link[aria-current=page] { background:var(--btn-regular-bg); }
+.field-nav-link[aria-current=page]:after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--field-signal); }
+#search-bar { border:1px solid var(--field-rule); border-radius:0; background:transparent; max-width:190px; }
+#search-bar:focus-within { border-color:var(--primary); box-shadow:inset 3px 0 var(--field-signal); }
+#search-bar input { min-width:0; font-size:12px; }
+@media(max-width:1100px) { .field-nav-link { padding:0 12px; } .field-nav-brand { padding-left:8px; padding-right:12px; } }
+@media(max-width:767px) { .field-nav-mark { width:25px; margin-right:9px; } .field-brand-caption { font-size:7px; } }
