@@ -1,15 +1,9 @@
 ---
+import artwork from "../assets/brand/field-notes.svg?raw";
 interface Props { id: string; class?: string; compact?: boolean; }
-const { id, compact = false, class: className } = Astro.props;
-const clipId = `field-emblem-${id}`;
+const { compact = false, class: className } = Astro.props;
+const shapes = artwork.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
 ---
-<svg xmlns="http://www.w3.org/2000/svg" class={className} width={compact ? 30 : 200} height={compact ? 30 : 200} viewBox="0 0 200 200" fill="none" aria-hidden="true">
-  <defs><clipPath id={clipId}><path d="M23 25h154l-77 132Z"/></clipPath></defs>
-  <path d="M29 15h-16l87 151 87-151H51M66 15h14m10 0h97M34 44l-9-16m144 16 9-16M91 158l9 16 9-16" stroke="currentColor" stroke-width="1.5"/>
-  {!compact && <g clip-path={`url(#${clipId})`} stroke="currentColor" stroke-width=".8" opacity=".35">
-    <path d="M-10 30C40-10 49 100 99 69s80-76 121-33M-10 39C41-1 46 110 99 79s82-76 121-34M-10 48C42 8 43 120 99 89s84-76 121-35M-10 57C43 17 40 130 99 99s86-76 121-36M-10 66C44 26 37 140 99 109s88-76 121-37M-10 75C45 35 34 150 99 119s90-76 121-38M-10 84C46 44 31 160 99 129s92-76 121-39M-10 93C47 53 28 170 99 139s94-76 121-40M-10 102C48 62 25 180 99 149s96-76 121-41"/>
-  </g>}
-  <path d="M54 43h14v45h24v13H54ZM98 43h14v23l23-23h18l-29 29 31 29h-20l-23-23v23H98Z" fill="currentColor"/>
-  <path d="m91 115 9 16 9-16Z" fill="var(--field-signal, #f1ef00)"/>
-  {!compact && <><path d="M24 184h17m118 0h17" stroke="currentColor"/><text x="100" y="188" text-anchor="middle" fill="currentColor" font-family="Consolas,monospace" font-size="11" font-weight="700" letter-spacing="1.8">FIELD NOTES</text></>}
+<svg xmlns="http://www.w3.org/2000/svg" class={className} width={compact ? 30 : 200} height={compact ? 30 : 200} viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+  <Fragment set:html={shapes} />
 </svg>
