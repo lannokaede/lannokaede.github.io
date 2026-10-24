@@ -1,6 +1,9 @@
+---
+import FieldEmblem from "./FieldEmblem.astro";
+---
 <div id="field-boot" hidden role="dialog" aria-modal="true" aria-label="正在进入博客">
   <div class="boot-track"><div id="boot-fill"></div></div>
-  <div class="boot-brand"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M50 5 90 28v44L50 95 10 72V28Z M50 5v45m40-22L50 50 10 28m40 22v45" stroke="currentColor"/><path d="m50 30 18 10v20L50 70 32 60V40Z" fill="#f1ef00"/></svg><span>LANNOKAEDE</span><small>PERSONAL ARCHIVE / 保持好奇，持续折腾</small></div>
+  <div class="boot-brand"><FieldEmblem id="boot" /><span>LANNOKAEDE</span><small>PERSONAL ARCHIVE / 保持好奇，持续折腾</small></div>
   <div id="boot-readout"><strong id="boot-percent">0%</strong><span id="boot-status">INITIALIZING</span></div>
   <button id="boot-skip" type="button">跳过 / SKIP ↗</button>
   <div class="boot-sweep"></div>

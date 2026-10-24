@@ -127,6 +127,8 @@ body { background-image: radial-gradient(var(--field-rule) .6px, transparent .6p
 .field-logotype > span { font-size:.68em; letter-spacing:.12em; margin-top:10px; color:var(--field-muted); }
 .field-hero h1.field-logotype b { font-size:12px; letter-spacing:.2em; margin-top:20px; }
 .field-nav-mark { width:30px; height:30px; flex-shrink:0; margin-right:12px; color:var(--field-ink); }
+.field-geometry.field-hero-emblem { color:var(--field-ink); opacity:.3; width:38%; height:auto; right:28px; top:52px; }
+@media(max-width:640px) { .field-geometry.field-hero-emblem { width:30%; right:12px; top:45px; opacity:.15; } }
 .field-nav-brand > div { color:var(--field-ink); }
 .field-brand-caption { display:block; font:8px Consolas,monospace; letter-spacing:.18em; color:var(--field-muted); margin-top:5px; }
 .field-nav-links { align-self:stretch; align-items:stretch; }
