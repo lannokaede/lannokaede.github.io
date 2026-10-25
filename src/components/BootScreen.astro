@@ -3,7 +3,7 @@ import FieldEmblem from "./FieldEmblem.astro";
 ---
 <div id="field-boot" hidden role="dialog" aria-modal="true" aria-label="正在进入博客">
   <div class="boot-track"><div id="boot-fill"></div></div>
-  <div class="boot-brand"><FieldEmblem id="boot" /><span>lannokaede</span><small>保持好奇，持续折腾</small></div>
+  <div class="boot-brand"><FieldEmblem id="boot" /><span>LANNOKAEDE</span><small>PERSONAL ARCHIVE / 保持好奇，持续折腾</small></div>
   <div id="boot-readout"><strong id="boot-percent">0%</strong><span id="boot-status">INITIALIZING</span></div>
   <button id="boot-skip" type="button">跳过 / SKIP ↗</button>
   <div class="boot-sweep"></div>
@@ -34,7 +34,7 @@ import FieldEmblem from "./FieldEmblem.astro";
     if (finished || exiting) return;
     const elapsed = now - started;
     const ready = document.readyState === 'complete' || elapsed > 3000;
-    const progress = Math.floor(Math.min(ready ? 100 : 92, elapsed / 900 * 100));
+    const progress = Math.floor(Math.min(ready ? 100 : 92, elapsed / 1450 * 100));
     cover.style.setProperty('--boot-progress', progress + '%');
     document.getElementById('boot-percent').textContent = progress + '%';
     document.getElementById('boot-status').textContent = progress === 100 ? 'READY' : 'LOADING';
@@ -48,21 +48,25 @@ import FieldEmblem from "./FieldEmblem.astro";
 })();
 </script>
 <style is:global>
-#field-boot[hidden]{display:none}
-#field-boot{position:fixed;inset:0;z-index:100000;background:var(--page-bg);color:var(--field-ink);overflow:hidden;font-family:inherit;animation:boot-failsafe 0s 5.1s forwards}
-.boot-track{position:absolute;inset:auto 0 0;height:2px;background:var(--field-rule)}
-#boot-fill{width:var(--boot-progress,0%);height:100%;background:var(--field-signal)}
-.boot-brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;flex-direction:column;gap:18px;width:max-content;color:var(--field-ink)}
-.boot-brand svg{width:80px;height:80px;color:var(--field-signal)}
-.boot-brand>span{font-size:28px;letter-spacing:-.04em;font-weight:500}
-.boot-brand small{font-size:12px;color:var(--field-muted)}
-#boot-readout{position:absolute;left:24px;bottom:24px;display:flex;align-items:center;gap:12px;color:var(--field-muted)}
-#boot-percent{font-size:12px;font-weight:400;font-variant-numeric:tabular-nums}
-#boot-status{font-size:10px;letter-spacing:.08em}
-#boot-skip{position:absolute;right:24px;top:24px;padding:12px;color:var(--field-muted);font-size:11px;z-index:3}
-#boot-skip:focus-visible{outline:2px solid var(--primary)}
-.boot-sweep{display:none}
-.boot-exit{transition:opacity .35s;opacity:0;pointer-events:none}
-@keyframes boot-failsafe{to{visibility:hidden;pointer-events:none}}
-@media(prefers-reduced-motion:reduce){#field-boot{display:none!important}}
+#field-boot[hidden] { display:none; }
+#field-boot { position:fixed; inset:0; z-index:100000; background:#101512; color:#f1ef00; overflow:hidden; font-family:Consolas,monospace; animation:boot-failsafe 0s 5.1s forwards; }
+.boot-track { position:absolute; inset:0 auto 0 0; width:12px; background:#ffffff15; }
+#boot-fill { height:var(--boot-progress,0%); background:#f1ef00; }
+.boot-brand { position:absolute; right:12%; top:50%; transform:translateY(-50%); display:flex; align-items:center; flex-direction:column; gap:24px; color:#e9ece6; }
+.boot-brand svg { width:150px; height:150px; }
+.boot-brand > span { font-size:16px; letter-spacing:.25em; font-weight:bold; }
+.boot-brand small { font-size:9px; letter-spacing:.1em; opacity:.55; }
+#boot-readout { position:absolute; left:28px; top:clamp(100px,var(--boot-progress,0%),calc(100% - 16px)); transform:translateY(-100%); display:grid; gap:5px; }
+#boot-percent { font-size:clamp(36px,5vw,64px); line-height:1; }
+#boot-status { font-size:10px; letter-spacing:.18em; }
+#boot-status:before { content:'▪ '; }
+#boot-skip { position:absolute; right:24px; top:24px; padding:12px; color:#d0d6cc; border:1px solid #ffffff30; font-size:11px; z-index:3; }
+#boot-skip:focus-visible { outline:2px solid #f1ef00; }
+.boot-sweep { position:absolute; inset:0; background:#f1ef00; transform:translateX(-100%); pointer-events:none; }
+.boot-exit .boot-sweep { animation:boot-sweep .5s cubic-bezier(.7,0,.3,1) forwards; }
+.boot-exit { transition:opacity .2s .5s; opacity:0; }
+@keyframes boot-sweep { to { transform:translateX(100%); } }
+@keyframes boot-failsafe { to { visibility:hidden; pointer-events:none; } }
+@media(max-width:600px) { .boot-brand { right:8%; gap:18px; } .boot-brand svg { width:100px; height:100px; } .boot-brand small { max-width:175px; text-align:center; line-height:1.8; } .boot-brand > span { font-size:12px; } }
+@media(prefers-reduced-motion:reduce) { #field-boot { display:none !important; } }
 </style>

@@ -29,17 +29,17 @@ let links: NavBarLink[] = navBarConfig.links.map(
         <a href={url('/')} aria-label={siteConfig.title} title={siteConfig.title} class="field-nav-brand btn-plain h-[3.25rem] min-w-0 px-2 sm:px-5 font-bold">
             <div class="flex flex-row min-w-0 text-[var(--primary)] items-center text-md">
                 <FieldEmblem id="nav" compact class="field-nav-mark" />
-                <span class="truncate field-brand-name">lannokaede<small class="field-brand-caption">技术与日常</small></span>
+                <span class="truncate field-brand-name">LANNOKAEDE<small class="field-brand-caption">FIELD NOTES / 探索日志</small></span>
             </div>
         </a>
         <div class="field-nav-links hidden md:flex">
-            {links.map((l) => {
+            {links.map((l, index) => {
                 return <a aria-label={l.name} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
                           data-nav-path={l.external ? undefined : url(l.url)}
                           class="field-nav-link btn-plain h-11 font-bold px-5"
                 >
                     <div class="flex items-center">
-                        {l.name}
+                        <small class="field-nav-number">{String(index + 1).padStart(2, '0')}</small>{l.name}
                         {l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.875rem] transition -translate-y-[1px] ml-1 text-black/[0.2] dark:text-white/[0.2]"></Icon>}
                     </div>
                 </a>;
