@@ -1,16 +1,10 @@
 ---
 import { url } from "../utils/url-utils";
-import FieldEmblem from "./FieldEmblem.astro";
 ---
 <section class="field-hero" aria-labelledby="field-title">
-  <div class="field-kicker"><span class="field-dot"></span> PERSONAL ARCHIVE <span>EST. 2026 / 01</span></div>
-  <div class="field-hero-body">
-    <p class="field-eyebrow">OBSERVE. RECORD. CREATE.</p>
-    <h1 id="field-title" class="field-logotype">LANNOKAEDE<span>FIELD NOTES</span><b>探索日志 / 个人记录</b></h1>
-    <p class="field-motto">保持好奇，持续折腾<span>探索技术，也记录生活的切片。</span></p>
-    <a class="field-action" href={url('/archive/')}>探索全部记录 <span aria-hidden="true">↗</span></a>
-    <FieldEmblem id="hero" class="field-geometry field-hero-emblem" />
-  </div>
-  <div class="field-topics"><span>01 / 技术笔记</span><span>02 / 生活随笔</span><span>03 / 游戏与动漫</span></div>
+  <p class="field-intro">lannokaede 的个人札记</p>
+  <h1 id="field-title">保持好奇，<span>持续折腾。</span></h1>
+  <p class="field-description">这里写技术，也写日常。<br />记录解决问题的过程，留下游戏、动漫与生活中的片刻。</p>
+  <a class="field-action" href={url('/about/')}>认识一下我</a>
 </section>
-<div class="field-section"><span>01</span><h2>最新记录 <small>LATEST ENTRIES</small></h2><span aria-hidden="true">↙</span></div>
+<div class="field-section"><h2>最近写下的</h2><a href={url('/archive/')}>全部文章</a></div>

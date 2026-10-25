@@ -1,9 +1,9 @@
 ---
-import artwork from "../assets/brand/field-notes.svg?raw";
 interface Props { id: string; class?: string; compact?: boolean; }
 const { compact = false, class: className } = Astro.props;
-const shapes = artwork.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
 ---
-<svg xmlns="http://www.w3.org/2000/svg" class={className} width={compact ? 30 : 200} height={compact ? 30 : 200} viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
-  <Fragment set:html={shapes} />
+<!-- Original folded-note monogram: a page edge, an l stem and a k fold. -->
+<svg xmlns="http://www.w3.org/2000/svg" class={className} width={compact ? 30 : 160} height={compact ? 30 : 160} viewBox="0 0 96 96" fill="none" aria-hidden="true">
+  <path d="M24 18v60h49M46 25v42m24-42L46 46l27 21" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 18h34l15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".4"/>
 </svg>
