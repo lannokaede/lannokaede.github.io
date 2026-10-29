@@ -11,9 +11,10 @@ import FieldEmblem from "./FieldEmblem.astro";
 <script is:inline>
 (() => {
   const cover = document.getElementById('field-boot');
-  if (!cover || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!cover || document.documentElement.dataset.fieldMotion === 'reduced' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try { if (sessionStorage.getItem('field-boot-seen')) return; sessionStorage.setItem('field-boot-seen', '1'); } catch {}
   cover.hidden = false;
+  document.documentElement.dataset.fieldBoot = 'active';
   const previousOverflow = document.documentElement.style.overflow;
   document.documentElement.style.overflow = 'hidden';
   const started = performance.now();
@@ -23,6 +24,7 @@ import FieldEmblem from "./FieldEmblem.astro";
     finished = true;
     cancelAnimationFrame(frame);
     cover.hidden = true;
+    delete document.documentElement.dataset.fieldBoot;
     document.documentElement.style.overflow = previousOverflow;
     if (cover.contains(document.activeElement)) document.activeElement.blur();
   };

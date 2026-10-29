@@ -1,15 +1,37 @@
 ---
 import { url } from "../utils/url-utils";
 import FieldEmblem from "./FieldEmblem.astro";
+import { getSortedPosts } from "../utils/content-utils";
+import { formatDateToYYYYMMDD } from "../utils/date-utils";
+const posts = await getSortedPosts();
+const latest = posts[0]?.data.published;
 ---
 <section class="field-hero" aria-labelledby="field-title">
-  <div class="field-kicker"><span class="field-dot"></span> PERSONAL ARCHIVE <span>EST. 2026 / 01</span></div>
+  <div class="field-kicker"><span class="field-dot" aria-hidden="true"></span> PERSONAL ARCHIVE <span>EST. 2026 / VOL. 01</span></div>
   <div class="field-hero-body">
-    <p class="field-eyebrow">OBSERVE. RECORD. CREATE.</p>
+    <p class="field-eyebrow"><span aria-hidden="true">[ FIELD STATION / 001 ]</span> OBSERVE. RECORD. CREATE.</p>
     <h1 id="field-title" class="field-logotype">LANNOKAEDE<span>FIELD NOTES</span><b>探索日志 / 个人记录</b></h1>
     <p class="field-motto">保持好奇，持续折腾<span>探索技术，也记录生活的切片。</span></p>
     <a class="field-action" href={url('/archive/')}>探索全部记录 <span aria-hidden="true">↗</span></a>
-    <FieldEmblem id="hero" class="field-geometry field-hero-emblem" />
+    <div class="field-survey" aria-hidden="true">
+      <div class="field-survey-label"><span>地形观测 / SURVEY</span><span>FN—001</span></div>
+      <div class="field-scope">
+        <svg class="field-contours" viewBox="0 0 300 300" fill="none">
+          <path d="M-20 235C40 100 70 315 155 173S245 36 325 100M-20 215C40 80 70 295 155 153S245 16 325 80M-20 195C40 60 70 275 155 133S245-4 325 60M-20 175C40 40 70 255 155 113S245-24 325 40M-20 155C40 20 70 235 155 93S245-44 325 20M-20 255C40 120 70 335 155 193S245 56 325 120M-20 275C40 140 70 355 155 213S245 76 325 140" />
+        </svg>
+        <div class="field-orbit"></div>
+        <div class="field-crosshair"></div>
+        <FieldEmblem id="hero" class="field-survey-emblem" />
+        <span class="field-scope-axis">N</span>
+        <span class="field-scope-point"></span>
+      </div>
+      <div class="field-survey-label"><span>探索未定，记录有迹。</span><span>+ + +</span></div>
+    </div>
+  </div>
+  <div class="field-telemetry">
+    <span><small>ARCHIVE INDEX</small><strong>{String(posts.length).padStart(2, "0")} <em>篇记录</em></strong></span>
+    <span><small>LAST TRANSMISSION</small><strong>{latest ? formatDateToYYYYMMDD(latest) : "—"}</strong></span>
+    <span class="field-telemetry-note"><small>EXPLORATION STATUS</small><strong><i aria-hidden="true"></i> 持续探索中</strong></span>
   </div>
   <div class="field-topics"><span>01 / 技术笔记</span><span>02 / 生活随笔</span><span>03 / 游戏与动漫</span></div>
 </section>

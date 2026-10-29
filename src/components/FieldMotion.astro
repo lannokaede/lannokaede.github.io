@@ -1,0 +1,80 @@
+<div id="field-reading-progress" aria-hidden="true" hidden><span></span></div>
+<button id="field-motion-toggle" type="button" aria-pressed="false" aria-label="减少动态效果" hidden>
+  <span class="field-motion-icon" aria-hidden="true">Ⅱ</span><span data-motion-label>动效 ON</span>
+</button>
+
+<script is:inline>
+(() => {
+  try {
+    if (localStorage.getItem('field-motion') === 'reduced') {
+      document.documentElement.dataset.fieldMotion = 'reduced';
+    }
+  } catch {}
+})();
+</script>
+
+<script>
+const root = document.documentElement;
+const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const toggle = document.querySelector<HTMLButtonElement>('#field-motion-toggle');
+let observer: IntersectionObserver | undefined;
+let frame = 0;
+
+function syncMotion() {
+  const reduced = preference.matches || root.dataset.fieldMotion === 'reduced';
+  root.classList.toggle('field-motion-reduced', reduced);
+  if (toggle) {
+    toggle.hidden = false;
+    toggle.setAttribute('aria-pressed', String(reduced));
+    toggle.setAttribute('aria-label', preference.matches ? '系统已设置减少动态效果' : '减少动态效果');
+    toggle.disabled = preference.matches;
+    const label = toggle.querySelector('[data-motion-label]');
+    if (label) label.textContent = reduced ? '动效 OFF' : '动效 ON';
+  }
+  if (reduced) observer?.disconnect();
+  else observeCards();
+}
+
+function observeCards() {
+  observer?.disconnect();
+  if (root.classList.contains('field-motion-reduced') || !('IntersectionObserver' in window)) return;
+  observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('field-revealed');
+      observer?.unobserve(entry.target);
+    }
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.field-post').forEach((card) => observer?.observe(card));
+}
+
+toggle?.addEventListener('click', () => {
+  const reduced = root.dataset.fieldMotion !== 'reduced';
+  root.dataset.fieldMotion = reduced ? 'reduced' : 'full';
+  try { localStorage.setItem('field-motion', reduced ? 'reduced' : 'full'); } catch {}
+  syncMotion();
+});
+preference.addEventListener('change', syncMotion);
+
+function updateProgress() {
+  frame = 0;
+  const progress = document.querySelector<HTMLElement>('#field-reading-progress');
+  const article = document.querySelector<HTMLElement>('#post-container .markdown-content');
+  if (!progress) return;
+  progress.hidden = !article;
+  if (!article) return;
+  const bounds = article.getBoundingClientRect();
+  const distance = bounds.height - window.innerHeight;
+  const fraction = distance > 0 ? Math.max(0, Math.min(1, -bounds.top / distance)) : Number(bounds.bottom <= window.innerHeight);
+  progress.style.setProperty('--reading-progress', String(fraction));
+}
+function scheduleProgress() {
+  if (!frame) frame = requestAnimationFrame(updateProgress);
+}
+window.addEventListener('scroll', scheduleProgress, { passive: true });
+window.addEventListener('resize', scheduleProgress);
+window.addEventListener('load', scheduleProgress, { once: true });
+document.addEventListener('swup:page:view', () => { observeCards(); scheduleProgress(); });
+syncMotion();
+scheduleProgress();
+</script>
