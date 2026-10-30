@@ -1,3 +1,57 @@
+.custom-md.interview-review {
+    line-height: 1.95;
+    overflow-wrap: anywhere;
+
+    p {
+        margin-block: 1.2em;
+    }
+
+    h2 {
+        margin-top: 2.8rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.55;
+    }
+
+    h3 {
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        line-height: 1.65;
+    }
+
+    li {
+        margin-block: 0.65rem;
+    }
+
+    blockquote {
+        margin-block: 1.5rem;
+        padding: 0.2rem 1.1rem;
+        border-radius: 0.5rem;
+        background: var(--btn-plain-bg-hover);
+    }
+
+    hr {
+        margin-block: 2.6rem;
+    }
+
+    table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        margin-block: 1.75rem;
+        font-size: 0.95em;
+    }
+
+    th, td {
+        min-width: 6rem;
+        padding: 0.8rem 1rem;
+        line-height: 1.75;
+    }
+
+    .expressive-code {
+        margin-block: 1.75rem;
+    }
+}
+
 .custom-md {
     h1 {
         @apply text-3xl;

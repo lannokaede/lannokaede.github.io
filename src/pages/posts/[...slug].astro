@@ -102,7 +102,7 @@ const jsonLd = {
             }
 
 
-            <Markdown class="mb-6 markdown-content onload-animation">
+            <Markdown class={`mb-6 markdown-content onload-animation${entry.data.category === "面试复习" ? " interview-review" : ""}`}>
                 <Content />
             </Markdown>
 
