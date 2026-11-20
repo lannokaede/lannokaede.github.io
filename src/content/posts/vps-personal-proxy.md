@@ -1,8 +1,8 @@
 ---
-title: 订阅改了，为什么 DNS 还是走原路？
+title: 美国 VPS 的订阅配置和 DNS 排查
 published: 2026-10-28
 updated: 2026-10-28
-description: 这台美国 VPS 上的 3x-ui、独立订阅和每月配额，以及一次 Clash Verge DNS 泄漏排查。
+description: 给自己和三个朋友配了独立订阅，顺手记下流量配额和 Clash Verge 里的 DNS 排查过程。
 image: /images/anime/bocchi-starry.webp
 tags: [VPS, 自建代理, Xray, REALITY, Linux]
 category: 技术笔记
@@ -11,8 +11,6 @@ lang: zh_CN
 ---
 
 代理已经连上了，网页出口和 WebRTC 检测也都指向美国，DNS 列表里却还有国内解析器。订阅里的配置补过一轮，重新拉取后，结果还是一样。
-
-后来查到，Clash Verge 本地的 TUN 设置覆盖了订阅配置。服务器发下来的文件改了，客户端运行时用的还是旧值。
 
 ## 服务端
 
@@ -40,9 +38,9 @@ ssh -N -L 15432:127.0.0.1:54321 root@VPS_HOST
 
 普通用户配置为每月 1 日续期，服务器和面板都设成了北京时间。额度耗尽后的停用、续期后的清零和恢复，都做过测试；还模拟了过期后再补续期的情况，检查会不会一直留在停用状态。用的是 3x-ui 内置的[日历月续期功能](https://github.com/MHSanaei/3x-ui/blob/v3.11.0/internal/web/service/calendar_renew.go)。
 
-## DNS 配置改了，为什么还没生效
+## Clash Verge 的本地配置
 
-初版订阅确实没有配完整的 DNS 策略，所以先补了订阅端。国内和局域网的直连规则保留，其余解析需要与代理规则配合。更新订阅后，检测页里仍然能看到国内解析器，问题没有就此消失。
+我先补了订阅里的 DNS 策略，保留国内和局域网的直连规则。重新拉取订阅后，检测页仍然列着国内解析器。
 
 继续检查 Clash Verge，发现实际运行配置里还是：
 
@@ -51,7 +49,7 @@ tun:
   strict-route: false
 ```
 
-本地 TUN 设置把订阅里的值覆盖了。于是服务器上的订阅文件是一份，客户端下载到的也是这一份，经过本地合并之后，交给 Mihomo 的又成了另一份。之前只查订阅内容，漏掉了最后一步。
+订阅已经拉到了新配置，Clash Verge 合并本地 TUN 设置时又把它盖回去了。我一开始只核对了下载的文件，后来才去看 Mihomo 实际收到的配置。
 
 这里要去 Clash Verge 的 TUN 设置里开严格路由，同时检查 DNS 覆写是否盖掉了订阅策略。继续刷新订阅不会改变本地的覆写选项。[Mihomo 的 TUN 文档](https://wiki.metacubex.one/config/inbound/tun/)里有 `strict-route` 的平台行为说明，DNS 各个解析器字段则在[另一页](https://wiki.metacubex.one/config/dns/)。
 

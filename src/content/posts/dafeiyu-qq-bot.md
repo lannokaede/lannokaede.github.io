@@ -1,8 +1,8 @@
 ---
-title: 大肥鱼为什么看不懂 QQ 转发视频
+title: 大肥鱼 QQ 机器人部署记录
 published: 2026-10-28
 updated: 2026-10-28
-description: 用 AstrBot 和 NapCat 把大肥鱼接进 QQ，改群聊回复、表情包和记忆，也查了转发视频为什么看不懂。
+description: 在 AstrBot 和 NapCat 上接入大肥鱼，记一下群聊回复、表情包、记忆和转发视频的调试过程。
 image: /images/anime/bocchi-school.webp
 tags: [QQ机器人, AstrBot, NapCat, 大肥鱼, Docker]
 category: 技术笔记
@@ -30,7 +30,7 @@ docker compose logs --tail 100 astrbot
 docker logs --tail 100 napcat
 ```
 
-## 群聊回复和人设要一起改
+## 群聊回复和人设
 
 最初用 AstrBot 自带的随机搭话，概率设为 15%。后来装了 [Chat Plus](https://github.com/Him666233/astrbot_plugin_group_chat_plus)，把群聊回复判断交给它，初始概率仍是 0.15，原来的随机触发则关掉。
 
@@ -42,7 +42,7 @@ docker logs --tail 100 napcat
 
 社区人设里的能力也没有全照搬。语音和生图没接，相关描述就按当前情况改掉。群聊称呼按发言人的身份区分，不把每个搭话的人都叫成同一个称呼。
 
-## 表情包先碰到了接口问题
+## 表情包插件
 
 表情包用 meme_manager，先导入一小套图库，给图片补了描述和向量。选图时参考近期对话和当前人设，一次最多发一个。自动收集只在指定群里开，设了采样、冷却和去重，避免把群里的图片全部存下来。
 
@@ -76,9 +76,7 @@ docker logs --tail 100 napcat
 
 现在依据的是抽帧和画面文字，没有接语音识别。读视频有总超时，失败时会把失败情况告诉回复模型，要求它别编画面。
 
-## QQ 仍然会掉登录
-
-前面大部分测试都能在服务器上做，QQ 收发还得另算。
+## QQ 登录与待测项
 
 之前手机扫过码，服务器也收到了扫码事件，随后 QQ 却返回了错误码 168，提示账号存在安全限制。另一次是保存的登录身份失效，快捷登录被拒，只能重新扫码。两种情况都遇到过，不能只看容器是不是还在运行。
 
