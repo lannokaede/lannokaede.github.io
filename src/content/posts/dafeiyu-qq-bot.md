@@ -1,8 +1,9 @@
 ---
-title: 大肥鱼 QQ 机器人部署记录
+title: 大肥鱼为什么看不懂 QQ 转发视频
 published: 2026-10-28
 updated: 2026-10-28
 description: 用 AstrBot 和 NapCat 把大肥鱼接进 QQ，改群聊回复、表情包和记忆，也查了转发视频为什么看不懂。
+image: /images/anime/bocchi-school.webp
 tags: [QQ机器人, AstrBot, NapCat, 大肥鱼, Docker]
 category: 技术笔记
 draft: false

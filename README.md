@@ -60,7 +60,7 @@ draft: false
 - `astro.config.mjs`：正式站点地址和部署路径。
 - `src/assets/images/`：头像、横幅及其他本地图片。
 
-当前头像使用与 GitHub 账号 `lannokaede` 相同的头像。以后可在 `src/config.ts` 修改 `profileConfig.avatar`；如需使用本地图片，将图片放入 `src/assets/images/` 并填写对应路径。首页横幅目前关闭，如需启用，设置 `siteConfig.banner.enable: true` 并填写 `src`。图片路径 `assets/images/...` 相对于 `src/`。
+当前头像使用 GitHub 账号 `lannokaede` 的头像。首页横幅在 `siteConfig.banner` 配置，文章封面由各自的 `image` 字段指定。动漫配图的来源列在关于页。
 
 评论目前未启用。公开链接为 GitHub、邮箱和哔哩哔哩。
 

@@ -29,6 +29,7 @@ export default defineConfig({
 	site: "https://lannokaede.github.io/",
 	base: "/",
 	trailingSlash: "always",
+	redirects: { "/2/": "/archive/", "/3/": "/archive/" },
 	// Ship each static page with its styles, avoiding stale hashed CSS after a Pages deployment.
 	build: { inlineStylesheets: "always" },
 	integrations: [

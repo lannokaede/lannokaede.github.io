@@ -7,8 +7,6 @@ import "../styles/global.css";
 import "../styles/markdown-extend.styl";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
-import BootScreen from "@components/BootScreen.astro";
-import FieldMotion from "@components/FieldMotion.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -50,7 +48,7 @@ if (!banner || typeof banner !== "string" || banner.trim() === "") {
 // TODO don't use post cover as banner for now
 banner = siteConfig.banner.src;
 
-const enableBanner = siteConfig.banner.enable;
+const enableBanner = siteConfig.banner.enable && isHomePage;
 
 let pageTitle: string;
 if (title) {
@@ -68,13 +66,6 @@ if (!lang) {
 }
 const siteLang = lang.replace("_", "-");
 
-const bannerOffsetByPosition = {
-	top: `${BANNER_HEIGHT_EXTEND}vh`,
-	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
-	bottom: "0",
-};
-const bannerOffset =
-	bannerOffsetByPosition[siteConfig.banner.position || "center"];
 ---
 
 <!DOCTYPE html>
@@ -116,6 +107,11 @@ const bannerOffset =
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
 		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
+			try {
+				if (localStorage.getItem('field-motion') === 'reduced') {
+					document.documentElement.classList.add('reduce-motion');
+				}
+			} catch {}
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -157,8 +153,6 @@ const bannerOffset =
 		  data-overlayscrollbars-initialize
 	>
 		<ConfigCarrier></ConfigCarrier>
-		<FieldMotion />
-		<BootScreen />
 		<slot />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
@@ -167,24 +161,16 @@ const bannerOffset =
 </html>
 
 <style is:global define:vars={{
-	bannerOffset,
 	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
 @tailwind components;
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
-	}
-	.enable-banner #banner-wrapper {
 		@apply h-[var(--banner-height-home)]
 	}
-
-	.enable-banner.is-home #banner {
-		@apply h-[var(--banner-height-home)] translate-y-0
-	}
-	.enable-banner #banner {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--bannerOffset)]
+	.enable-banner #banner-wrapper {
+		height: var(--banner-display-height, var(--banner-height));
 	}
 	.enable-banner.is-home #main-grid {
 		@apply translate-y-[var(--banner-height-extend)];
@@ -197,6 +183,11 @@ const bannerOffset =
 	}
 	.navbar-hidden {
 		@apply opacity-0 -translate-y-16
+	}
+}
+@media (max-width: 1023px) {
+	.enable-banner {
+		--banner-display-height: min(var(--banner-height), calc(56.25vw + 24px));
 	}
 }
 </style>

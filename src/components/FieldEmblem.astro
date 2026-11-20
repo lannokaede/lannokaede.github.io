@@ -1,9 +1,0 @@
----
-import artwork from "../assets/brand/field-notes.svg?raw";
-interface Props { id: string; class?: string; compact?: boolean; }
-const { compact = false, class: className } = Astro.props;
-const shapes = artwork.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
----
-<svg xmlns="http://www.w3.org/2000/svg" class={className} width={compact ? 30 : 200} height={compact ? 30 : 200} viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
-  <Fragment set:html={shapes} />
-</svg>

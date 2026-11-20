@@ -1,8 +1,9 @@
 ---
-title: 美国 VPS 自建代理记录
+title: 订阅改了，为什么 DNS 还是走原路？
 published: 2026-10-28
 updated: 2026-10-28
 description: 这台美国 VPS 上的 3x-ui、独立订阅和每月配额，以及一次 Clash Verge DNS 泄漏排查。
+image: /images/anime/bocchi-starry.webp
 tags: [VPS, 自建代理, Xray, REALITY, Linux]
 category: 技术笔记
 draft: false

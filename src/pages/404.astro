@@ -1,0 +1,12 @@
+---
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { url } from "../utils/url-utils";
+---
+
+<MainGridLayout title="找不到这篇文章">
+    <section class="card-base p-8 md:p-12">
+        <h1 class="text-3xl font-bold">找不到这个页面</h1>
+        <p class="mt-4 text-75">这篇文章可能已下架，也可能是链接写错了。</p>
+        <a class="mt-6 inline-block font-medium text-[var(--btn-content)] underline" href={url("/archive/")}>浏览文章归档 →</a>
+    </section>
+</MainGridLayout>
