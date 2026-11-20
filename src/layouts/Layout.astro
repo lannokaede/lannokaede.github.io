@@ -208,7 +208,6 @@ import {
 	BANNER_HEIGHT_EXTEND,
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT
 } from "../constants/constants";
-import { siteConfig } from '../config';
 
 /* Preload fonts */
 // (async function() {
@@ -349,24 +348,11 @@ function initCustomScrollbar() {
 	});
 }
 
-function showBanner() {
-	if (!siteConfig.banner.enable) return;
-
-	const banner = document.getElementById('banner');
-	if (!banner) {
-		console.error('Banner element not found');
-		return;
-	}
-
-	banner.classList.remove('opacity-0', 'scale-105');
-}
-
 function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
-	showBanner();
 }
 
 /* Load settings when entering the site */
