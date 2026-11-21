@@ -4,7 +4,7 @@ import { onMount } from "svelte";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import type { PostForList } from "../utils/content-utils";
-import { getPostUrlBySlug } from "../utils/url-utils";
+import { getPostUrlBySlug, url } from "../utils/url-utils";
 
 export let tags: string[] = [];
 export let categories: string[] = [];
@@ -14,6 +14,7 @@ const params = new URLSearchParams(window.location.search);
 tags = params.has("tag") ? params.getAll("tag") : [];
 categories = params.has("category") ? params.getAll("category") : [];
 const uncategorized = params.get("uncategorized");
+const hasActiveFilter = tags.length > 0 || categories.length > 0 || !!uncategorized;
 
 interface Group {
 	year: number;
@@ -23,8 +24,8 @@ interface Group {
 let groups: Group[] = [];
 
 function formatDate(date: Date) {
-	const month = (date.getMonth() + 1).toString().padStart(2, "0");
-	const day = date.getDate().toString().padStart(2, "0");
+	const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+	const day = date.getUTCDate().toString().padStart(2, "0");
 	return `${month}-${day}`;
 }
 
@@ -55,7 +56,7 @@ onMount(async () => {
 
 	const grouped = filteredPosts.reduce(
 		(acc, post) => {
-			const year = post.data.published.getFullYear();
+			const year = post.data.published.getUTCFullYear();
 			if (!acc[year]) {
 				acc[year] = [];
 			}
@@ -76,7 +77,27 @@ onMount(async () => {
 });
 </script>
 
-<div class="card-base px-8 py-6">
+<div class="card-base px-5 md:px-8 py-6">
+    {#if hasActiveFilter}
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-2 border-b border-dashed border-[var(--line-divider)] text-sm">
+            <div class="text-75 flex flex-wrap items-center gap-2">
+                <span>当前筛选：</span>
+                {#each categories as cat}
+                    <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">{cat}</span>
+                {/each}
+                {#each tags as tag}
+                    <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">#{tag}</span>
+                {/each}
+                {#if uncategorized}
+                    <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">未分类</span>
+                {/if}
+            </div>
+            <a href={url("/archive/")} class="text-[var(--primary)] hover:underline font-medium">查看全部</a>
+        </div>
+    {/if}
+    {#if groups.length === 0}
+        <div class="py-10 text-center text-50 text-sm">没有符合条件的文章</div>
+    {/if}
     {#each groups as group}
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">
@@ -130,7 +151,7 @@ onMount(async () => {
                         <!-- tag list -->
                         <div
                                 class="hidden md:block md:w-[15%] text-left text-sm transition
-                     whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
+                     whitespace-nowrap overflow-ellipsis overflow-hidden text-black/45 dark:text-white/45"
                         >
                             {formatTag(post.data.tags)}
                         </div>

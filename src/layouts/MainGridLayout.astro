@@ -54,6 +54,7 @@ const mainPanelTop = showBanner
 {showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-hidden">
     <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
                   mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/30 to-transparent"></div>
 </div>}
 
 <!-- Main content -->

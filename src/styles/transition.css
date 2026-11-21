@@ -51,6 +51,9 @@ html.is-animating .transition-swup-fade {
 #post-container :nth-child(5) { animation-delay: calc(var(--content-delay) + 250ms) }
 #post-container :nth-child(6) { animation-delay: calc(var(--content-delay) + 325ms) }
 
+html.reduce-motion .post-card:hover {
+    transform: none !important;
+}
 html.reduce-motion *,
 html.reduce-motion *::before,
 html.reduce-motion *::after {
@@ -61,6 +64,9 @@ html.reduce-motion *::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .post-card:hover {
+        transform: none !important;
+    }
     *, *::before, *::after {
         scroll-behavior: auto !important;
         animation-duration: .01ms !important;

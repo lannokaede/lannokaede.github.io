@@ -176,7 +176,11 @@ const siteLang = lang.replace("_", "-");
 		@apply translate-y-[var(--banner-height-extend)];
 	}
 	.enable-banner #top-row {
-		@apply h-[calc(var(--banner-height-home)_-_4.5rem)] transition-all duration-300
+		height: max(4.5rem, calc(var(--banner-display-height, var(--banner-height)) - 4.5rem));
+		@apply transition-all duration-300
+	}
+	.enable-banner.is-home #top-row {
+		@apply h-[calc(var(--banner-height-home)_-_4.5rem)]
 	}
 	.enable-banner.is-home #sidebar-sticky {
 		@apply top-[calc(1rem_-_var(--banner-height-extend))]
@@ -465,11 +469,12 @@ function scrollFunction() {
 		const NAVBAR_HEIGHT = 72
 		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16			// The height the main panel overlaps the banner
 
-		let bannerHeight = BANNER_HEIGHT
+		const bannerEl = document.getElementById('banner-wrapper')
+		let bannerPx = bannerEl ? bannerEl.offsetHeight : window.innerHeight * (BANNER_HEIGHT / 100)
 		if (document.body.classList.contains('lg:is-home') && window.innerWidth >= 1024) {
-			bannerHeight = BANNER_HEIGHT_HOME
+			bannerPx = window.innerHeight * (BANNER_HEIGHT_HOME / 100)
 		}
-		let threshold = window.innerHeight * (bannerHeight / 100) - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16
+		let threshold = bannerPx - NAVBAR_HEIGHT - MAIN_PANEL_EXCESS_HEIGHT - 16
 		if (document.body.scrollTop >= threshold || document.documentElement.scrollTop >= threshold) {
 			navbar.classList.add('navbar-hidden')
 		} else {

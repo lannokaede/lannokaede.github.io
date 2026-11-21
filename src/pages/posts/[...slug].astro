@@ -24,6 +24,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
+const inlineHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 const { remarkPluginFrontmatter } = await entry.render();
 
@@ -52,7 +53,7 @@ const jsonLd = {
             {}
         ]}>
             <!-- word count and reading time -->
-            <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
+            <div class="flex flex-row text-black/45 dark:text-white/45 gap-5 mb-3 transition onload-animation">
                 <div class="flex flex-row items-center">
                     <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
                         <Icon name="material-symbols:notes-rounded"></Icon>
@@ -74,10 +75,10 @@ const jsonLd = {
                 <div
                     data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title"
                     class="transition w-full block font-bold mb-3
-                    text-3xl md:text-[2.25rem]/[2.75rem]
+                    text-2xl md:text-[2rem] leading-snug
                     text-black/90 dark:text-white/90
                     md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
-                    before:absolute before:top-[0.75rem] before:left-[-1.125rem]
+                    before:absolute before:top-[0.45rem] before:left-[-1.125rem]
                 ">
                     {entry.data.title}
                 </div>
@@ -98,9 +99,29 @@ const jsonLd = {
             <!-- always show cover as long as it has one -->
 
             {entry.data.image &&
-                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
+                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-6 rounded-xl banner-container aspect-[16/9] md:aspect-auto md:max-h-[22rem] onload-animation"/>
             }
 
+
+            {inlineHeadings.length >= 2 && (
+                <details class="2xl:hidden mb-6 rounded-xl border border-[var(--line-divider)] bg-black/[0.02] dark:bg-white/[0.03] px-4 py-3 onload-animation">
+                    <summary class="cursor-pointer select-none font-semibold text-sm text-75 flex items-center justify-between">
+                        <span>目录（{inlineHeadings.length} 节）</span>
+                        <span class="text-xs text-50">展开 / 收起</span>
+                    </summary>
+                    <nav aria-label="文章目录" class="mt-2.5 pt-2.5 border-t border-dashed border-[var(--line-divider)] flex flex-col gap-1.5">
+                        {inlineHeadings.map((h) => (
+                            <a href={`#${h.slug}`}
+                               class:list={[
+                                   "text-sm text-75 hover:text-[var(--primary)] transition py-0.5 truncate",
+                                   {"pl-4 text-[0.85rem] text-50": h.depth === 3}
+                               ]}>
+                                {h.text.replace(/#$/, "")}
+                            </a>
+                        ))}
+                    </nav>
+                </details>
+            )}
 
             <Markdown class="mb-6 markdown-content onload-animation">
                 <Content />
@@ -111,26 +132,32 @@ const jsonLd = {
         </div>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
-        <a href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.nextSlug}]}>
-            {entry.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
-                <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.nextTitle}
-                </div>
-            </div>}
-        </a>
+    {(entry.data.nextSlug || entry.data.prevSlug) && (
+        <div class="grid grid-cols-1 md:grid-cols-2 mb-4 gap-4 w-full">
+            {entry.data.nextSlug ? (
+                <a href={getPostUrlBySlug(entry.data.nextSlug)}
+                   class="w-full font-bold overflow-hidden active:scale-95">
+                    <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-3">
+                        <Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)]" />
+                        <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
+                            {entry.data.nextTitle}
+                        </div>
+                    </div>
+                </a>
+            ) : <div class="hidden md:block" />}
 
-        <a href={entry.data.prevSlug ? getPostUrlBySlug(entry.data.prevSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.prevSlug}]}>
-            {entry.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.prevTitle}
-                </div>
-                <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
-            </div>}
-        </a>
-    </div>
+            {entry.data.prevSlug ? (
+                <a href={getPostUrlBySlug(entry.data.prevSlug)}
+                   class="w-full font-bold overflow-hidden active:scale-95">
+                    <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-3">
+                        <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
+                            {entry.data.prevTitle}
+                        </div>
+                        <Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)]" />
+                    </div>
+                </a>
+            ) : <div class="hidden md:block" />}
+        </div>
+    )}
 
 </MainGridLayout>

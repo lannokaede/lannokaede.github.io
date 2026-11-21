@@ -71,6 +71,7 @@ class TableOfContents extends HTMLElement {
     tocEntries: HTMLAnchorElement[] = [];
     active: boolean[] = [];
     activeIndicator: HTMLElement | null = null;
+    initialized = false;
 
     constructor() {
         super();
@@ -207,12 +208,15 @@ class TableOfContents extends HTMLElement {
             element.addEventListener('animationend', () => {
                 this.init();
             }, { once: true });
-        } else {
-            console.debug('Animation element not found');
         }
+        setTimeout(() => {
+            this.init();
+        }, 400);
     };
 
     init() {
+        if (this.initialized) return;
+        this.initialized = true;
         this.tocEl = document.getElementById(
             "toc-inner-wrapper"
         );

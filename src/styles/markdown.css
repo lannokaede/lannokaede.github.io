@@ -1,6 +1,40 @@
 .custom-md {
+    line-height: 1.82;
+
     h1 {
-        @apply text-3xl;
+        @apply text-2xl md:text-3xl leading-snug;
+    }
+
+    h2 {
+        @apply text-xl md:text-[1.4rem] leading-snug mt-9 mb-3.5 font-bold;
+    }
+
+    h3 {
+        @apply text-lg md:text-[1.15rem] leading-snug mt-6 mb-2.5 font-semibold;
+    }
+
+    p {
+        @apply my-4 leading-[1.82];
+    }
+
+    ul, ol {
+        @apply my-4 space-y-1.5;
+    }
+
+    hr {
+        @apply my-8 border-dashed border-[var(--line-divider)];
+    }
+
+    table {
+        @apply w-full my-5 text-sm border-collapse;
+    }
+
+    th, td {
+        @apply border border-[var(--line-divider)] px-3 py-2 text-left;
+    }
+
+    th {
+        @apply font-semibold bg-black/[0.03] dark:bg-white/[0.04];
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -20,12 +54,13 @@
     }
 
     a:not(.no-styling) {
-        @apply relative bg-none link font-medium text-[var(--primary)]
-        underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4;
+        @apply relative bg-none font-medium text-[var(--primary)]
+        underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4
+        rounded px-0.5 -mx-0.5 transition;
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
-        display: inline-block;
-    
+        display: inline;
+
         &:hover, &:active {
             @apply decoration-transparent;
             background: var(--btn-plain-bg-hover);
@@ -35,7 +70,7 @@
     }
 
     code {
-        @apply bg-[var(--inline-code-bg)] text-[var(--inline-code-color)] px-1 py-0.5 rounded-md overflow-hidden;
+        @apply bg-[var(--inline-code-bg)] text-[var(--inline-code-color)] px-1.5 py-0.5 text-[0.88em] rounded-md overflow-hidden;
 
         font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
         &:before {
@@ -98,11 +133,21 @@
     }
 
     blockquote {
-        @apply not-italic border-transparent relative;
+        @apply not-italic border-transparent relative my-5 py-2.5 pl-4 pr-4 rounded-r-lg;
         font-weight: inherit;
+        background-color: color-mix(in oklch, var(--btn-regular-bg) 55%, transparent);
 
         &:before {
-            @apply content-[''] absolute -left-1 block transition bg-[var(--btn-regular-bg)] h-full w-1 rounded-full;
+            @apply content-[''] absolute left-0 top-0 block transition h-full w-1 rounded-full;
+            background-color: color-mix(in oklch, var(--primary) 60%, transparent);
+        }
+
+        > :first-child {
+            margin-top: 0;
+        }
+
+        > :last-child {
+            margin-bottom: 0;
         }
 
         /* Remove the double quotes from default styles */
@@ -117,5 +162,4 @@
         overflow-x: auto;
         margin: 1em 0;
     }
-    
 }

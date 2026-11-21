@@ -9,7 +9,7 @@ import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
 	title: "lannokaede 的手记",
-	subtitle: "保持好奇，持续折腾",
+	subtitle: "写 Go、折腾 Agent 与服务器排坑",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 245,
@@ -56,7 +56,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "https://avatars.githubusercontent.com/u/181042428?v=4&s=512",
 	name: "lannokaede",
-	bio: "保持好奇，持续折腾",
+	bio: "电子科大软件工程在读，平时写 Go 后端和本地 Agent 工具。",
 	links: [
 		{
 			name: "邮箱",
