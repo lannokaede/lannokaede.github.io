@@ -37,7 +37,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 
 const mainPanelTop = showBanner
 	? `calc(var(--banner-display-height, var(--banner-height)) - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
-	: "5.5rem";
+	: "6.25rem";
 ---
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
@@ -57,16 +57,21 @@ const mainPanelTop = showBanner
 {showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-hidden">
     <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
                   mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/10"></div>
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/45 to-transparent"></div>
-    <div class="pointer-events-none absolute inset-x-0 bottom-[4.25rem] md:bottom-16 z-20">
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/20"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/55 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-[4.5rem] md:bottom-16 z-20">
         <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7">
-            <div class="max-w-xl">
-                <h1 class="text-white text-2xl md:text-4xl font-bold tracking-[-0.02em] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
+            <div class="max-w-2xl">
+                <div class="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 mb-3 border border-white/20 bg-black/35 backdrop-blur-md text-[0.72rem] font-mono-tech tracking-wider text-white/90 uppercase shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-soft-pulse"></span>
+                    <span>ENGINEERING NOTES · GO / AGENT / VPS</span>
+                </div>
+                <h1 class="font-display text-white text-2xl sm:text-3xl md:text-[2.75rem] leading-[1.15] font-bold tracking-[-0.02em] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]">
                     {siteConfig.title}
                 </h1>
                 {siteConfig.subtitle && (
-                    <p class="mt-1.5 text-white/85 text-sm md:text-base font-medium drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]">
+                    <p class="mt-2 text-white/85 text-sm md:text-[1.02rem] font-normal tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
                         {siteConfig.subtitle}
                     </p>
                 )}

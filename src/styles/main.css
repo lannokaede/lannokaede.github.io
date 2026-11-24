@@ -1,22 +1,67 @@
 @tailwind components;
 
+body {
+    background-color: var(--page-bg);
+    background-image:
+        radial-gradient(ellipse 75% 42% at 50% -6%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 72%),
+        radial-gradient(ellipse 45% 35% at 88% 18%, color-mix(in oklch, var(--primary) 9%, transparent), transparent 70%),
+        radial-gradient(var(--dot-grid-color) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+    background-attachment: fixed, fixed, scroll;
+}
+
+@keyframes soft-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.45;
+        transform: scale(0.85);
+    }
+}
+
+.animate-soft-pulse {
+    animation: soft-pulse 2.4s ease-in-out infinite;
+}
+
 @layer components {
+    .font-display {
+        font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
+    }
+    .font-mono-tech {
+        font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-variant-numeric: tabular-nums;
+    }
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition border border-[var(--card-border)];
-        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(12px) saturate(135%);
+        -webkit-backdrop-filter: blur(12px) saturate(135%);
+        box-shadow: var(--card-shadow), var(--card-highlight);
     }
     .navbar-glass {
-        background-color: color-mix(in oklch, var(--card-bg) 82%, transparent);
-        backdrop-filter: blur(14px) saturate(140%);
-        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        background-color: color-mix(in oklch, var(--card-bg) 78%, transparent);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12), var(--card-highlight);
     }
     .post-card {
-        transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 240ms ease, border-color 240ms ease, background-color 150ms ease;
+        transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms ease, border-color 260ms ease, background-color 180ms ease;
     }
     .post-card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--card-shadow-hover);
-        border-color: color-mix(in oklch, var(--primary) 34%, var(--card-border));
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow-hover), var(--card-highlight);
+        border-color: color-mix(in oklch, var(--primary) 42%, var(--card-border));
+    }
+    .pill-tag {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition;
+        background-color: color-mix(in oklch, var(--btn-regular-bg) 85%, transparent);
+        color: var(--btn-content);
+        border: 1px solid color-mix(in oklch, var(--primary) 14%, transparent);
+    }
+    .pill-tag:hover {
+        background-color: var(--btn-regular-bg-hover);
+        border-color: color-mix(in oklch, var(--primary) 35%, transparent);
     }
     .reading-progress-bar {
         position: fixed;
@@ -26,7 +71,8 @@
         width: 0%;
         z-index: 60;
         pointer-events: none;
-        background: linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary) 65%, white));
+        background: linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary) 60%, white));
+        box-shadow: 0 0 10px color-mix(in oklch, var(--primary) 55%, transparent);
         transition: width 80ms linear, opacity 200ms ease;
         opacity: 0;
     }

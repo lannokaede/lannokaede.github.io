@@ -12,49 +12,63 @@ const [posts, categories, tags] = await Promise.all([
 	getTagList(),
 ]);
 ---
-<div class="card-base p-4">
-    <a aria-label="Go to About Page" href={url('/about/')}
-       class="group block relative mx-auto mt-1 mb-3
-       w-36 h-36 lg:w-44 lg:h-44 overflow-hidden rounded-2xl ring-2 ring-[var(--card-border)] shadow-sm active:scale-95 transition">
-        <div class="absolute transition pointer-events-none group-hover:bg-black/30 group-active:bg-black/50
-        w-full h-full z-50 flex items-center justify-center">
-            <Icon name="fa6-regular:address-card"
-                  class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-4xl">
-            </Icon>
+<div class="card-base overflow-hidden">
+    <!-- Decorative studio header band -->
+    <div class="h-20 w-full relative overflow-hidden"
+         style="background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 30%, transparent), color-mix(in oklch, var(--primary) 10%, transparent));">
+        <div class="absolute inset-0 opacity-40"
+             style="background-image: radial-gradient(color-mix(in oklch, var(--primary) 45%, transparent) 1px, transparent 1px); background-size: 14px 14px;"></div>
+        <div class="absolute top-2.5 right-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.68rem] font-mono-tech text-75 bg-[var(--card-bg)] border border-[var(--card-border)]">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-soft-pulse"></span>
+            <span>UESTC · SE</span>
         </div>
-        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="w-full h-full transition-transform duration-300 group-hover:scale-[1.03]"></ImageWrapper>
-    </a>
-    <div class="px-1">
-        <div class="font-bold text-xl text-center mb-1.5 dark:text-neutral-50 transition tracking-[-0.01em]">{config.name}</div>
-        <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2.5 transition"></div>
-        <div class="text-center text-sm leading-relaxed text-black/60 dark:text-white/60 mb-3.5 transition">{config.bio}</div>
+    </div>
 
-        <div class="grid grid-cols-3 gap-1 py-2.5 mb-3.5 border-y border-dashed border-[var(--line-divider)] text-center">
-            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
-                <div class="text-base font-bold text-90 leading-tight">{posts.length}</div>
-                <div class="text-[0.72rem] text-50 mt-0.5">文章</div>
-            </a>
-            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
-                <div class="text-base font-bold text-90 leading-tight">{categories.length}</div>
-                <div class="text-[0.72rem] text-50 mt-0.5">分类</div>
-            </a>
-            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
-                <div class="text-base font-bold text-90 leading-tight">{tags.length}</div>
-                <div class="text-[0.72rem] text-50 mt-0.5">标签</div>
-            </a>
-        </div>
+    <div class="px-4 pb-4">
+        <a aria-label="Go to About Page" href={url('/about/')}
+           class="group block relative mx-auto -mt-12 mb-3
+           w-24 h-24 lg:w-28 lg:h-28 overflow-hidden rounded-2xl ring-4 ring-[var(--card-bg)] shadow-md active:scale-95 transition">
+            <div class="absolute transition pointer-events-none group-hover:bg-black/35 group-active:bg-black/50
+            w-full h-full z-50 flex items-center justify-center">
+                <Icon name="fa6-regular:address-card"
+                      class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-3xl">
+                </Icon>
+            </div>
+            <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="w-full h-full transition-transform duration-300 group-hover:scale-[1.05]"></ImageWrapper>
+        </a>
 
-        <div class="flex flex-wrap gap-2 justify-center">
-            {config.links.length > 1 && config.links.map(item =>
-                    <a rel="me" title={item.name} aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
-                        <Icon name={item.icon} class="text-[1.35rem]"></Icon>
-                    </a>
-            )}
-            {config.links.length == 1 && <a rel="me" title={config.links[0].name} aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
-                                            class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95">
-                <Icon name={config.links[0].icon} class="text-[1.35rem]"></Icon>
-                {config.links[0].name}
-            </a>}
+        <div class="px-1">
+            <div class="font-display font-bold text-xl text-center mb-1 text-90 transition tracking-[-0.01em]">{config.name}</div>
+            <div class="h-0.5 w-6 bg-[var(--primary)] mx-auto rounded-full mb-2.5 opacity-80 transition"></div>
+            <div class="text-center text-[0.84rem] leading-relaxed text-black/60 dark:text-white/60 mb-4 transition">{config.bio}</div>
+
+            <div class="grid grid-cols-3 gap-1.5 py-2.5 mb-4 border-y border-dashed border-[var(--line-divider)] text-center">
+                <a href={url('/archive/')} class="rounded-xl py-1.5 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                    <div class="font-mono-tech text-base font-bold text-90 leading-tight">{posts.length}</div>
+                    <div class="text-[0.7rem] text-50 mt-0.5">文章</div>
+                </a>
+                <a href={url('/archive/')} class="rounded-xl py-1.5 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                    <div class="font-mono-tech text-base font-bold text-90 leading-tight">{categories.length}</div>
+                    <div class="text-[0.7rem] text-50 mt-0.5">分类</div>
+                </a>
+                <a href={url('/archive/')} class="rounded-xl py-1.5 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                    <div class="font-mono-tech text-base font-bold text-90 leading-tight">{tags.length}</div>
+                    <div class="text-[0.7rem] text-50 mt-0.5">标签</div>
+                </a>
+            </div>
+
+            <div class="flex flex-wrap gap-2 justify-center">
+                {config.links.length > 1 && config.links.map(item =>
+                        <a rel="me" title={item.name} aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-xl h-9 w-9 active:scale-90">
+                            <Icon name={item.icon} class="text-[1.2rem]"></Icon>
+                        </a>
+                )}
+                {config.links.length == 1 && <a rel="me" title={config.links[0].name} aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
+                                                class="btn-regular rounded-xl h-9 gap-2 px-3 font-bold active:scale-95">
+                    <Icon name={config.links[0].icon} class="text-[1.2rem]"></Icon>
+                    {config.links[0].name}
+                </a>}
+            </div>
         </div>
     </div>
 </div>
