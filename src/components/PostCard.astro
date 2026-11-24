@@ -40,21 +40,22 @@ const {
 const className = Astro.props.class;
 
 const hasCover = image !== undefined && image !== null && image !== "";
-const coverWidth = "30%";
-const visibleTags = (tags || []).slice(0, featured ? 5 : 4);
+const visibleTags = (tags || []).slice(0, featured ? 5 : 3);
 
 const { remarkPluginFrontmatter } = await entry.render();
 ---
 {featured ? (
-<article class:list={["card-base post-card flex flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+<article data-spotlight class:list={["card-base post-card spotlight-card flex flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
     {hasCover && (
-        <a href={url} aria-label={title} class="group relative block w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+        <a href={url} aria-label={title} class="group cover-sheen relative block w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
             <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
-                          class="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.04]">
+                          class="w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.05]">
             </ImageWrapper>
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/15"></div>
-            <div class="absolute top-3.5 left-4 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.7rem] font-mono-tech font-semibold tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary)]"></span>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-black/15"></div>
+            <div class="absolute top-3.5 left-4 z-20 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.7rem] font-mono-tech font-semibold tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/20">
+                <span class="eq-bars" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </span>
                 <span>LATEST · #{issueNumber}</span>
             </div>
             {category && (
@@ -62,10 +63,14 @@ const { remarkPluginFrontmatter } = await entry.render();
                     {category}
                 </div>
             )}
+            <!-- subtle decorative corner reticle -->
+            <span class="pointer-events-none hidden md:block absolute bottom-3 right-4 z-20 font-mono-tech text-[0.65rem] tracking-widest text-white/60">
+                FIELD NOTE // {formatDateToYYYYMMDD(published)}
+            </span>
         </a>
     )}
 
-    <div class="px-5 md:px-8 pt-5 md:pt-6 pb-6">
+    <div class="px-5 md:px-8 pt-5 md:pt-6 pb-6 relative z-10">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono-tech text-50 mb-2.5">
             <span class="inline-flex items-center gap-1">
                 <Icon name="material-symbols:calendar-today-outline-rounded" class="text-sm text-[var(--primary)]" />
@@ -84,7 +89,7 @@ const { remarkPluginFrontmatter } = await entry.render();
         </div>
 
         <a href={url}
-           class="group block font-display font-bold text-2xl md:text-[1.68rem] leading-snug tracking-[-0.015em] text-90 hover:text-[var(--primary)] transition mb-2.5">
+           class="group block font-display font-bold text-2xl md:text-[1.7rem] leading-snug tracking-[-0.015em] text-90 hover:text-[var(--primary)] transition mb-2.5">
             <span>{title}</span>
         </a>
 
@@ -92,7 +97,7 @@ const { remarkPluginFrontmatter } = await entry.render();
             {description || remarkPluginFrontmatter.excerpt}
         </p>
 
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-dashed border-[var(--line-divider)]">
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3.5 border-t border-dashed border-[var(--line-divider)]">
             <div class="flex flex-wrap items-center gap-1.5">
                 {visibleTags.map((tag) => (
                     <a href={getTagUrl(tag)} class="pill-tag">#{tag.trim()}</a>
@@ -100,85 +105,60 @@ const { remarkPluginFrontmatter } = await entry.render();
             </div>
             <a href={url} class="group inline-flex items-center gap-1 text-xs font-semibold text-[var(--primary)] hover:opacity-80 transition">
                 <span>阅读全文</span>
-                <Icon name="material-symbols:arrow-forward-rounded" class="text-base transition-transform group-hover:translate-x-0.5" />
+                <Icon name="material-symbols:arrow-forward-rounded" class="text-base transition-transform duration-200 group-hover:translate-x-1" />
             </a>
         </div>
     </div>
 </article>
 ) : (
-<article class:list={["card-base post-card flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
-    <div class:list={["pl-5 md:pl-7 pr-5 md:pr-5 pt-5 md:pt-6 pb-5 md:pb-6 relative", {"w-full md:w-[calc(100%_-_52px_-_12px)]": !hasCover, "w-full md:w-[calc(100%_-_var(--coverWidth)_-_16px)]": hasCover}]}>
-        <!-- editorial eyebrow row -->
-        <div class="flex flex-wrap items-center gap-2 text-xs font-mono-tech text-50 mb-2.5">
-            <span class="px-2 py-0.5 rounded-md font-semibold text-[var(--primary)]"
-                  style="background-color: color-mix(in oklch, var(--primary) 12%, transparent);">
+<article data-spotlight class:list={["card-base post-card spotlight-card flex flex-col h-full w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+    {hasCover && (
+        <div class="group cover-sheen relative w-full aspect-[16/10] overflow-hidden">
+            <a href={url} aria-label={title} class="block w-full h-full">
+                <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
+                              class="w-full h-full transition-transform duration-700 ease-out group-hover:scale-[1.06]">
+                </ImageWrapper>
+            </a>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-black/15"></div>
+            <div class="pointer-events-none absolute top-3 left-3 z-20 px-2.5 py-0.5 rounded-full font-mono-tech text-[0.68rem] font-semibold text-white bg-black/50 backdrop-blur-md border border-white/15">
                 #{issueNumber}
-            </span>
+            </div>
             {category && (
-                <a href={getCategoryUrl(category)} class="font-sans font-medium text-75 hover:text-[var(--primary)] transition">
+                <a href={getCategoryUrl(category)} class="absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full text-[0.72rem] font-medium text-white/95 bg-black/45 backdrop-blur-md border border-white/15 hover:bg-[var(--primary)] transition">
                     {category}
                 </a>
             )}
-            <span aria-hidden="true" class="text-25">·</span>
+            <div class="pointer-events-none absolute bottom-2.5 right-3 z-20 opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition duration-300 w-7 h-7 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white">
+                <Icon name="material-symbols:arrow-outward-rounded" class="text-base" />
+            </div>
+        </div>
+    )}
+
+    <div class="flex flex-col flex-1 p-5 relative z-10">
+        <div class="flex items-center justify-between gap-2 text-[0.74rem] font-mono-tech text-50 mb-2">
             <span>{formatDateToYYYYMMDD(published)}</span>
+            <span>{remarkPluginFrontmatter.words} 字 · {remarkPluginFrontmatter.minutes} 分钟</span>
         </div>
 
         <a href={url}
-           class="relative transition group w-full block font-display font-bold mb-2.5 text-xl md:text-[1.35rem] leading-snug tracking-[-0.01em] text-90 pr-2
-        hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
-        active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
-        ">
-            <span>{title}</span><Icon class="inline-flex align-middle ml-1 text-[1.35rem] text-[var(--primary)] md:opacity-0 md:-translate-x-1 md:group-hover:opacity-100 md:group-hover:translate-x-0 transition" name="material-symbols:chevron-right-rounded"></Icon>
+           class="group block font-display font-bold mb-2 text-[1.16rem] leading-snug tracking-[-0.01em] text-90 hover:text-[var(--primary)] transition line-clamp-2">
+            <span>{title}</span>
         </a>
 
-        <!-- description -->
-        <div class="transition text-[0.93rem] leading-relaxed text-75 mb-3.5 pr-1 md:pr-2 line-clamp-2">
+        <p class="text-[0.88rem] leading-relaxed text-75 mb-4 line-clamp-2">
             {description || remarkPluginFrontmatter.excerpt}
-        </div>
+        </p>
 
-        <!-- tags + word count / read time -->
-        <div class="flex flex-wrap items-center justify-between gap-2.5">
-            <div class="hidden sm:flex flex-wrap items-center gap-1.5">
+        <div class="mt-auto pt-3 border-t border-dashed border-[var(--line-divider)] flex items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-1.5 min-w-0">
                 {visibleTags.map((tag) => (
                     <a href={getTagUrl(tag)} class="pill-tag">#{tag.trim()}</a>
                 ))}
             </div>
-            <div class="text-xs font-mono-tech text-black/45 dark:text-white/45 flex items-center gap-2 transition">
-                <span>{remarkPluginFrontmatter.words} {i18n(remarkPluginFrontmatter.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}</span>
-                <span aria-hidden="true" class="text-25">·</span>
-                <span>{remarkPluginFrontmatter.minutes} {i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}</span>
-            </div>
+            <a href={url} aria-label={title} class="shrink-0 text-[var(--primary)] hover:translate-x-0.5 transition">
+                <Icon name="material-symbols:arrow-forward-rounded" class="text-lg" />
+            </a>
         </div>
     </div>
-
-    {hasCover && <a href={url} aria-label={title}
-                    class:list={["group",
-                        "aspect-[16/9] md:aspect-auto mx-4 mt-4 mb-0 md:my-0 md:mx-0",
-                        "md:w-[var(--coverWidth)] relative md:absolute md:top-3.5 md:bottom-3.5 md:right-3.5 rounded-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10 active:scale-95"
-                    ]} >
-        <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/25 group-active:bg-black/45 transition"></div>
-        <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center ">
-            <Icon name="material-symbols:chevron-right-rounded"
-                  class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl">
-            </Icon>
-        </div>
-        <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
-                  class="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.06]">
-        </ImageWrapper>
-    </a>}
-
-    {!hasCover &&
-        <a href={url} aria-label={title} class="!hidden md:!flex btn-regular w-[3.25rem]
-         absolute right-3.5 top-3.5 bottom-3.5 rounded-xl bg-[var(--enter-btn-bg)]
-         hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95
-        ">
-            <Icon name="material-symbols:chevron-right-rounded"
-                  class="transition text-[var(--primary)] text-4xl mx-auto">
-            </Icon>
-        </a>
-    }
 </article>
 )}
-
-<style define:vars={{coverWidth}}>
-</style>

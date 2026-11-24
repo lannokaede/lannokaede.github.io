@@ -6,11 +6,11 @@ import PostCard from "./PostCard.astro";
 const { page } = Astro.props;
 
 let delay = 0;
-const interval = 55;
+const interval = 65;
 const isFirstPage = page.currentPage === 1;
 const pageOffset = (page.currentPage - 1) * page.size;
 ---
-<div class="flex flex-col gap-5 mb-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-5">
     {page.data.map((entry: CollectionEntry<"posts">, idx: number) => (
         <PostCard
                 entry={entry}
@@ -25,7 +25,7 @@ const pageOffset = (page.currentPage - 1) * page.size;
                 draft={entry.data.draft}
                 featured={isFirstPage && idx === 0}
                 issueNumber={String(pageOffset + idx + 1).padStart(2, "0")}
-                class="onload-animation"
+                class:list={["onload-animation", { "md:col-span-2": isFirstPage && idx === 0 }]}
                 style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
         ></PostCard>
     ))}

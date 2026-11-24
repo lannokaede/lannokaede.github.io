@@ -12,7 +12,7 @@ const [posts, categories, tags] = await Promise.all([
 	getTagList(),
 ]);
 ---
-<div class="card-base overflow-hidden">
+<div data-spotlight class="card-base spotlight-card overflow-hidden">
     <!-- Decorative studio header band -->
     <div class="h-20 w-full relative overflow-hidden"
          style="background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 30%, transparent), color-mix(in oklch, var(--primary) 10%, transparent));">
@@ -42,7 +42,7 @@ const [posts, categories, tags] = await Promise.all([
             <div class="h-0.5 w-6 bg-[var(--primary)] mx-auto rounded-full mb-2.5 opacity-80 transition"></div>
             <div class="text-center text-[0.84rem] leading-relaxed text-black/60 dark:text-white/60 mb-4 transition">{config.bio}</div>
 
-            <div class="grid grid-cols-3 gap-1.5 py-2.5 mb-4 border-y border-dashed border-[var(--line-divider)] text-center">
+            <div class="grid grid-cols-3 gap-1.5 py-2.5 mb-3.5 border-y border-dashed border-[var(--line-divider)] text-center">
                 <a href={url('/archive/')} class="rounded-xl py-1.5 hover:bg-[var(--btn-plain-bg-hover)] transition">
                     <div class="font-mono-tech text-base font-bold text-90 leading-tight">{posts.length}</div>
                     <div class="text-[0.7rem] text-50 mt-0.5">文章</div>
@@ -55,6 +55,21 @@ const [posts, categories, tags] = await Promise.all([
                     <div class="font-mono-tech text-base font-bold text-90 leading-tight">{tags.length}</div>
                     <div class="text-[0.7rem] text-50 mt-0.5">标签</div>
                 </a>
+            </div>
+
+            <!-- NOW / mini terminal status strip -->
+            <div class="mb-4 rounded-xl px-3 py-2 text-[0.73rem] font-mono-tech border border-[var(--card-border)]"
+                 style="background-color: color-mix(in oklch, var(--btn-regular-bg) 55%, transparent);">
+                <div class="flex items-center justify-between text-[0.65rem] text-50 mb-1">
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <span>NOW BUILDING</span>
+                    </span>
+                    <span class="text-[var(--primary)]">ONLINE</span>
+                </div>
+                <div class="text-75 truncate">
+                    <span class="text-[var(--primary)] mr-1">&gt;</span>Go Agent · LibreChat · VPS<span class="terminal-cursor" aria-hidden="true"></span>
+                </div>
             </div>
 
             <div class="flex flex-wrap gap-2 justify-center">

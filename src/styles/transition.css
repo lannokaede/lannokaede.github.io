@@ -9,11 +9,11 @@ html.is-animating .transition-swup-fade {
 /* Fade-in animations for components */
 @keyframes fade-in-up {
     0% {
-        transform: translateY(.75rem);
+        transform: translateY(1rem) scale(0.988);
         opacity: 0;
     }
     100% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 }
@@ -21,7 +21,7 @@ html.is-animating .transition-swup-fade {
 /* Main components */
 .onload-animation {
     opacity: 0;
-    animation: 300ms fade-in-up;
+    animation: 460ms cubic-bezier(0.22, 1, 0.36, 1) fade-in-up;
     animation-fill-mode: forwards;
 }
 #navbar {
