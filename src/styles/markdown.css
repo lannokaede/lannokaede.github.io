@@ -6,11 +6,11 @@
     }
 
     h2 {
-        @apply text-xl md:text-[1.4rem] leading-snug mt-9 mb-3.5 font-bold;
+        @apply text-xl md:text-[1.4rem] leading-snug mt-10 mb-4 pb-2 font-bold border-b border-dashed border-[var(--line-divider)];
     }
 
     h3 {
-        @apply text-lg md:text-[1.15rem] leading-snug mt-6 mb-2.5 font-semibold;
+        @apply text-lg md:text-[1.15rem] leading-snug mt-7 mb-2.5 font-semibold;
     }
 
     p {

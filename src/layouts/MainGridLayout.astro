@@ -42,6 +42,9 @@ const mainPanelTop = showBanner
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
+<!-- Reading Progress Bar -->
+<div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
+
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
 <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
@@ -54,7 +57,22 @@ const mainPanelTop = showBanner
 {showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-hidden">
     <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
                   mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/30 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/10"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/45 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-[4.25rem] md:bottom-16 z-20">
+        <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7">
+            <div class="max-w-xl">
+                <h1 class="text-white text-2xl md:text-4xl font-bold tracking-[-0.02em] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
+                    {siteConfig.title}
+                </h1>
+                {siteConfig.subtitle && (
+                    <p class="mt-1.5 text-white/85 text-sm md:text-base font-medium drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]">
+                        {siteConfig.subtitle}
+                    </p>
+                )}
+            </div>
+        </div>
+    </div>
 </div>}
 
 <!-- Main content -->
@@ -120,4 +138,42 @@ const mainPanelTop = showBanner
         {!siteConfig.toc.enable && <div id="toc"></div>}
     </div>
 </div>
+
+<script>
+function updateReadingProgress() {
+    const bar = document.getElementById("reading-progress");
+    if (!bar) return;
+    const isPost = Boolean(document.getElementById("post-container"));
+    if (!isPost) {
+        bar.style.opacity = "0";
+        bar.style.width = "0%";
+        return;
+    }
+    const doc = document.documentElement;
+    const scrollTop = window.scrollY || doc.scrollTop;
+    const maxScroll = doc.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) {
+        bar.style.opacity = "0";
+        bar.style.width = "0%";
+        return;
+    }
+    const pct = Math.min(100, Math.max(0, (scrollTop / maxScroll) * 100));
+    bar.style.opacity = scrollTop > 40 ? "1" : "0";
+    bar.style.width = `${pct.toFixed(1)}%`;
+}
+
+if (!(window as any).__readingProgressBound) {
+    (window as any).__readingProgressBound = true;
+    window.addEventListener("scroll", updateReadingProgress, { passive: true });
+    window.addEventListener("resize", updateReadingProgress, { passive: true });
+    const bindSwup = () => {
+        window.swup?.hooks.on("page:view", () => {
+            requestAnimationFrame(updateReadingProgress);
+        });
+    };
+    if (window.swup) bindSwup();
+    else document.addEventListener("swup:enable", bindSwup, { once: true });
+}
+updateReadingProgress();
+</script>
 </Layout>

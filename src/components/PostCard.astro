@@ -63,13 +63,15 @@ const { remarkPluginFrontmatter } = await entry.render();
         </div>
 
         <!-- word count and read time  -->
-        <div class="text-xs text-black/45 dark:text-white/45 flex items-center gap-2.5 transition">
-            <div>
-                {remarkPluginFrontmatter.words} {" " + i18n(remarkPluginFrontmatter.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}
+        <div class="text-xs text-black/45 dark:text-white/45 flex items-center gap-3 transition">
+            <div class="inline-flex items-center gap-1">
+                <Icon name="material-symbols:notes-rounded" class="text-sm text-[var(--primary)] opacity-80" />
+                <span>{remarkPluginFrontmatter.words} {" " + i18n(remarkPluginFrontmatter.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}</span>
             </div>
-            <div aria-hidden="true">·</div>
-            <div>
-                {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
+            <div aria-hidden="true" class="text-black/25 dark:text-white/25">·</div>
+            <div class="inline-flex items-center gap-1">
+                <Icon name="material-symbols:schedule-outline-rounded" class="text-sm text-[var(--primary)] opacity-80" />
+                <span>{remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}</span>
             </div>
         </div>
 
@@ -78,7 +80,7 @@ const { remarkPluginFrontmatter } = await entry.render();
     {hasCover && <a href={url} aria-label={title}
                     class:list={["group",
                         "aspect-[16/9] md:aspect-auto mx-4 mt-4 mb-0 md:my-0 md:mx-0",
-                        "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95"
+                        "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10 active:scale-95"
                     ]} >
         <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/25 group-active:bg-black/45 transition"></div>
         <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center ">

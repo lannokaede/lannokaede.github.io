@@ -136,11 +136,14 @@ const jsonLd = {
         <div class="grid grid-cols-1 md:grid-cols-2 mb-4 gap-4 w-full">
             {entry.data.nextSlug ? (
                 <a href={getPostUrlBySlug(entry.data.nextSlug)}
-                   class="w-full font-bold overflow-hidden active:scale-95">
-                    <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-3">
-                        <Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)]" />
-                        <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
-                            {entry.data.nextTitle}
+                   class="group w-full overflow-hidden active:scale-95">
+                    <div class="card-base post-card rounded-2xl w-full min-h-[4.25rem] max-w-full px-4 py-3 flex items-center justify-start gap-3">
+                        <Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)] transition-transform group-hover:-translate-x-0.5" />
+                        <div class="min-w-0">
+                            <div class="text-[0.72rem] text-50 mb-0.5">上一篇</div>
+                            <div class="font-bold overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
+                                {entry.data.nextTitle}
+                            </div>
                         </div>
                     </div>
                 </a>
@@ -148,12 +151,15 @@ const jsonLd = {
 
             {entry.data.prevSlug ? (
                 <a href={getPostUrlBySlug(entry.data.prevSlug)}
-                   class="w-full font-bold overflow-hidden active:scale-95">
-                    <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-3">
-                        <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap text-black/75 dark:text-white/75">
-                            {entry.data.prevTitle}
+                   class="group w-full overflow-hidden active:scale-95">
+                    <div class="card-base post-card rounded-2xl w-full min-h-[4.25rem] max-w-full px-4 py-3 flex items-center justify-end gap-3 text-right">
+                        <div class="min-w-0">
+                            <div class="text-[0.72rem] text-50 mb-0.5">下一篇</div>
+                            <div class="font-bold overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
+                                {entry.data.prevTitle}
+                            </div>
                         </div>
-                        <Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)]" />
+                        <Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)] transition-transform group-hover:translate-x-0.5" />
                     </div>
                 </a>
             ) : <div class="hidden md:block" />}

@@ -1,34 +1,56 @@
 ---
 import { Icon } from "astro-icon/components";
 import { profileConfig } from "../../config";
+import { getCategoryList, getSortedPosts, getTagList } from "../../utils/content-utils";
 import { url } from "../../utils/url-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
 
 const config = profileConfig;
+const [posts, categories, tags] = await Promise.all([
+	getSortedPosts(),
+	getCategoryList(),
+	getTagList(),
+]);
 ---
 <div class="card-base p-4">
     <a aria-label="Go to About Page" href={url('/about/')}
        class="group block relative mx-auto mt-1 mb-3
-       w-36 h-36 lg:w-44 lg:h-44 overflow-hidden rounded-2xl active:scale-95">
+       w-36 h-36 lg:w-44 lg:h-44 overflow-hidden rounded-2xl ring-2 ring-[var(--card-border)] shadow-sm active:scale-95 transition">
         <div class="absolute transition pointer-events-none group-hover:bg-black/30 group-active:bg-black/50
         w-full h-full z-50 flex items-center justify-center">
             <Icon name="fa6-regular:address-card"
                   class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-4xl">
             </Icon>
         </div>
-        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="w-full h-full"></ImageWrapper>
+        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="w-full h-full transition-transform duration-300 group-hover:scale-[1.03]"></ImageWrapper>
     </a>
     <div class="px-1">
-        <div class="font-bold text-xl text-center mb-1.5 dark:text-neutral-50 transition">{config.name}</div>
+        <div class="font-bold text-xl text-center mb-1.5 dark:text-neutral-50 transition tracking-[-0.01em]">{config.name}</div>
         <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2.5 transition"></div>
         <div class="text-center text-sm leading-relaxed text-black/60 dark:text-white/60 mb-3.5 transition">{config.bio}</div>
+
+        <div class="grid grid-cols-3 gap-1 py-2.5 mb-3.5 border-y border-dashed border-[var(--line-divider)] text-center">
+            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                <div class="text-base font-bold text-90 leading-tight">{posts.length}</div>
+                <div class="text-[0.72rem] text-50 mt-0.5">文章</div>
+            </a>
+            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                <div class="text-base font-bold text-90 leading-tight">{categories.length}</div>
+                <div class="text-[0.72rem] text-50 mt-0.5">分类</div>
+            </a>
+            <a href={url('/archive/')} class="rounded-lg py-1 hover:bg-[var(--btn-plain-bg-hover)] transition">
+                <div class="text-base font-bold text-90 leading-tight">{tags.length}</div>
+                <div class="text-[0.72rem] text-50 mt-0.5">标签</div>
+            </a>
+        </div>
+
         <div class="flex flex-wrap gap-2 justify-center">
             {config.links.length > 1 && config.links.map(item =>
-                    <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
+                    <a rel="me" title={item.name} aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
                         <Icon name={item.icon} class="text-[1.35rem]"></Icon>
                     </a>
             )}
-            {config.links.length == 1 && <a rel="me" aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
+            {config.links.length == 1 && <a rel="me" title={config.links[0].name} aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
                                             class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95">
                 <Icon name={config.links[0].icon} class="text-[1.35rem]"></Icon>
                 {config.links[0].name}
