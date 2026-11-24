@@ -45,6 +45,42 @@ const mainPanelTop = showBanner
 <!-- Reading Progress Bar -->
 <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
 
+<!-- Wide-screen ambient side glow orbs & vertical architectural framing lines -->
+<div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
+    <div class="ambient-orb-left hidden lg:block absolute top-[38%] -left-36 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-70 dark:opacity-55"></div>
+    <div class="ambient-orb-right hidden lg:block absolute top-[58%] -right-36 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-65 dark:opacity-50"></div>
+    <div class="hidden min-[1440px]:block absolute inset-y-0 left-1/2 -translate-x-1/2 w-[calc(var(--page-width)+2.5rem)] border-x border-dashed border-[var(--line-divider)] opacity-80"></div>
+</div>
+
+<!-- Left Margin Editorial Spine Rail (wide desktop only) -->
+<aside class="pointer-events-none hidden min-[1480px]:flex fixed left-6 top-[70%] -translate-y-1/2 z-20 flex-col items-center gap-3.5 select-none opacity-75 hover:opacity-100 transition-opacity" aria-hidden="true">
+    <span class="font-mono-tech text-[0.7rem] text-[var(--primary)] leading-none">+</span>
+    <span class="w-px h-8 bg-gradient-to-b from-transparent via-[var(--line-color)] to-[var(--line-color)]"></span>
+    <span class="writing-vertical-lr font-mono-tech text-[0.65rem] tracking-[0.26em] uppercase text-50">
+        FIELD NOTES // LANNOKAEDE · 2026
+    </span>
+    <span class="w-px h-8 bg-[var(--line-color)]"></span>
+    <div class="flex flex-col items-center gap-1.5">
+        <span class="eq-bars"><span></span><span></span><span></span></span>
+        <span id="side-scroll-pct" class="font-mono-tech text-[0.65rem] font-semibold text-[var(--primary)]">00%</span>
+    </div>
+    <span class="font-mono-tech text-[0.7rem] text-30 leading-none">+</span>
+</aside>
+
+<!-- Right Margin Coordinates & Vertical Scroll Track (wide desktop, hidden on post pages with TOC) -->
+<aside id="right-margin-rail" class="pointer-events-none hidden min-[1480px]:flex fixed right-6 top-[70%] -translate-y-1/2 z-20 flex-col items-center gap-3.5 select-none opacity-75 transition-opacity duration-300" aria-hidden="true">
+    <span class="font-mono-tech text-[0.7rem] text-[var(--primary)] leading-none">+</span>
+    <div class="relative w-[2px] h-24 rounded-full bg-black/10 dark:bg-white/10 overflow-visible">
+        <div id="side-scroll-fill" class="w-full rounded-full bg-[var(--primary)]" style="height: 0%; transition: height 80ms linear;"></div>
+        <span id="side-scroll-dot" class="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--primary)] shadow-[0_0_8px_var(--primary)]" style="top: 0%; transition: top 80ms linear;"></span>
+    </div>
+    <span class="writing-vertical-rl font-mono-tech text-[0.65rem] tracking-[0.24em] uppercase text-50">
+        30.75°N · 103.93°E · CHENGDU
+    </span>
+    <span class="w-px h-8 bg-gradient-to-b from-[var(--line-color)] to-transparent"></span>
+    <span class="font-mono-tech text-[0.7rem] text-30 leading-none">+</span>
+</aside>
+
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
 <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
@@ -60,7 +96,7 @@ const mainPanelTop = showBanner
     <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/20"></div>
     <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-transparent"></div>
     <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/55 to-transparent"></div>
-    <div class="pointer-events-none absolute inset-x-0 bottom-[4.5rem] md:bottom-16 z-20">
+    <div id="banner-hero-copy" class="pointer-events-none absolute inset-x-0 bottom-[4.5rem] md:bottom-16 z-20 will-change-transform">
         <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7">
             <div class="max-w-2xl">
                 <div class="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 mb-3 border border-white/20 bg-black/40 backdrop-blur-md text-[0.72rem] font-mono-tech tracking-wider text-white/90 uppercase shadow-sm">
@@ -179,6 +215,23 @@ function updateScrollEffects() {
         ring.style.strokeDashoffset = `${(RING_CIRCUMFERENCE * (1 - ratio)).toFixed(2)}`;
     }
 
+    // 2b. Wide-screen margin rails (live scroll % & vertical track; hide right rail when post TOC is active)
+    const pctText = document.getElementById("side-scroll-pct");
+    if (pctText) {
+        pctText.textContent = `${String(Math.round(ratio * 100)).padStart(2, "0")}%`;
+    }
+    const sideFill = document.getElementById("side-scroll-fill");
+    const sideDot = document.getElementById("side-scroll-dot");
+    const pctStr = `${(ratio * 100).toFixed(1)}%`;
+    if (sideFill) sideFill.style.height = pctStr;
+    if (sideDot) sideDot.style.top = pctStr;
+
+    const rightRail = document.getElementById("right-margin-rail");
+    if (rightRail) {
+        const hasPostToc = Boolean(document.getElementById("post-container")) && Boolean(document.querySelector("#toc a"));
+        rightRail.style.opacity = hasPostToc ? "0" : "";
+    }
+
     // 3. Navbar scroll state
     const navbar = document.getElementById("navbar");
     if (navbar) {
@@ -186,13 +239,23 @@ function updateScrollEffects() {
         else navbar.removeAttribute("data-scrolled");
     }
 
-    // 4. Gentle Hero Banner Parallax
+    // 4. Gentle Hero Banner Parallax & hero copy fade-out (prevents bleed-through behind glass cards)
     const banner = document.getElementById("banner");
     if (banner) {
         if (!prefersReducedMotion() && scrollTop < 700) {
             banner.style.transform = `translate3d(0, ${(scrollTop * 0.2).toFixed(1)}px, 0) scale(1.04)`;
         } else if (prefersReducedMotion()) {
             banner.style.transform = "";
+        }
+    }
+    const heroCopy = document.getElementById("banner-hero-copy");
+    if (heroCopy) {
+        const heroOpacity = Math.max(0, 1 - scrollTop / 160);
+        heroCopy.style.opacity = heroOpacity.toFixed(2);
+        if (!prefersReducedMotion()) {
+            heroCopy.style.transform = `translate3d(0, ${(-Math.min(scrollTop, 180) * 0.16).toFixed(1)}px, 0)`;
+        } else {
+            heroCopy.style.transform = "";
         }
     }
 }

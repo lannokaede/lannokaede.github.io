@@ -121,6 +121,37 @@ body {
     border-color: color-mix(in oklch, var(--primary) 24%, var(--card-border));
 }
 
+/* Wide-screen ambient side orbs & editorial margin rails */
+@keyframes orb-drift-a {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(24px, -32px, 0) scale(1.08); }
+}
+
+@keyframes orb-drift-b {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-28px, 26px, 0) scale(1.06); }
+}
+
+.ambient-orb-left {
+    background: radial-gradient(circle, color-mix(in oklch, var(--primary) 20%, transparent) 0%, transparent 70%);
+    animation: orb-drift-a 18s ease-in-out infinite;
+}
+
+.ambient-orb-right {
+    background: radial-gradient(circle, color-mix(in oklch, var(--primary) 16%, transparent) 0%, transparent 70%);
+    animation: orb-drift-b 22s ease-in-out infinite;
+}
+
+.writing-vertical-rl {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.writing-vertical-lr {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
 @layer components {
     .font-display {
         font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;

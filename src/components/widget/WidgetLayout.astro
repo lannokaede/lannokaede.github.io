@@ -6,26 +6,32 @@ import { i18n } from "../../i18n/translation";
 interface Props {
 	id: string;
 	name?: string;
+	subtitle?: string;
 	isCollapsed?: boolean;
 	collapsedHeight?: string;
 	class?: string;
 	style?: string;
 }
-const { id, name, isCollapsed, collapsedHeight, style } = Astro.props;
+const { id, name, subtitle, isCollapsed, collapsedHeight, style } = Astro.props;
 const className = Astro.props.class;
 ---
-<widget-layout data-id={id} data-is-collapsed={String(isCollapsed)} class={"pb-4 card-base " + className} style={style}>
-    <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-4 mb-2
-        before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-        before:absolute before:left-[-16px] before:top-[5.5px]">{name}</div>
-    <div id={id} class:list={["collapse-wrapper px-4 overflow-hidden", {"collapsed": isCollapsed}]}>
+<widget-layout data-spotlight data-id={id} data-is-collapsed={String(isCollapsed)} class={"pb-4 card-base spotlight-card " + (className || "")} style={style}>
+    <div class="flex items-center justify-between px-4 pt-3.5 pb-2.5 mb-2.5 border-b border-dashed border-[var(--line-divider)]">
+        <div class="flex items-center gap-2">
+            <span class="w-1.5 h-4 rounded-full bg-[var(--primary)]"></span>
+            <span class="font-display font-bold text-[1.02rem] text-90 tracking-[-0.01em]">{name}</span>
+        </div>
+        {subtitle && (
+            <span class="font-mono-tech text-[0.65rem] tracking-widest uppercase text-50">{subtitle}</span>
+        )}
+    </div>
+    <div id={id} class:list={["collapse-wrapper px-4 overflow-hidden relative z-10", {"collapsed": isCollapsed}]}>
         <slot></slot>
     </div>
-    {isCollapsed && <div class="expand-btn px-4 -mb-2">
-        <button class="btn-plain rounded-lg w-full h-9">
-            <div class="text-[var(--primary)] flex items-center justify-center gap-2 -translate-x-2">
-                <Icon name="material-symbols:more-horiz" class="text-[1.75rem]"></Icon> {i18n(I18nKey.more)}
-            </div>
+    {isCollapsed && <div class="expand-btn px-4 pt-2.5 relative z-10">
+        <button class="w-full h-8 rounded-full border border-dashed border-[var(--line-divider)] hover:border-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] text-xs font-mono-tech text-50 hover:text-[var(--primary)] transition flex items-center justify-center gap-1.5 active:scale-95">
+            <span>{i18n(I18nKey.more)}</span>
+            <Icon name="material-symbols:keyboard-arrow-down-rounded" class="text-base"></Icon>
         </button>
     </div>}
 </widget-layout>

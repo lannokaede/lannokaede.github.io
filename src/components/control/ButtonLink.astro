@@ -6,38 +6,20 @@ interface Props {
 }
 const { badge, url, label } = Astro.props;
 ---
-<a href={url} aria-label={label}>
-    <button
-        class:list={`
-            w-full
-            h-10
-            rounded-lg
-            bg-none
-            hover:bg-[var(--btn-plain-bg-hover)]
-            active:bg-[var(--btn-plain-bg-active)]
-            transition-all
-            pl-2
-            hover:pl-3
-            
-            text-neutral-700
-            hover:text-[var(--primary)]
-            dark:text-neutral-300
-            dark:hover:text-[var(--primary)]
-        `
-        }
-    >
-        <div class="flex items-center justify-between relative mr-2">
-            <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  ">
-                <slot></slot>
-            </div>
-            { badge !== undefined && badge !== null && badge !== '' &&
-                <div class="transition px-2 h-7 ml-4 min-w-[2rem] text-sm font-bold
-                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
-                    bg-[var(--btn-regular-bg)] dark:bg-[var(--primary)]
-                    flex items-center justify-center">
-                    { badge }
-                </div>
-            }
-        </div>
-    </button>
+<a href={url} aria-label={label}
+   class="group flex items-center justify-between w-full h-9 rounded-xl px-2.5
+          text-sm text-75 hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)]
+          transition-all duration-200">
+    <span class="flex items-center gap-2 min-w-0">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary)] opacity-45 group-hover:opacity-100 group-hover:scale-125 transition"></span>
+        <span class="truncate group-hover:translate-x-0.5 transition-transform">
+            <slot></slot>
+        </span>
+    </span>
+    { badge !== undefined && badge !== null && badge !== '' &&
+        <span class="shrink-0 ml-3 px-2 py-0.5 rounded-full font-mono-tech text-[0.72rem] font-semibold transition"
+              style="background-color: color-mix(in oklch, var(--primary) 12%, transparent); color: var(--btn-content);">
+            { badge }
+        </span>
+    }
 </a>
