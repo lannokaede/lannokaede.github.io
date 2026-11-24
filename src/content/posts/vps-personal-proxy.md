@@ -64,3 +64,10 @@ systemctl list-timers 'personal-vpn-*'
 journalctl -u personal-vpn-cert-renew.service -n 30 --no-pager
 journalctl -u personal-vpn-backup.service -n 30 --no-pager
 ```
+
+## 后面顺手多出来的两个用法
+
+11 月中下旬，这台机器和 Clash Verge 又顺手补了两笔记录：
+
+- **Windows 下给游戏加进程直连**：在 Clash Verge Rev 2.5.10（开着 TUN）里想让《明日方舟》B 服 PC 端绕过代理，一开始只把 `Games.exe` 加进了本地订阅规则覆写的 `PROCESS-PATH,...,DIRECT`，后来一看它只是外层启动进程，真正跑游戏本体的是子进程 `Arknights.exe`，得把两个完整路径一块加进 `prepend`。Mihomo API 确认规则都加载进去了，不过当时没进游戏抓实时连接验证命中。
+- **给另一台服务器当美国出口**：11 月 23 日在另一台机器上搭自用 [LibreChat](/posts/self-hosted-aichat/) 时，官方镜像直连拉不动，干脆把那台机器上的 `v2rayA`（本机 SOCKS5 `127.0.0.1:20170` 和 HTTP `20171`）直接切到了这台美国 VPS 的 VLESS 节点，Cloudflare 和 IPinfo 实测出口都在美国。顺手看了眼 11 月 23 日这台 VPS 的资源余量：50 GB 根分区还剩 40 GB，内存可用约 1,283 MiB（总量 1,963 MiB，没开 swap），带这些个人服务绰绰有余。
