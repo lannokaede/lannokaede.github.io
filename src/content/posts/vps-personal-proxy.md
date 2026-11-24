@@ -1,5 +1,5 @@
 ---
-title: 美国 VPS 分给三个朋友共用，顺手查了个 Clash Verge DNS 泄漏
+title: 美国 VPS 分给朋友共用，外加 Clash Verge 的 DNS 排查
 published: 2026-10-28
 updated: 2026-11-24
 description: 给自己和三个朋友拆了独立订阅和 200 GiB 月额度，顺带记一下排查 Clash Verge 偷偷盖掉 DNS 规则的过程。
@@ -12,7 +12,7 @@ lang: zh_CN
 
 代理明明连着，查 IP 归属地和 WebRTC 也都在美国，结果浏览器一测 DNS，列表里还是挂着几个国内解析器。回头把订阅里的 DNS 策略补了一圈重拉，结果纹丝不动。
 
-## 服务器和端口是怎么分的
+## 服务器和端口分配
 
 机器是台 2 核 2 GB 的美国 VPS，系统跑 Ubuntu 22.04.5 LTS（x86_64），除了自己用，顺手给三个朋友也各分了一套。
 
@@ -26,7 +26,7 @@ ssh -N -L 15432:127.0.0.1:54321 root@VPS_HOST
 
 把 `VPS_HOST` 换成机器地址，终端别关，浏览器打开本地 15432 端口就能进。用完把隧道一掐，入口跟着就断了。
 
-## 四个人拆四份订阅
+## 四份独立订阅
 
 我自己那份在面板里没设限，三个朋友每人每月给了 200 GiB（面板按上传加下载算，填的是 `214748364800` 字节）。四个人共用同一个入口，节点凭证、订阅链接和流量计数全分开。
 
@@ -34,7 +34,7 @@ ssh -N -L 15432:127.0.0.1:54321 root@VPS_HOST
 
 三个朋友的账号设了每月 1 号自动清零，机器和面板时区统一调成了北京时间。之前特意把额度跑满停用、到点清零恢复、过期再续期都试了一轮，走的是 3x-ui 自带的[日历月续期逻辑](https://github.com/MHSanaei/3x-ui/blob/v3.11.0/internal/web/service/calendar_renew.go)，没出岔子。
 
-## Clash Verge 把 DNS 规则偷偷盖掉了
+## Clash Verge 的 DNS 覆写问题
 
 一开始以为是自己订阅文件漏写 DNS 规则，老老实实补了一遍、留好国内和局域网直连，重拉订阅再测，照样泄漏。
 
@@ -51,7 +51,7 @@ tun:
 
 不过改完之后还没重跑客户端检测，等有空再连着分流规则一起核一遍，顺便理清哪些域名本来就该走本地解析。
 
-## 证书续期和数据库自动备份
+## 证书续期和自动备份
 
 Nginx 8443 用的是一张 Let's Encrypt 的 IP 证书，跟 Xray 的 REALITY 分开管。
 
@@ -65,7 +65,7 @@ journalctl -u personal-vpn-cert-renew.service -n 30 --no-pager
 journalctl -u personal-vpn-backup.service -n 30 --no-pager
 ```
 
-## 后面顺手多出来的两个用法
+## 后来加的两个用法
 
 11 月中下旬，这台机器和 Clash Verge 又顺手补了两笔记录：
 
