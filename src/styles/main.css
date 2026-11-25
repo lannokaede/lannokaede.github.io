@@ -95,6 +95,149 @@ body {
     opacity: 1;
 }
 
+/* Cursor-tracking 1px illuminated border rim (Linear / Stripe style) */
+.spotlight-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 280ms ease;
+    background: radial-gradient(
+        260px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        color-mix(in oklch, var(--primary) 75%, white),
+        transparent 68%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+.spotlight-card:hover::after {
+    opacity: 0.9;
+}
+
+/* 3D micro-tilt on cards */
+.tilt-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* Scroll-triggered reveal wave */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+    transition: opacity 560ms cubic-bezier(0.22, 1, 0.36, 1), transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.tilt-card.is-visible {
+    transition-delay: 0ms !important;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms ease, border-color 260ms ease, background-color 180ms ease;
+}
+
+html.reduce-motion .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Hero scroll cue bobbing */
+@keyframes bob-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+}
+
+.animate-bob-y {
+    animation: bob-y 2s ease-in-out infinite;
+}
+
+/* Floating subtle margin glyphs */
+@keyframes glyph-float {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.28; }
+    50% { transform: translate3d(0, -14px, 0) rotate(8deg); opacity: 0.62; }
+}
+
+.side-glyph {
+    animation: glyph-float var(--glyph-dur, 7s) ease-in-out infinite;
+    animation-delay: var(--glyph-delay, 0s);
+}
+
+/* Magnetic tactile spring on interactive icon buttons */
+[data-magnetic] {
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+    will-change: transform;
+}
+
+/* Navbar sliding pill indicator */
+#nav-hover-pill {
+    transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), width 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+}
+
+/* Click spark micro-burst */
+@keyframes spark-ring {
+    0% { transform: translate(-50%, -50%) scale(0.25); opacity: 0.65; }
+    100% { transform: translate(-50%, -50%) scale(1.65); opacity: 0; }
+}
+
+@keyframes spark-dot {
+    0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.15); opacity: 0; }
+}
+
+.click-spark-ring {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 1.5px solid var(--primary);
+    pointer-events: none;
+    z-index: 9999;
+    animation: spark-ring 480ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.click-spark-dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--primary);
+    pointer-events: none;
+    z-index: 9999;
+    animation: spark-dot 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Subtle decorative corner hover brackets on cards */
+.corner-tick {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 25;
+    opacity: 0;
+    transition: opacity 260ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    border-color: color-mix(in oklch, var(--primary) 70%, transparent);
+}
+
+.post-card:hover .corner-tick {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
 /* Subtle diagonal sheen sweep on cover hover */
 .cover-sheen::after {
     content: "";

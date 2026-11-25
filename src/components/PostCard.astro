@@ -45,7 +45,11 @@ const visibleTags = (tags || []).slice(0, featured ? 5 : 3);
 const { remarkPluginFrontmatter } = await entry.render();
 ---
 {featured ? (
-<article data-spotlight class:list={["card-base post-card spotlight-card flex flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+<article data-spotlight data-tilt data-reveal class:list={["card-base post-card spotlight-card tilt-card scroll-reveal flex flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+    <span class="corner-tick top-2 left-2 border-t-2 border-l-2 rounded-tl -translate-x-1 -translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick top-2 right-2 border-t-2 border-r-2 rounded-tr translate-x-1 -translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick bottom-2 left-2 border-b-2 border-l-2 rounded-bl -translate-x-1 translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick bottom-2 right-2 border-b-2 border-r-2 rounded-br translate-x-1 translate-y-1" aria-hidden="true"></span>
     {hasCover && (
         <a href={url} aria-label={title} class="group cover-sheen relative block w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
             <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
@@ -111,7 +115,11 @@ const { remarkPluginFrontmatter } = await entry.render();
     </div>
 </article>
 ) : (
-<article data-spotlight class:list={["card-base post-card spotlight-card flex flex-col h-full w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+<article data-spotlight data-tilt data-reveal class:list={["card-base post-card spotlight-card tilt-card scroll-reveal flex flex-col h-full w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+    <span class="corner-tick top-2 left-2 border-t-2 border-l-2 rounded-tl -translate-x-1 -translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick top-2 right-2 border-t-2 border-r-2 rounded-tr translate-x-1 -translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick bottom-2 left-2 border-b-2 border-l-2 rounded-bl -translate-x-1 translate-y-1" aria-hidden="true"></span>
+    <span class="corner-tick bottom-2 right-2 border-b-2 border-r-2 rounded-br translate-x-1 translate-y-1" aria-hidden="true"></span>
     {hasCover && (
         <div class="group cover-sheen relative w-full aspect-[16/10] overflow-hidden">
             <a href={url} aria-label={title} class="block w-full h-full">

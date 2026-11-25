@@ -5,7 +5,7 @@ import { Icon } from "astro-icon/components";
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
 <div class="back-to-top-wrapper hidden lg:block">
     <div id="back-to-top-btn" class="back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
-        <button aria-label="Back to Top" class="card-base hover:border-[var(--primary)] relative h-[3.5rem] w-[3.5rem] rounded-2xl flex items-center justify-center group active:scale-90 transition">
+        <button data-magnetic aria-label="Back to Top" class="card-base hover:border-[var(--primary)] relative h-[3.5rem] w-[3.5rem] rounded-2xl flex items-center justify-center group active:scale-90 transition">
             <svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 56 56" aria-hidden="true">
                 <circle cx="28" cy="28" r="22" fill="none" stroke="currentColor" stroke-width="2.2" class="text-black/10 dark:text-white/10" />
                 <circle id="back-to-top-ring" cx="28" cy="28" r="22" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linecap="round"

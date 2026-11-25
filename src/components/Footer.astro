@@ -1,5 +1,4 @@
 ---
-
 import { licenseConfig, profileConfig } from "../config";
 import { url } from "../utils/url-utils";
 
@@ -7,7 +6,18 @@ const currentYear = new Date().getFullYear();
 ---
 
 <div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-6 md:mx-16"></div>
-<div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
+<div class="transition rounded-2xl mb-12 flex flex-col items-center justify-center gap-3 px-6">
+    <div class="inline-flex flex-wrap items-center justify-center gap-2.5 text-xs font-mono-tech text-50">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[var(--card-border)] bg-[var(--card-bg)]">
+            <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span>FIELD NOTES · CHENGDU</span>
+        </span>
+        <button type="button" data-motion-toggle
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[var(--card-border)] bg-[var(--card-bg)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition cursor-pointer active:scale-95">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary)]"></span>
+            <span data-motion-label>动效：开启</span>
+        </button>
+    </div>
     <div class="transition text-50 text-sm text-center leading-relaxed">
         &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name} ·
         {licenseConfig.enable && <><a class="transition link text-[var(--primary)] font-medium" target="_blank" rel="license" href={licenseConfig.url}>{licenseConfig.name}</a> · </>}

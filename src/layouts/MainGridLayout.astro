@@ -45,11 +45,17 @@ const mainPanelTop = showBanner
 <!-- Reading Progress Bar -->
 <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
 
-<!-- Wide-screen ambient side glow orbs & vertical architectural framing lines -->
+<!-- Wide-screen ambient side glow orbs, architectural framing lines & subtle floating glyphs -->
 <div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
     <div class="ambient-orb-left hidden lg:block absolute top-[38%] -left-36 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-70 dark:opacity-55"></div>
     <div class="ambient-orb-right hidden lg:block absolute top-[58%] -right-36 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-65 dark:opacity-50"></div>
     <div class="hidden min-[1440px]:block absolute inset-y-0 left-1/2 -translate-x-1/2 w-[calc(var(--page-width)+2.5rem)] border-x border-dashed border-[var(--line-divider)] opacity-80"></div>
+
+    <!-- Subtle drifting margin glyphs on ultra-wide screens -->
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[58%] left-[7%] font-mono-tech text-sm text-[var(--primary)]" style="--glyph-dur: 7.5s; --glyph-delay: 0s;">♪</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[82%] left-[10%] font-mono-tech text-xs text-50" style="--glyph-dur: 9s; --glyph-delay: 1.8s;">◇</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[62%] right-[8%] font-mono-tech text-xs text-[var(--primary)]" style="--glyph-dur: 8.2s; --glyph-delay: 0.9s;">+</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[85%] right-[10%] font-mono-tech text-sm text-50" style="--glyph-dur: 10s; --glyph-delay: 2.6s;">♫</span>
 </div>
 
 <!-- Left Margin Editorial Spine Rail (wide desktop only) -->
@@ -97,11 +103,18 @@ const mainPanelTop = showBanner
     <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-transparent"></div>
     <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/55 to-transparent"></div>
     <div id="banner-hero-copy" class="pointer-events-none absolute inset-x-0 bottom-[4.5rem] md:bottom-16 z-20 will-change-transform">
-        <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7">
+        <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7 flex items-end justify-between gap-4">
             <div class="max-w-2xl">
-                <div class="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 mb-3 border border-white/20 bg-black/40 backdrop-blur-md text-[0.72rem] font-mono-tech tracking-wider text-white/90 uppercase shadow-sm">
-                    <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-                    <span>ENGINEERING NOTES · GO / AGENT / VPS</span>
+                <div class="hidden sm:flex flex-wrap items-center gap-2 mb-3">
+                    <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 border border-white/20 bg-black/40 backdrop-blur-md text-[0.72rem] font-mono-tech tracking-wider text-white/90 uppercase shadow-sm">
+                        <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <span>ENGINEERING NOTES · GO / AGENT / VPS</span>
+                    </div>
+                    <div class="hidden md:inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 border border-white/15 bg-black/35 backdrop-blur-md text-[0.7rem] font-mono-tech text-white/80">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-soft-pulse"></span>
+                        <span>CHENGDU</span>
+                        <span id="hero-clock">--:--:--</span>
+                    </div>
                 </div>
                 <h1 class="font-display text-white text-2xl sm:text-3xl md:text-[2.75rem] leading-[1.15] font-bold tracking-[-0.02em] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]">
                     {siteConfig.title}
@@ -112,6 +125,13 @@ const mainPanelTop = showBanner
                     </p>
                 )}
             </div>
+
+            <!-- Interactive scroll-down cue on desktop -->
+            <button type="button" id="hero-scroll-cue" aria-label="向下浏览文章"
+                    class="pointer-events-auto hidden lg:inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 mb-10 border border-white/20 bg-black/40 hover:bg-black/60 backdrop-blur-md text-xs font-mono-tech text-white/85 hover:text-white transition cursor-pointer active:scale-95">
+                <span>SCROLL</span>
+                <Icon name="material-symbols:keyboard-arrow-down-rounded" class="text-base text-[var(--primary)] animate-bob-y" />
+            </button>
         </div>
     </div>
 </div>}
@@ -182,6 +202,11 @@ const mainPanelTop = showBanner
 
 <script>
 const RING_CIRCUMFERENCE = 138.23;
+const NOW_STATUSES = [
+    { label: "NOW BUILDING", text: "Go Agent · LibreChat · VPS" },
+    { label: "NOW PLAYING", text: "結束バンド · After School Tea Time" },
+    { label: "CURRENT BASE", text: "UESTC · Chengdu · Field Notes" },
+];
 
 function prefersReducedMotion() {
     return (
@@ -239,7 +264,7 @@ function updateScrollEffects() {
         else navbar.removeAttribute("data-scrolled");
     }
 
-    // 4. Gentle Hero Banner Parallax & hero copy fade-out (prevents bleed-through behind glass cards)
+    // 4. Gentle Hero Banner Parallax & hero copy fade-out
     const banner = document.getElementById("banner");
     if (banner) {
         if (!prefersReducedMotion() && scrollTop < 700) {
@@ -260,13 +285,183 @@ function updateScrollEffects() {
     }
 }
 
-function handleSpotlightMove(e: PointerEvent) {
+function updateHeroClock() {
+    const el = document.getElementById("hero-clock");
+    if (!el) return;
+    try {
+        el.textContent = new Intl.DateTimeFormat("zh-CN", {
+            timeZone: "Asia/Shanghai",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+        }).format(new Date());
+    } catch {}
+}
+
+function syncMotionToggleLabels() {
+    const reduced = document.documentElement.classList.contains("reduce-motion");
+    document.querySelectorAll<HTMLElement>("[data-motion-label]").forEach((el) => {
+        el.textContent = reduced ? "动效：减弱" : "动效：开启";
+    });
+}
+
+function initScrollReveal() {
+    const items = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (items.length === 0) return;
+    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
+        items.forEach((el) => el.classList.add("is-visible"));
+        return;
+    }
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.08, rootMargin: "0px 0px -24px 0px" },
+    );
+    items.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.96) {
+            el.classList.add("is-visible");
+        } else {
+            observer.observe(el);
+        }
+    });
+}
+
+function initInteractiveBindings() {
+    initScrollReveal();
+    syncMotionToggleLabels();
+    updateHeroClock();
+
+    // Hero scroll-down button
+    const scrollCue = document.getElementById("hero-scroll-cue");
+    if (scrollCue && !(scrollCue as any).__bound) {
+        (scrollCue as any).__bound = true;
+        scrollCue.addEventListener("click", () => {
+            const target = document.getElementById("main-grid");
+            if (target) target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+        });
+    }
+
+    // Interactive NOW BUILDING status switcher
+    const nowBtn = document.getElementById("now-terminal-btn");
+    if (nowBtn && !(nowBtn as any).__bound) {
+        (nowBtn as any).__bound = true;
+        let idx = 0;
+        nowBtn.addEventListener("click", () => {
+            idx = (idx + 1) % NOW_STATUSES.length;
+            const labelEl = document.getElementById("now-terminal-label");
+            const textEl = document.getElementById("now-terminal-text");
+            if (labelEl) labelEl.textContent = NOW_STATUSES[idx].label;
+            if (textEl) textEl.textContent = NOW_STATUSES[idx].text;
+        });
+    }
+
+    // Footer motion toggle buttons (desktop + mobile instances)
+    document.querySelectorAll<HTMLElement>("[data-motion-toggle]").forEach((btn) => {
+        if ((btn as any).__bound) return;
+        (btn as any).__bound = true;
+        btn.addEventListener("click", () => {
+            const root = document.documentElement;
+            const nextReduced = !root.classList.contains("reduce-motion");
+            root.classList.toggle("reduce-motion", nextReduced);
+            try {
+                localStorage.setItem("field-motion", nextReduced ? "reduced" : "full");
+            } catch {}
+            syncMotionToggleLabels();
+            updateScrollEffects();
+            if (nextReduced) {
+                document.querySelectorAll<HTMLElement>("[data-tilt],[data-magnetic]").forEach((el) => {
+                    el.style.transform = "";
+                });
+            }
+        });
+    });
+
+    // 3D Micro-Tilt reset on leave
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+        if ((card as any).__tiltBound) return;
+        (card as any).__tiltBound = true;
+        card.addEventListener("pointerleave", () => {
+            card.style.transform = "";
+        });
+    });
+
+    // Magnetic button reset on leave
+    document.querySelectorAll<HTMLElement>("[data-magnetic]").forEach((btn) => {
+        if ((btn as any).__magBound) return;
+        (btn as any).__magBound = true;
+        btn.addEventListener("pointerleave", () => {
+            btn.style.transform = "";
+        });
+    });
+}
+
+function handlePointerMove(e: PointerEvent) {
     if (e.pointerType !== "mouse" || prefersReducedMotion()) return;
-    const target = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-spotlight]");
-    if (!target) return;
-    const rect = target.getBoundingClientRect();
-    target.style.setProperty("--mouse-x", `${(e.clientX - rect.left).toFixed(1)}px`);
-    target.style.setProperty("--mouse-y", `${(e.clientY - rect.top).toFixed(1)}px`);
+    const rawTarget = e.target as HTMLElement | null;
+
+    // 1. Spotlight + illuminated 1px border rim
+    const spot = rawTarget?.closest<HTMLElement>("[data-spotlight]");
+    if (spot) {
+        const rect = spot.getBoundingClientRect();
+        spot.style.setProperty("--mouse-x", `${(e.clientX - rect.left).toFixed(1)}px`);
+        spot.style.setProperty("--mouse-y", `${(e.clientY - rect.top).toFixed(1)}px`);
+    }
+
+    // 2. Subtle 3D micro-tilt on Bento cards
+    const tilt = rawTarget?.closest<HTMLElement>("[data-tilt]");
+    if (tilt) {
+        const rect = tilt.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width - 0.5;
+        const ny = (e.clientY - rect.top) / rect.height - 0.5;
+        const rx = (-ny * 4.2).toFixed(2);
+        const ry = (nx * 4.2).toFixed(2);
+        tilt.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+    }
+
+    // 3. Magnetic pull on small icon buttons
+    const mag = rawTarget?.closest<HTMLElement>("[data-magnetic]");
+    if (mag) {
+        const rect = mag.getBoundingClientRect();
+        const dx = ((e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2)) * 4;
+        const dy = ((e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2)) * 4;
+        mag.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
+    }
+}
+
+function spawnClickSpark(e: MouseEvent) {
+    if (prefersReducedMotion()) return;
+    const x = e.clientX;
+    const y = e.clientY;
+    if (x === 0 && y === 0) return;
+
+    const ring = document.createElement("span");
+    ring.className = "click-spark-ring";
+    ring.style.left = `${x}px`;
+    ring.style.top = `${y}px`;
+    document.body.appendChild(ring);
+    setTimeout(() => ring.remove(), 500);
+
+    const count = 6;
+    for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.4 - 0.2);
+        const dist = 16 + Math.random() * 10;
+        const dot = document.createElement("span");
+        dot.className = "click-spark-dot";
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        dot.style.setProperty("--dx", `${(Math.cos(angle) * dist).toFixed(1)}px`);
+        dot.style.setProperty("--dy", `${(Math.sin(angle) * dist).toFixed(1)}px`);
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 540);
+    }
 }
 
 if (!(window as any).__blogMotionBound) {
@@ -282,16 +477,22 @@ if (!(window as any).__blogMotionBound) {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
-    document.addEventListener("pointermove", handleSpotlightMove, { passive: true });
+    document.addEventListener("pointermove", handlePointerMove, { passive: true });
+    document.addEventListener("click", spawnClickSpark, { passive: true });
+    window.setInterval(updateHeroClock, 1000);
 
     const bindSwup = () => {
         window.swup?.hooks.on("page:view", () => {
-            requestAnimationFrame(updateScrollEffects);
+            requestAnimationFrame(() => {
+                initInteractiveBindings();
+                updateScrollEffects();
+            });
         });
     };
     if (window.swup) bindSwup();
     else document.addEventListener("swup:enable", bindSwup, { once: true });
 }
+initInteractiveBindings();
 updateScrollEffects();
 </script>
 </Layout>
