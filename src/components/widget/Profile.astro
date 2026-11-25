@@ -13,20 +13,28 @@ const [posts, categories, tags] = await Promise.all([
 ]);
 ---
 <div data-spotlight class="card-base spotlight-card overflow-hidden">
-    <!-- Decorative studio header band -->
-    <div class="h-20 w-full relative overflow-hidden"
-         style="background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 30%, transparent), color-mix(in oklch, var(--primary) 10%, transparent));">
-        <div class="absolute inset-0 opacity-40"
-             style="background-image: radial-gradient(color-mix(in oklch, var(--primary) 45%, transparent) 1px, transparent 1px); background-size: 14px 14px;"></div>
-        <div class="absolute top-2.5 right-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.68rem] font-mono-tech text-75 bg-[var(--card-bg)] border border-[var(--card-border)]">
+    <!-- Unified Studio Window Chrome -->
+    <div class="win-chrome">
+        <div class="flex items-center gap-2 min-w-0">
+            <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="font-mono-tech text-[0.68rem] text-50 truncate">~/profile</span>
+        </div>
+        <span class="inline-flex items-center gap-1.5 font-mono-tech text-[0.64rem] text-50">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-soft-pulse"></span>
             <span>UESTC · SE</span>
-        </div>
+        </span>
     </div>
 
-    <div class="px-4 pb-4">
+    <!-- Decorative studio gradient header band -->
+    <div class="h-14 w-full relative overflow-hidden"
+         style="background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 28%, transparent), color-mix(in oklch, var(--primary) 8%, transparent));">
+        <div class="absolute inset-0 opacity-40"
+             style="background-image: radial-gradient(color-mix(in oklch, var(--primary) 45%, transparent) 1px, transparent 1px); background-size: 14px 14px;"></div>
+    </div>
+
+    <div class="px-4 pb-4 relative z-10">
         <a aria-label="Go to About Page" href={url('/about/')}
-           class="group block relative mx-auto -mt-12 mb-3
+           class="group block relative mx-auto -mt-10 mb-3
            w-24 h-24 lg:w-28 lg:h-28 overflow-hidden rounded-2xl ring-4 ring-[var(--card-bg)] shadow-md active:scale-95 transition">
             <div class="absolute transition pointer-events-none group-hover:bg-black/35 group-active:bg-black/50
             w-full h-full z-50 flex items-center justify-center">
@@ -40,7 +48,7 @@ const [posts, categories, tags] = await Promise.all([
         <div class="px-1">
             <div class="font-display font-bold text-xl text-center mb-1 text-90 transition tracking-[-0.01em]">{config.name}</div>
             <div class="h-0.5 w-6 bg-[var(--primary)] mx-auto rounded-full mb-2.5 opacity-80 transition"></div>
-            <div class="text-center text-[0.84rem] leading-relaxed text-black/60 dark:text-white/60 mb-4 transition">{config.bio}</div>
+            <div class="text-center text-[0.84rem] leading-relaxed text-black/60 dark:text-white/60 mb-3.5 transition">{config.bio}</div>
 
             <div class="grid grid-cols-3 gap-1.5 py-2.5 mb-3.5 border-y border-dashed border-[var(--line-divider)] text-center">
                 <a href={url('/archive/')} class="rounded-xl py-1.5 hover:bg-[var(--btn-plain-bg-hover)] transition">
@@ -57,19 +65,26 @@ const [posts, categories, tags] = await Promise.all([
                 </a>
             </div>
 
-            <!-- NOW / interactive mini terminal status strip -->
-            <button type="button" id="now-terminal-btn" title="点一下切换状态"
-                    class="w-full text-left mb-4 rounded-xl px-3 py-2 text-[0.73rem] font-mono-tech border border-[var(--card-border)] hover:border-[var(--primary)] active:scale-[0.98] transition cursor-pointer group"
-                    style="background-color: color-mix(in oklch, var(--btn-regular-bg) 55%, transparent);">
-                <div class="flex items-center justify-between text-[0.65rem] text-50 mb-1">
-                    <span class="inline-flex items-center gap-1.5">
-                        <span class="eq-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-                        <span id="now-terminal-label">NOW BUILDING</span>
-                    </span>
-                    <span class="text-[var(--primary)] group-hover:opacity-100 opacity-80 transition">SWITCH ↻</span>
+            <!-- Proposal C: Dark Mini Terminal Console (interactive) -->
+            <button type="button" id="now-terminal-btn" title="点击切换状态"
+                    class="mini-terminal group w-full text-left mb-4 rounded-xl overflow-hidden active:scale-[0.98] cursor-pointer">
+                <div class="px-2.5 py-1.5 flex items-center justify-between border-b border-white/10"
+                     style="background: rgba(255, 255, 255, 0.04);">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="win-dots win-dots-vivid" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <span class="font-mono-tech text-[0.64rem] text-slate-400 truncate">lannokaede@cd:~</span>
+                    </div>
+                    <span class="shrink-0 font-mono-tech text-[0.62rem] text-[var(--primary)] opacity-80 group-hover:opacity-100 transition">TAB ↻</span>
                 </div>
-                <div class="text-75 truncate">
-                    <span class="text-[var(--primary)] mr-1">&gt;</span><span id="now-terminal-text">Go Agent · LibreChat · VPS</span><span class="terminal-cursor" aria-hidden="true"></span>
+                <div class="px-2.5 py-2.5 font-mono-tech term-scanlines">
+                    <div class="text-[0.65rem] text-emerald-400/90 mb-1 flex items-center gap-1.5">
+                        <span>$ status --mode</span>
+                        <span id="now-terminal-label" class="px-1.5 py-0.2 rounded text-[0.62rem]"
+                              style="background-color: color-mix(in oklch, var(--primary) 26%, transparent); color: color-mix(in oklch, var(--primary) 45%, white);">build</span>
+                    </div>
+                    <div class="text-[0.75rem] text-slate-100 truncate">
+                        <span class="text-[var(--primary)] mr-1">❯</span><span id="now-terminal-text">Go Agent · LibreChat · VPS</span><span class="terminal-cursor" aria-hidden="true"></span>
+                    </div>
                 </div>
             </button>
 

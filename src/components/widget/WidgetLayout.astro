@@ -16,13 +16,13 @@ const { id, name, subtitle, isCollapsed, collapsedHeight, style } = Astro.props;
 const className = Astro.props.class;
 ---
 <widget-layout data-spotlight data-id={id} data-is-collapsed={String(isCollapsed)} class={"pb-4 card-base spotlight-card " + (className || "")} style={style}>
-    <div class="flex items-center justify-between px-4 pt-3.5 pb-2.5 mb-2.5 border-b border-dashed border-[var(--line-divider)]">
-        <div class="flex items-center gap-2">
-            <span class="w-1.5 h-4 rounded-full bg-[var(--primary)]"></span>
-            <span class="font-display font-bold text-[1.02rem] text-90 tracking-[-0.01em]">{name}</span>
+    <div class="win-chrome mb-3">
+        <div class="flex items-center gap-2 min-w-0">
+            <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="font-display font-bold text-[0.95rem] text-90 tracking-[-0.01em] truncate">{name}</span>
         </div>
         {subtitle && (
-            <span class="font-mono-tech text-[0.65rem] tracking-widest uppercase text-50">{subtitle}</span>
+            <span class="font-mono-tech text-[0.64rem] tracking-wider text-50 shrink-0">{subtitle}</span>
         )}
     </div>
     <div id={id} class:list={["collapse-wrapper px-4 overflow-hidden relative z-10", {"collapsed": isCollapsed}]}>

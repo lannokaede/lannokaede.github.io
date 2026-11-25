@@ -50,6 +50,13 @@ const { remarkPluginFrontmatter } = await entry.render();
     <span class="corner-tick top-2 right-2 border-t-2 border-r-2 rounded-tr translate-x-1 -translate-y-1" aria-hidden="true"></span>
     <span class="corner-tick bottom-2 left-2 border-b-2 border-l-2 rounded-bl -translate-x-1 translate-y-1" aria-hidden="true"></span>
     <span class="corner-tick bottom-2 right-2 border-b-2 border-r-2 rounded-br translate-x-1 translate-y-1" aria-hidden="true"></span>
+    <div class="win-chrome">
+        <div class="flex items-center gap-2 min-w-0">
+            <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="font-mono-tech text-[0.68rem] text-50 truncate">~/posts/{entry.slug}.md</span>
+        </div>
+        <span class="font-mono-tech text-[0.66rem] text-[var(--primary)] font-semibold shrink-0">LATEST · #{issueNumber}</span>
+    </div>
     {hasCover && (
         <a href={url} aria-label={title} class="group cover-sheen relative block w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
             <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
@@ -120,6 +127,13 @@ const { remarkPluginFrontmatter } = await entry.render();
     <span class="corner-tick top-2 right-2 border-t-2 border-r-2 rounded-tr translate-x-1 -translate-y-1" aria-hidden="true"></span>
     <span class="corner-tick bottom-2 left-2 border-b-2 border-l-2 rounded-bl -translate-x-1 translate-y-1" aria-hidden="true"></span>
     <span class="corner-tick bottom-2 right-2 border-b-2 border-r-2 rounded-br translate-x-1 translate-y-1" aria-hidden="true"></span>
+    <div class="win-chrome">
+        <div class="flex items-center gap-2 min-w-0">
+            <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="font-mono-tech text-[0.66rem] text-50 truncate">#{issueNumber} · {category || "notes"}</span>
+        </div>
+        <span class="font-mono-tech text-[0.65rem] text-50 shrink-0">{formatDateToYYYYMMDD(published)}</span>
+    </div>
     {hasCover && (
         <div class="group cover-sheen relative w-full aspect-[16/10] overflow-hidden">
             <a href={url} aria-label={title} class="block w-full h-full">

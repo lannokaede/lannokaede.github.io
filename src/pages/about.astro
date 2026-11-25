@@ -1,5 +1,4 @@
 ---
-
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
@@ -16,10 +15,19 @@ const { Content } = await render(aboutPost);
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-6 md:px-9 py-6 md:py-7 relative w-full ">
-            <Markdown class="mt-2" searchable={false}>
-                <Content />
-            </Markdown>
+        <div class="card-base z-10 overflow-hidden relative w-full">
+            <div class="win-chrome">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="win-dots win-dots-vivid" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <span class="font-mono-tech text-[0.68rem] text-50 truncate">~/about.md</span>
+                </div>
+                <span class="font-mono-tech text-[0.65rem] text-50 shrink-0">README</span>
+            </div>
+            <div class="px-6 md:px-9 py-6 md:py-7">
+                <Markdown class="mt-1" searchable={false}>
+                    <Content />
+                </Markdown>
+            </div>
         </div>
     </div>
 </MainGridLayout>
