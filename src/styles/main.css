@@ -391,14 +391,45 @@ html.reduce-motion .scroll-reveal {
         border-color: color-mix(in oklch, var(--primary) 42%, var(--card-border));
     }
     .pill-tag {
-        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition;
-        background-color: color-mix(in oklch, var(--btn-regular-bg) 85%, transparent);
+        @apply inline-flex items-stretch rounded-[7px] overflow-hidden text-xs font-medium leading-[1.35] transition;
+        font-family: "Roboto", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+        background-color: #ffffff;
+        color: oklch(0.28 0.02 var(--hue));
+        border: 1px solid color-mix(in oklch, var(--primary) 24%, rgba(15, 23, 42, 0.1));
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    :root.dark .pill-tag {
+        background-color: #111625;
+        color: #e2e8f0;
+        border-color: color-mix(in oklch, var(--primary) 30%, rgba(255, 255, 255, 0.08));
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+    }
+    .pill-tag-prefix {
+        @apply inline-flex items-center justify-center px-1.5 py-0.5 font-mono-tech text-[0.68rem] font-bold transition;
+        background-color: color-mix(in oklch, var(--primary) 12%, transparent);
         color: var(--btn-content);
-        border: 1px solid color-mix(in oklch, var(--primary) 14%, transparent);
+        border-right: 1px solid color-mix(in oklch, var(--primary) 20%, transparent);
+    }
+    :root.dark .pill-tag-prefix {
+        background-color: color-mix(in oklch, var(--primary) 20%, transparent);
+        color: color-mix(in oklch, var(--primary) 55%, white);
+        border-right-color: color-mix(in oklch, var(--primary) 26%, transparent);
+    }
+    .pill-tag-label {
+        @apply inline-flex items-center px-2 py-0.5 tracking-[0.015em];
     }
     .pill-tag:hover {
-        background-color: var(--btn-regular-bg-hover);
-        border-color: color-mix(in oklch, var(--primary) 35%, transparent);
+        transform: translateY(-1.5px);
+        border-color: color-mix(in oklch, var(--primary) 70%, transparent);
+        box-shadow: 0 6px 14px -4px color-mix(in oklch, var(--primary) 32%, transparent);
+    }
+    .pill-tag:hover .pill-tag-prefix {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-right-color: var(--primary);
+    }
+    .pill-tag:active {
+        transform: translateY(0) scale(0.97);
     }
     .reading-progress-bar {
         position: fixed;

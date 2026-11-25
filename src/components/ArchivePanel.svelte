@@ -94,7 +94,7 @@ onMount(async () => {
                         <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">{cat}</span>
                     {/each}
                     {#each tags as tag}
-                        <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">#{tag}</span>
+                        <span class="pill-tag"><span class="pill-tag-prefix" aria-hidden="true">#</span><span class="pill-tag-label">{tag}</span></span>
                     {/each}
                     {#if uncategorized}
                         <span class="px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] font-medium">未分类</span>
