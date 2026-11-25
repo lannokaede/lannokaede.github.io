@@ -166,12 +166,13 @@ const mainPanelTop = showBanner
 </div>
 
 <!-- Banner -->
-{showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-hidden">
-    <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
-                  mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/20"></div>
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-transparent"></div>
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--page-bg)] via-[var(--page-bg)]/55 to-transparent"></div>
+{showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-visible">
+    <div id="banner-media" class="banner-media-mask pointer-events-none absolute inset-x-0 top-0 h-[calc(100%+2rem)] md:h-[calc(100%+4.75rem)] overflow-hidden">
+        <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
+                      mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/58 via-black/22 to-black/18"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/42 via-black/10 to-transparent"></div>
+    </div>
     <div id="banner-hero-copy" class="pointer-events-none absolute inset-x-0 bottom-[4.5rem] md:bottom-16 z-20 will-change-transform">
         <div class="max-w-[var(--page-width)] mx-auto px-5 md:px-7 flex items-end justify-between gap-4">
             <div class="max-w-2xl">
