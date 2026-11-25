@@ -563,11 +563,24 @@ html.reduce-motion .animate-bob-y {
     animation-play-state: paused !important;
 }
 
+html.reduce-motion #banner-media {
+    position: absolute !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .bg-marquee-track,
     .side-glyph,
     .animate-bob-y {
         animation-play-state: paused !important;
+    }
+    #banner-media {
+        position: absolute !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 }
 

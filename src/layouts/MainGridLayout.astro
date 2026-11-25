@@ -167,8 +167,8 @@ const mainPanelTop = showBanner
 
 <!-- Banner -->
 {showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-visible">
-    <div id="banner-media" class="banner-media-mask pointer-events-none absolute inset-x-0 top-0 h-[calc(100%+2rem)] md:h-[calc(100%+4.75rem)] overflow-hidden">
-        <ImageWrapper id="banner" class="h-full" src={siteConfig.banner.src}
+    <div id="banner-media" class="banner-media-mask pointer-events-none fixed inset-x-0 top-0 z-0 overflow-hidden will-change-transform">
+        <ImageWrapper id="banner" class="h-full will-change-transform" src={siteConfig.banner.src}
                       mobileSrc={siteConfig.banner.mobileSrc} position={siteConfig.banner.position} priority />
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/58 via-black/22 to-black/18"></div>
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/42 via-black/10 to-transparent"></div>
@@ -335,28 +335,43 @@ function updateScrollEffects() {
         else navbar.removeAttribute("data-scrolled");
     }
 
-    // 4. Gentle Hero Banner Parallax & hero copy fade-out
+    // 4. Lingering cinematic parallax on Hero Banner & smooth hero copy fade-out
+    const bannerMedia = document.getElementById("banner-media");
     const banner = document.getElementById("banner");
-    if (banner) {
-        if (!prefersReducedMotion() && scrollTop < 700) {
-            banner.style.transform = `translate3d(0, ${(scrollTop * 0.2).toFixed(1)}px, 0) scale(1.04)`;
-        } else if (prefersReducedMotion()) {
-            banner.style.transform = "";
+    const reduced = prefersReducedMotion();
+    if (bannerMedia) {
+        if (reduced) {
+            bannerMedia.style.transform = "";
+            bannerMedia.style.opacity = "";
+            bannerMedia.style.visibility = "";
+            if (banner) banner.style.transform = "";
+        } else {
+            const fadeStart = 200;
+            const fadeRange = 540;
+            const p = Math.min(1, Math.max(0, (scrollTop - fadeStart) / fadeRange));
+            const opacity = Math.pow(1 - p, 1.35);
+            const lingerY = -Math.min(scrollTop, 920) * 0.28;
+            bannerMedia.style.transform = `translate3d(0, ${lingerY.toFixed(1)}px, 0)`;
+            bannerMedia.style.opacity = opacity.toFixed(3);
+            bannerMedia.style.visibility = opacity <= 0.01 ? "hidden" : "visible";
+            if (banner) {
+                const zoom = 1 + Math.min(scrollTop / 740, 1) * 0.065;
+                banner.style.transform = `scale(${zoom.toFixed(4)})`;
+            }
         }
     }
     const heroCopy = document.getElementById("banner-hero-copy");
     if (heroCopy) {
-        const heroOpacity = Math.max(0, 1 - scrollTop / 160);
+        const heroOpacity = Math.max(0, 1 - scrollTop / 170);
         heroCopy.style.opacity = heroOpacity.toFixed(2);
-        if (!prefersReducedMotion()) {
-            heroCopy.style.transform = `translate3d(0, ${(-Math.min(scrollTop, 180) * 0.16).toFixed(1)}px, 0)`;
+        if (!reduced) {
+            heroCopy.style.transform = `translate3d(0, ${(Math.min(scrollTop, 180) * 0.22).toFixed(1)}px, 0)`;
         } else {
             heroCopy.style.transform = "";
         }
     }
 
     // 5. Multi-layered kinetic scrolling background parallax
-    const reduced = prefersReducedMotion();
     const bgGrid = document.getElementById("bg-scroll-grid");
     const marqueeA = document.getElementById("bg-marquee-shift-a");
     const marqueeB = document.getElementById("bg-marquee-shift-b");

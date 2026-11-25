@@ -179,6 +179,17 @@ const siteLang = lang.replace("_", "-");
 	.enable-banner #banner-wrapper {
 		height: var(--banner-display-height, var(--banner-height));
 	}
+	.enable-banner #banner-media {
+		height: calc(var(--banner-display-height, var(--banner-height)) + 2rem);
+	}
+	@media (min-width: 768px) {
+		.enable-banner #banner-media {
+			height: calc(var(--banner-display-height, var(--banner-height)) + 4.75rem);
+		}
+	}
+	.enable-banner.is-home #banner-media {
+		height: calc(var(--banner-height-home) + 4.75rem);
+	}
 	.enable-banner.is-home #main-grid {
 		@apply translate-y-[var(--banner-height-extend)];
 	}
