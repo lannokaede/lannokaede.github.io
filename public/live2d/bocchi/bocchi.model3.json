@@ -1,0 +1,36 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "bocchi.moc3",
+		"Textures": [
+			"texture_00.png"
+		],
+		"Physics": "bocchi.physics3.json",
+		"DisplayInfo": "bocchi.cdi3.json",
+		"Expressions": [
+			{
+				"Name": "Guitar",
+				"File": "Guitar.exp3.json"
+			},
+			{
+				"Name": "Happy",
+				"File": "Happy.exp3.json"
+			},
+			{
+				"Name": "Scare",
+				"File": "Scare.exp3.json"
+			}
+		]
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"PARAM_EYE_L_OPEN",
+				"PARAM_EYE_R_OPEN"
+			]
+		}
+	],
+	"HitAreas": []
+}

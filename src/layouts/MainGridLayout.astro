@@ -45,27 +45,97 @@ const mainPanelTop = showBanner
 <!-- Reading Progress Bar -->
 <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
 
-<!-- Wide-screen ambient side glow orbs, architectural framing lines & subtle floating glyphs -->
-<div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
-    <div class="ambient-orb-left hidden lg:block absolute top-[38%] -left-36 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-70 dark:opacity-55"></div>
-    <div class="ambient-orb-right hidden lg:block absolute top-[58%] -right-36 w-[26rem] h-[26rem] rounded-full blur-3xl opacity-65 dark:opacity-50"></div>
+<!-- Multi-layered kinetic scrolling background stage -->
+<div id="kinetic-bg-stage" class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
+    <!-- Layer 1: Kessoku-inspired parallax atmospheric aura washes -->
+    <div id="bg-orb-a" class="ambient-orb-bocchi hidden md:block absolute top-[32%] -left-32 w-[30rem] h-[30rem] rounded-full blur-3xl will-change-transform"></div>
+    <div id="bg-orb-b" class="ambient-orb-right hidden md:block absolute top-[48%] -right-32 w-[28rem] h-[28rem] rounded-full blur-3xl will-change-transform"></div>
+    <div id="bg-orb-c" class="ambient-orb-nijika hidden lg:block absolute top-[76%] left-[12%] w-[24rem] h-[24rem] rounded-full blur-3xl will-change-transform"></div>
+    <div id="bg-orb-d" class="ambient-orb-kita hidden lg:block absolute top-[78%] right-[14%] w-[22rem] h-[22rem] rounded-full blur-3xl will-change-transform"></div>
+
+    <!-- Layer 2: Scroll-parallax architectural blueprint cross-grid -->
+    <div id="bg-scroll-grid" class="bg-scroll-grid absolute -inset-y-48 inset-x-0 will-change-transform"></div>
+
+    <!-- Layer 3: Dual opposing kinetic scrolling typography ribbons -->
+    <div class="bg-marquee-mask absolute inset-x-0 top-[56%] -rotate-[2deg] opacity-90">
+        <div id="bg-marquee-shift-a" class="will-change-transform">
+            <div class="bg-marquee-track bg-marquee-left">
+                <span class="bg-marquee-item">
+                    <span>KESSOKU BAND</span><em class="bg-marquee-sep">✦</em>
+                    <span>STARRY LIVE HOUSE</span><em class="bg-marquee-sep">//</em>
+                    <span>FIELD NOTES</span><em class="bg-marquee-sep">♪</em>
+                    <span>GO · AGENT · VPS</span><em class="bg-marquee-sep">✦</em>
+                    <span>結束バンド</span><em class="bg-marquee-sep">//</em>
+                    <span>LANNOKAEDE</span><em class="bg-marquee-sep">♫</em>
+                </span>
+                <span class="bg-marquee-item" aria-hidden="true">
+                    <span>KESSOKU BAND</span><em class="bg-marquee-sep">✦</em>
+                    <span>STARRY LIVE HOUSE</span><em class="bg-marquee-sep">//</em>
+                    <span>FIELD NOTES</span><em class="bg-marquee-sep">♪</em>
+                    <span>GO · AGENT · VPS</span><em class="bg-marquee-sep">✦</em>
+                    <span>結束バンド</span><em class="bg-marquee-sep">//</em>
+                    <span>LANNOKAEDE</span><em class="bg-marquee-sep">♫</em>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-marquee-mask absolute inset-x-0 top-[80%] -rotate-[2deg] opacity-85">
+        <div id="bg-marquee-shift-b" class="will-change-transform">
+            <div class="bg-marquee-track bg-marquee-right">
+                <span class="bg-marquee-item">
+                    <span>BOCCHI THE ROCK!</span><em class="bg-marquee-sep">♪</em>
+                    <span>CHENGDU 30.75°N</span><em class="bg-marquee-sep">//</em>
+                    <span>SELF-HOSTED NOTES</span><em class="bg-marquee-sep">✦</em>
+                    <span>ENGINEERING LOG</span><em class="bg-marquee-sep">♫</em>
+                    <span>AFTER SCHOOL TEA TIME</span><em class="bg-marquee-sep">//</em>
+                </span>
+                <span class="bg-marquee-item" aria-hidden="true">
+                    <span>BOCCHI THE ROCK!</span><em class="bg-marquee-sep">♪</em>
+                    <span>CHENGDU 30.75°N</span><em class="bg-marquee-sep">//</em>
+                    <span>SELF-HOSTED NOTES</span><em class="bg-marquee-sep">✦</em>
+                    <span>ENGINEERING LOG</span><em class="bg-marquee-sep">♫</em>
+                    <span>AFTER SCHOOL TEA TIME</span><em class="bg-marquee-sep">//</em>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer 4: Scroll-parallax guitar-string / music-staff SVG wave ribbons -->
+    <svg id="bg-wave-a" class="bg-staff-wave absolute top-[49%] -left-[22vw] w-[144vw] h-[220px] will-change-transform" viewBox="0 0 1920 220" fill="none" preserveAspectRatio="none">
+        <path d="M0,120 C260,44 520,192 840,112 C1160,32 1460,184 1920,98" stroke="var(--bg-wave-primary)" stroke-width="1.35" />
+        <path d="M0,136 C260,60 520,208 840,128 C1160,48 1460,200 1920,114" stroke="var(--bg-wave-pink)" stroke-width="1.1" stroke-dasharray="6 8" />
+        <path d="M0,152 C260,76 520,224 840,144 C1160,64 1460,216 1920,130" stroke="var(--bg-wave-primary)" stroke-width="0.95" opacity="0.72" />
+        <circle cx="310" cy="108" r="3.5" fill="var(--bg-wave-pink)" />
+        <circle cx="840" cy="112" r="3.5" fill="var(--bg-wave-primary)" />
+        <circle cx="1490" cy="148" r="3.5" fill="var(--bg-wave-pink)" />
+    </svg>
+
+    <svg id="bg-wave-b" class="bg-staff-wave absolute top-[73%] -left-[22vw] w-[144vw] h-[200px] will-change-transform" viewBox="0 0 1920 200" fill="none" preserveAspectRatio="none">
+        <path d="M0,96 C320,168 640,26 980,104 C1320,182 1620,42 1920,110" stroke="var(--bg-wave-pink)" stroke-width="1.2" opacity="0.85" />
+        <path d="M0,114 C320,186 640,44 980,122 C1320,200 1620,60 1920,128" stroke="var(--bg-wave-primary)" stroke-width="1.05" stroke-dasharray="4 10" />
+        <circle cx="520" cy="86" r="3" fill="var(--bg-wave-primary)" />
+        <circle cx="1280" cy="146" r="3.5" fill="var(--bg-wave-pink)" />
+    </svg>
+
+    <!-- Architectural framing dashed center lines -->
     <div class="hidden min-[1440px]:block absolute inset-y-0 left-1/2 -translate-x-1/2 w-[calc(var(--page-width)+2.5rem)] border-x border-dashed border-[var(--line-divider)] opacity-80"></div>
 
     <!-- Subtle drifting margin glyphs on ultra-wide screens -->
-    <span class="side-glyph hidden min-[1560px]:block absolute top-[58%] left-[7%] font-mono-tech text-sm text-[var(--primary)]" style="--glyph-dur: 7.5s; --glyph-delay: 0s;">♪</span>
-    <span class="side-glyph hidden min-[1560px]:block absolute top-[82%] left-[10%] font-mono-tech text-xs text-50" style="--glyph-dur: 9s; --glyph-delay: 1.8s;">◇</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[55%] left-[7%] font-mono-tech text-sm text-[var(--primary)]" style="--glyph-dur: 7.5s; --glyph-delay: 0s;">♪</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[69%] left-[10%] font-mono-tech text-xs text-pink-400/75" style="--glyph-dur: 9s; --glyph-delay: 1.8s;">✦</span>
     <span class="side-glyph hidden min-[1560px]:block absolute top-[62%] right-[8%] font-mono-tech text-xs text-[var(--primary)]" style="--glyph-dur: 8.2s; --glyph-delay: 0.9s;">+</span>
-    <span class="side-glyph hidden min-[1560px]:block absolute top-[85%] right-[10%] font-mono-tech text-sm text-50" style="--glyph-dur: 10s; --glyph-delay: 2.6s;">♫</span>
+    <span class="side-glyph hidden min-[1560px]:block absolute top-[85%] right-[10%] font-mono-tech text-sm text-pink-400/75" style="--glyph-dur: 10s; --glyph-delay: 2.6s;">♫</span>
 </div>
 
-<!-- Left Margin Editorial Spine Rail (wide desktop only) -->
-<aside class="pointer-events-none hidden min-[1480px]:flex fixed left-6 top-[70%] -translate-y-1/2 z-20 flex-col items-center gap-3.5 select-none opacity-75 hover:opacity-100 transition-opacity" aria-hidden="true">
+<!-- Left Margin Editorial Spine Rail (wide desktop only, horizontally clear of Live2D) -->
+<aside id="left-margin-rail" class="pointer-events-none hidden min-[1480px]:flex fixed left-6 top-[70%] -translate-y-1/2 z-20 flex-col items-center gap-3 select-none opacity-75 hover:opacity-100 transition-opacity" aria-hidden="true">
     <span class="font-mono-tech text-[0.7rem] text-[var(--primary)] leading-none">+</span>
-    <span class="w-px h-8 bg-gradient-to-b from-transparent via-[var(--line-color)] to-[var(--line-color)]"></span>
-    <span class="writing-vertical-lr font-mono-tech text-[0.65rem] tracking-[0.26em] uppercase text-50">
+    <span class="w-px h-6 bg-gradient-to-b from-transparent via-[var(--line-color)] to-[var(--line-color)]"></span>
+    <span class="writing-vertical-lr font-mono-tech text-[0.62rem] tracking-[0.24em] uppercase text-50">
         FIELD NOTES // LANNOKAEDE · 2026
     </span>
-    <span class="w-px h-8 bg-[var(--line-color)]"></span>
+    <span class="w-px h-6 bg-[var(--line-color)]"></span>
     <div class="flex flex-col items-center gap-1.5">
         <span class="eq-bars"><span></span><span></span><span></span></span>
         <span id="side-scroll-pct" class="font-mono-tech text-[0.65rem] font-semibold text-[var(--primary)]">00%</span>
@@ -282,6 +352,35 @@ function updateScrollEffects() {
         } else {
             heroCopy.style.transform = "";
         }
+    }
+
+    // 5. Multi-layered kinetic scrolling background parallax
+    const reduced = prefersReducedMotion();
+    const bgGrid = document.getElementById("bg-scroll-grid");
+    const marqueeA = document.getElementById("bg-marquee-shift-a");
+    const marqueeB = document.getElementById("bg-marquee-shift-b");
+    const waveA = document.getElementById("bg-wave-a");
+    const waveB = document.getElementById("bg-wave-b");
+    const orbA = document.getElementById("bg-orb-a");
+    const orbB = document.getElementById("bg-orb-b");
+    const orbC = document.getElementById("bg-orb-c");
+    const orbD = document.getElementById("bg-orb-d");
+
+    if (reduced) {
+        [bgGrid, marqueeA, marqueeB, waveA, waveB, orbA, orbB, orbC, orbD].forEach((el) => {
+            if (el) el.style.transform = "";
+        });
+    } else {
+        const clampedY = Math.min(scrollTop, 3200);
+        if (bgGrid) bgGrid.style.transform = `translate3d(0, ${(-(scrollTop * 0.18) % 96).toFixed(1)}px, 0)`;
+        if (marqueeA) marqueeA.style.transform = `translate3d(${(-clampedY * 0.16).toFixed(1)}px, 0, 0)`;
+        if (marqueeB) marqueeB.style.transform = `translate3d(${(clampedY * 0.13).toFixed(1)}px, 0, 0)`;
+        if (waveA) waveA.style.transform = `translate3d(${(clampedY * 0.09).toFixed(1)}px, ${(-clampedY * 0.05).toFixed(1)}px, 0)`;
+        if (waveB) waveB.style.transform = `translate3d(${(-clampedY * 0.08).toFixed(1)}px, ${(-clampedY * 0.035).toFixed(1)}px, 0)`;
+        if (orbA) orbA.style.transform = `translate3d(${(ratio * 28).toFixed(1)}px, ${(-ratio * 72).toFixed(1)}px, 0)`;
+        if (orbB) orbB.style.transform = `translate3d(${(-ratio * 34).toFixed(1)}px, ${(-ratio * 58).toFixed(1)}px, 0)`;
+        if (orbC) orbC.style.transform = `translate3d(${(ratio * 42).toFixed(1)}px, ${(-ratio * 95).toFixed(1)}px, 0)`;
+        if (orbD) orbD.style.transform = `translate3d(${(-ratio * 36).toFixed(1)}px, ${(-ratio * 84).toFixed(1)}px, 0)`;
     }
 }
 
