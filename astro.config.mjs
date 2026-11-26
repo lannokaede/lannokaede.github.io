@@ -37,13 +37,11 @@ export default defineConfig({
 			nesting: true,
 		}),
 		swup({
-			ignore: (url, { el } = {}) => {
-				if (el?.hasAttribute?.("data-no-swup")) return true;
-				return /\.(xml|txt|json|pdf|zip|png|jpe?g|webp|svg)$/i.test(url);
-			},
+			// Keep Swup instance for hooks while using rock-solid document navigation so
+			// rapid clicking never breaks Astro client:only Svelte islands or inline styles.
+			ignore: () => true,
 			theme: false,
 			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-			// Swap the banner+main stage and TOC while keeping Navbar, Kinetic BG, and Live2D Bocchi persistent.
 			containers: ["#swup-stage", "#toc"],
 			smoothScrolling: true,
 			cache: false,

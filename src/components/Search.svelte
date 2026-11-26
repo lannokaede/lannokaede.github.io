@@ -65,12 +65,7 @@ const quickActions: QuickAction[] = [
 
 function navigateTo(href: string) {
 	closePanel();
-	const swup = (window as any).swup;
-	if (swup && typeof swup.navigate === "function" && href.startsWith("/")) {
-		swup.navigate(href);
-	} else {
-		window.location.href = href;
-	}
+	window.location.href = href;
 }
 
 const openPanel = (focusInput = false) => {

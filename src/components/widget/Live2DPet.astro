@@ -85,6 +85,8 @@ const modelUrl = url("/live2d/bocchi/bocchi.model3.json");
 type ExpKey = "default" | "guitar" | "happy" | "scare";
 
 const STORAGE_KEY = "live2d-bocchi-hidden";
+const EXP_STORAGE_KEY = "live2d-bocchi-exp";
+const GREETED_KEY = "live2d-bocchi-greeted";
 const EXP_ORDER: ExpKey[] = ["default", "guitar", "happy", "scare"];
 const EXP_LINES: Record<ExpKey, string[]> = {
 	default: [
@@ -164,8 +166,19 @@ function initBocchiWidget() {
 	const modelUrl = root.dataset.modelUrl || "/live2d/bocchi/bocchi.model3.json";
 
 	let currentExp: ExpKey = "default";
-	let expTargets = { Guitar: 0, Happy: 0, Scare: 0 };
-	let expCurrent = { Guitar: 0, Happy: 0, Scare: 0 };
+	try {
+		const savedExp = sessionStorage.getItem(EXP_STORAGE_KEY) as ExpKey | null;
+		if (savedExp && EXP_ORDER.includes(savedExp)) currentExp = savedExp;
+	} catch {}
+	let expTargets = {
+		Guitar: currentExp === "guitar" ? 1 : 0,
+		Happy: currentExp === "happy" ? 1 : 0,
+		Scare: currentExp === "scare" ? 1 : 0,
+	};
+	let expCurrent = { ...expTargets };
+	chipButtons.forEach((btn) => {
+		btn.classList.toggle("is-active", btn.dataset.bocchiExp === currentExp);
+	});
 	let bubbleTimer: number | undefined;
 	let tempExpTimer: number | undefined;
 	let pixiStarted = false;
@@ -201,6 +214,9 @@ function initBocchiWidget() {
 	function setExpression(exp: ExpKey, speak = true, persistSelection = true) {
 		if (persistSelection) {
 			currentExp = exp;
+			try {
+				sessionStorage.setItem(EXP_STORAGE_KEY, exp);
+			} catch {}
 			chipButtons.forEach((btn) => {
 				btn.classList.toggle("is-active", btn.dataset.bocchiExp === exp);
 			});
@@ -497,11 +513,19 @@ function initBocchiWidget() {
 				}
 			});
 
-			window.setTimeout(() => {
-				if (!isHidden) {
-					showBubble(EXP_LINES.default[0]);
-				}
-			}, 900);
+			// Greet only once per browser session so navigating between posts stays calm
+			let alreadyGreeted = false;
+			try {
+				alreadyGreeted = sessionStorage.getItem(GREETED_KEY) === "1";
+				if (!alreadyGreeted) sessionStorage.setItem(GREETED_KEY, "1");
+			} catch {}
+			if (!alreadyGreeted) {
+				window.setTimeout(() => {
+					if (!isHidden) {
+						showBubble(EXP_LINES.default[0]);
+					}
+				}, 900);
+			}
 		} catch (err) {
 			window.clearTimeout(showLoaderTimer);
 			console.warn("[Live2D Bocchi] Failed to initialize:", err);
