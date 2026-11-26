@@ -19,11 +19,11 @@ export const siteConfig: SiteConfig = {
 		enable: true,
 		src: "/images/anime/bocchi-stage.webp",
 		mobileSrc: "/images/anime/bocchi-stage-mobile.webp",
-		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		position: "center 32%", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
 			enable: true,
 			text: "横幅 · 孤独摇滚！",
-			url: "https://chromaticdreamers.com/bocchi-the-rock-songs-ranked-by-guitar-difficulty/",
+			url: "https://wallhaven.cc/w/1p2m2w",
 		},
 	},
 	toc: {

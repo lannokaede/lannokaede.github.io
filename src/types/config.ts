@@ -24,7 +24,7 @@ export type SiteConfig = {
 		enable: boolean;
 		src: string;
 		mobileSrc?: string;
-		position?: "top" | "center" | "bottom";
+		position?: "top" | "center" | "bottom" | (string & {});
 		credit: {
 			enable: boolean;
 			text: string;
