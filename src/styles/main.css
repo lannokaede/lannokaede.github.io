@@ -1,7 +1,14 @@
 @tailwind components;
 
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 body {
     background-color: var(--page-bg);
+    font-variation-settings: "ROND" 45;
     background-image:
         radial-gradient(ellipse 75% 42% at 50% -6%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 72%),
         radial-gradient(ellipse 45% 35% at 88% 18%, color-mix(in oklch, var(--primary) 9%, transparent), transparent 70%),
@@ -596,7 +603,9 @@ html.reduce-motion #banner-media {
 
 @layer components {
     .font-display {
-        font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
+        font-family: "Google Sans Flex", "Plus Jakarta Sans Variable", "Noto Sans SC", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Hiragino Sans GB", "Microsoft YaHei UI", system-ui, sans-serif;
+        font-variation-settings: "ROND" 55;
+        letter-spacing: -0.015em;
     }
     .font-mono-tech {
         font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -624,7 +633,7 @@ html.reduce-motion #banner-media {
     }
     .pill-tag {
         @apply inline-flex items-stretch rounded-[7px] overflow-hidden text-xs font-medium leading-[1.35] transition;
-        font-family: "Roboto", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+        font-family: "Google Sans Flex", "Plus Jakarta Sans Variable", "Noto Sans SC", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Hiragino Sans GB", "Microsoft YaHei UI", system-ui, sans-serif;
         background-color: #ffffff;
         color: oklch(0.28 0.02 var(--hue));
         border: 1px solid color-mix(in oklch, var(--primary) 24%, rgba(15, 23, 42, 0.1));
