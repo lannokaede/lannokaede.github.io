@@ -3,10 +3,52 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { url } from "../utils/url-utils";
 ---
 
-<MainGridLayout title="找不到这篇文章">
-    <section class="card-base p-8 md:p-12">
-        <h1 class="text-3xl font-bold">找不到这个页面</h1>
-        <p class="mt-4 text-75">这篇文章可能已下架，也可能是链接写错了。</p>
-        <a class="mt-6 inline-block font-medium text-[var(--btn-content)] underline" href={url("/archive/")}>浏览文章归档 →</a>
+<MainGridLayout title="找不到这个页面">
+    <section class="card-base overflow-hidden">
+        <div class="win-chrome">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="win-dots win-dots-vivid" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="font-mono-tech text-[0.68rem] text-50 truncate">~/404.sh</span>
+            </div>
+            <span class="font-mono-tech text-[0.64rem] text-rose-500/80 dark:text-rose-400/80 shrink-0">EXIT 404</span>
+        </div>
+
+        <div class="p-6 md:p-10">
+            <div class="font-mono-tech text-xs tracking-wider uppercase text-[var(--primary)] mb-2">
+                PAGE NOT FOUND · 完熟芒果箱模式
+            </div>
+            <h1 class="font-display text-2xl md:text-3xl font-bold text-90">
+                这个页面躲进纸箱里了
+            </h1>
+            <p class="mt-3 text-sm md:text-base text-75 leading-relaxed">
+                你要找的文章可能已经调整路径、下架，或者链接里多打/少打了一个字符。
+            </p>
+
+            <div class="mini-terminal rounded-xl overflow-hidden my-6">
+                <div class="px-3 py-1.5 flex items-center justify-between border-b border-white/10" style="background: rgba(255, 255, 255, 0.04);">
+                    <span class="font-mono-tech text-[0.66rem] text-slate-400">lannokaede@cd:~/site</span>
+                    <span class="font-mono-tech text-[0.62rem] text-rose-400">HTTP 404</span>
+                </div>
+                <div class="px-3.5 py-3 font-mono-tech text-xs leading-relaxed text-slate-200 term-scanlines">
+                    <div class="text-emerald-400/90">$ curl -I <span id="missing-path">/unknown</span></div>
+                    <div class="text-rose-300/90 mt-1">HTTP/2 404 · Not Found</div>
+                    <div class="text-slate-400 mt-1"># 建议回首页看看，或者直接按 Ctrl+K 搜关键词</div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <a href={url("/")} class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white bg-[var(--primary)] hover:brightness-110 transition active:scale-95">
+                    回到首页
+                </a>
+                <a href={url("/archive/")} class="btn-regular inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold active:scale-95">
+                    浏览文章归档 →
+                </a>
+            </div>
+        </div>
     </section>
 </MainGridLayout>
+
+<script>
+const pathEl = document.getElementById("missing-path");
+if (pathEl) pathEl.textContent = window.location.pathname;
+</script>

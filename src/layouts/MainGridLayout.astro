@@ -165,6 +165,8 @@ const mainPanelTop = showBanner
     </div>
 </div>
 
+<!-- Swup-swapped stage (keeps Navbar, Kinetic BG, Margin Rails & Live2D Bocchi persistent across pages) -->
+<div id="swup-stage" class="transition-swup-fade">
 <!-- Banner -->
 {showBanner && <div id="banner-wrapper" class="absolute inset-x-0 top-0 z-10 overflow-visible">
     <div id="banner-media" class="banner-media-mask pointer-events-none fixed inset-x-0 top-0 z-0 overflow-hidden will-change-transform">
@@ -249,6 +251,7 @@ const mainPanelTop = showBanner
         <BackToTop></BackToTop>
     </div>
 </div>
+</div>
 
 <!-- The things that should be under the banner, only the TOC for now -->
 <div class="absolute w-full z-0 hidden 2xl:block">
@@ -286,11 +289,20 @@ function prefersReducedMotion() {
     );
 }
 
+let bottomReactedForPath = "";
+
 function updateScrollEffects() {
     const doc = document.documentElement;
     const scrollTop = window.scrollY || doc.scrollTop;
     const maxScroll = doc.scrollHeight - window.innerHeight;
     const ratio = maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0;
+
+    // Bocchi bottom-of-post greeting (once per post visit)
+    const isPostPage = Boolean(document.getElementById("post-container"));
+    if (isPostPage && maxScroll > 480 && ratio >= 0.96 && bottomReactedForPath !== window.location.pathname) {
+        bottomReactedForPath = window.location.pathname;
+        window.dispatchEvent(new CustomEvent("bocchi:react", { detail: { type: "bottom" } }));
+    }
 
     // 1. Reading progress bar (on post pages)
     const bar = document.getElementById("reading-progress");
@@ -478,6 +490,26 @@ function initInteractiveBindings() {
         });
     }
 
+    // Copy post link button (article page)
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-post-link]").forEach((btn) => {
+        if ((btn as any).__bound) return;
+        (btn as any).__bound = true;
+        btn.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                const label = btn.querySelector<HTMLElement>("[data-copy-link-label]");
+                if (label) {
+                    const prev = label.textContent || "复制文章链接";
+                    label.textContent = "已复制链接 ✓";
+                    window.setTimeout(() => {
+                        label.textContent = prev;
+                    }, 2200);
+                }
+                window.dispatchEvent(new CustomEvent("bocchi:react", { detail: { type: "copy-link" } }));
+            } catch {}
+        });
+    });
+
     // Footer motion toggle buttons (desktop + mobile instances)
     document.querySelectorAll<HTMLElement>("[data-motion-toggle]").forEach((btn) => {
         if ((btn as any).__bound) return;
@@ -593,11 +625,18 @@ if (!(window as any).__blogMotionBound) {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     document.addEventListener("pointermove", handlePointerMove, { passive: true });
-    document.addEventListener("click", spawnClickSpark, { passive: true });
+    document.addEventListener("click", (e) => {
+        spawnClickSpark(e);
+        const target = e.target as HTMLElement | null;
+        if (target?.closest(".copy-btn")) {
+            window.dispatchEvent(new CustomEvent("bocchi:react", { detail: { type: "copy-code" } }));
+        }
+    }, { passive: true });
     window.setInterval(updateHeroClock, 1000);
 
     const bindSwup = () => {
         window.swup?.hooks.on("page:view", () => {
+            bottomReactedForPath = "";
             requestAnimationFrame(() => {
                 initInteractiveBindings();
                 updateScrollEffects();

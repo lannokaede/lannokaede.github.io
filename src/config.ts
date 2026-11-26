@@ -28,7 +28,7 @@ export const siteConfig: SiteConfig = {
 	},
 	toc: {
 		enable: true, // Display the table of contents on the right side of the post
-		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
+		depth: 3, // Maximum heading depth to show in the table, from 1 to 3
 	},
 	favicon: [
 		{
@@ -60,7 +60,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "https://avatars.githubusercontent.com/u/181042428?v=4&s=512",
+	avatar: "/images/avatar.webp",
 	name: "lannokaede",
 	bio: "电子科大软件工程在读，平时写 Go 后端和本地 Agent 工具。",
 	links: [

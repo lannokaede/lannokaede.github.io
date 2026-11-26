@@ -6,7 +6,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@utils/content-utils";
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
+import { getDir, getPostUrlBySlug, url } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
@@ -28,12 +28,17 @@ const inlineHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 const { remarkPluginFrontmatter } = await entry.render();
 
+const coverImageUrl = entry.data.image
+	? new URL(entry.data.image, Astro.site).toString()
+	: new URL(siteConfig.banner.src, Astro.site).toString();
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
 	headline: entry.data.title,
 	description: entry.data.description || entry.data.title,
 	keywords: entry.data.tags,
+	image: coverImageUrl,
 	author: {
 		"@type": "Person",
 		name: profileConfig.name,
@@ -43,7 +48,6 @@ const jsonLd = {
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
 };
 ---
 <MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
@@ -52,7 +56,7 @@ const jsonLd = {
         <div id="post-container" class:list={["card-base z-10 overflow-hidden relative w-full ",
             {}
         ]}>
-            <!-- word count and reading time -->
+            <!-- Unified Studio Window Chrome -->
             <div class="win-chrome">
                 <div class="flex items-center gap-2 min-w-0">
                     <span class="win-dots win-dots-vivid" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -105,11 +109,9 @@ const jsonLd = {
             </div>
 
             <!-- always show cover as long as it has one -->
-
             {entry.data.image &&
                 <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-6 rounded-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-md banner-container aspect-[16/9] md:aspect-auto md:max-h-[22rem] onload-animation"/>
             }
-
 
             {inlineHeadings.length >= 2 && (
                 <details class="2xl:hidden mb-6 rounded-xl border border-[var(--line-divider)] bg-black/[0.02] dark:bg-white/[0.03] px-4 py-3 onload-animation">
@@ -135,6 +137,29 @@ const jsonLd = {
                 <Content />
             </Markdown>
 
+            <!-- Quick share / copy link bar -->
+            <div class="mb-5 pt-4 border-t border-dashed border-[var(--line-divider)] flex flex-wrap items-center justify-between gap-3 onload-animation">
+                <div class="font-mono-tech text-xs text-50">
+                    觉得有帮助的话，欢迎收藏或发给同在踩坑的朋友
+                </div>
+                <div class="flex items-center gap-2">
+                    <button
+                        type="button"
+                        data-copy-post-link
+                        class="btn-regular inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium cursor-pointer active:scale-95"
+                    >
+                        <Icon name="material-symbols:link-rounded" class="text-sm" />
+                        <span data-copy-link-label>复制文章链接</span>
+                    </button>
+                    <a
+                        href={url("/archive/")}
+                        class="btn-regular inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium active:scale-95"
+                    >
+                        <span>全部文章</span>
+                    </a>
+                </div>
+            </div>
+
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
             </div>
 
@@ -145,12 +170,18 @@ const jsonLd = {
         <div class="grid grid-cols-1 md:grid-cols-2 mb-4 gap-4 w-full">
             {entry.data.nextSlug ? (
                 <a href={getPostUrlBySlug(entry.data.nextSlug)}
-                   class="group w-full overflow-hidden active:scale-95">
-                    <div class="card-base post-card rounded-2xl w-full min-h-[4.25rem] max-w-full px-4 py-3 flex items-center justify-start gap-3">
-                        <Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)] transition-transform group-hover:-translate-x-0.5" />
-                        <div class="min-w-0">
-                            <div class="text-[0.72rem] text-50 mb-0.5">上一篇</div>
-                            <div class="font-bold overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
+                   class="group w-full overflow-hidden active:scale-[0.98] transition">
+                    <div class="card-base post-card rounded-2xl w-full overflow-hidden">
+                        <div class="win-chrome">
+                            <div class="flex items-center gap-1.5">
+                                <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+                                <span class="font-mono-tech text-[0.62rem] text-50">← PREV</span>
+                            </div>
+                            <span class="font-mono-tech text-[0.6rem] text-50">上一篇</span>
+                        </div>
+                        <div class="px-4 py-3 flex items-center justify-start gap-2.5">
+                            <Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-[1.45rem] text-[var(--primary)] transition-transform group-hover:-translate-x-0.5" />
+                            <div class="font-bold text-sm md:text-[0.95rem] overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
                                 {entry.data.nextTitle}
                             </div>
                         </div>
@@ -160,15 +191,21 @@ const jsonLd = {
 
             {entry.data.prevSlug ? (
                 <a href={getPostUrlBySlug(entry.data.prevSlug)}
-                   class="group w-full overflow-hidden active:scale-95">
-                    <div class="card-base post-card rounded-2xl w-full min-h-[4.25rem] max-w-full px-4 py-3 flex items-center justify-end gap-3 text-right">
-                        <div class="min-w-0">
-                            <div class="text-[0.72rem] text-50 mb-0.5">下一篇</div>
-                            <div class="font-bold overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
-                                {entry.data.prevTitle}
+                   class="group w-full overflow-hidden active:scale-[0.98] transition">
+                    <div class="card-base post-card rounded-2xl w-full overflow-hidden">
+                        <div class="win-chrome">
+                            <span class="font-mono-tech text-[0.6rem] text-50">下一篇</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-mono-tech text-[0.62rem] text-50">NEXT →</span>
+                                <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
                             </div>
                         </div>
-                        <Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-[1.75rem] text-[var(--primary)] transition-transform group-hover:translate-x-0.5" />
+                        <div class="px-4 py-3 flex items-center justify-end gap-2.5 text-right">
+                            <div class="font-bold text-sm md:text-[0.95rem] overflow-hidden transition overflow-ellipsis whitespace-nowrap text-75 group-hover:text-[var(--primary)]">
+                                {entry.data.prevTitle}
+                            </div>
+                            <Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-[1.45rem] text-[var(--primary)] transition-transform group-hover:translate-x-0.5" />
+                        </div>
                     </div>
                 </a>
             ) : <div class="hidden md:block" />}

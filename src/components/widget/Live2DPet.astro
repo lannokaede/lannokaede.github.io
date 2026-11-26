@@ -7,7 +7,7 @@ const modelUrl = url("/live2d/bocchi/bocchi.model3.json");
 
 <div
 	id="live2d-bocchi-root"
-	class="hidden lg:block fixed left-4 min-[1480px]:left-[4.5rem] bottom-3 z-40 select-none pointer-events-none"
+	class="hidden lg:block fixed left-2 min-[1480px]:left-[4.5rem] bottom-3 z-40 select-none pointer-events-none"
 	data-core-url={coreUrl}
 	data-model-url={modelUrl}
 	aria-label="后藤一里 Live2D 看板娘"
@@ -36,7 +36,7 @@ const modelUrl = url("/live2d/bocchi/bocchi.model3.json");
 		>
 			<div
 				id="bocchi-loading"
-				class="absolute inset-x-6 bottom-6 flex items-center justify-center gap-1.5 rounded-full px-3 py-1 text-[0.68rem] font-mono-tech bocchi-dock-pill transition-opacity duration-300"
+				class="opacity-0 absolute inset-x-6 bottom-6 flex items-center justify-center gap-1.5 rounded-full px-3 py-1 text-[0.68rem] font-mono-tech bocchi-dock-pill transition-opacity duration-300"
 			>
 				<span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-soft-pulse"></span>
 				<span>LOADING BOCCHI...</span>
@@ -68,16 +68,16 @@ const modelUrl = url("/live2d/bocchi/bocchi.model3.json");
 		</div>
 	</div>
 
-	<!-- Compact Restore Pill (shown when hidden) -->
+	<!-- Compact Restore Pill (icon-only in 1024..1439px gutter so zero card overlap, full pill on >=1440px) -->
 	<button
 		type="button"
 		id="bocchi-restore-btn"
-		class="bocchi-dock pointer-events-auto hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-75 hover:text-[var(--primary)] transition-all duration-200 cursor-pointer active:scale-95"
+		class="bocchi-dock pointer-events-auto hidden items-center justify-center gap-1.5 rounded-full w-8 h-8 min-[1440px]:w-auto min-[1440px]:h-auto min-[1440px]:px-3 min-[1440px]:py-1.5 text-xs font-medium text-75 hover:text-[var(--primary)] transition-all duration-200 cursor-pointer active:scale-95"
 		aria-label="展开波奇 Live2D 看板娘"
 		title="召唤角落里的后藤一里"
 	>
-		<span class="w-2 h-2 rounded-full bg-pink-400 animate-soft-pulse"></span>
-		<span class="font-mono-tech text-[0.7rem]">波奇 · L2D</span>
+		<span class="w-2 h-2 rounded-full bg-pink-400 animate-soft-pulse shrink-0"></span>
+		<span class="hidden min-[1440px]:inline font-mono-tech text-[0.7rem]">波奇 · L2D</span>
 	</button>
 </div>
 
@@ -167,16 +167,27 @@ function initBocchiWidget() {
 	let expTargets = { Guitar: 0, Happy: 0, Scare: 0 };
 	let expCurrent = { Guitar: 0, Happy: 0, Scare: 0 };
 	let bubbleTimer: number | undefined;
+	let tempExpTimer: number | undefined;
 	let pixiStarted = false;
 	let pixiApp: any = null;
 	let isHidden = false;
 
+	// Auto-collapse on narrower laptops (1024..1439px) if the user has not chosen a preference yet
 	try {
-		isHidden = localStorage.getItem(STORAGE_KEY) === "1";
-	} catch {}
+		const stored = localStorage.getItem(STORAGE_KEY);
+		if (stored === "1") {
+			isHidden = true;
+		} else if (stored === "0") {
+			isHidden = false;
+		} else {
+			isHidden = window.innerWidth < 1440;
+		}
+	} catch {
+		isHidden = window.innerWidth < 1440;
+	}
 
-	function showBubble(text: string) {
-		if (!bubbleEl || !bubbleTextEl) return;
+	function showBubble(text: string, duration = 3800) {
+		if (!bubbleEl || !bubbleTextEl || isHidden) return;
 		bubbleTextEl.textContent = text;
 		bubbleEl.classList.remove("opacity-0", "translate-y-2");
 		bubbleEl.classList.add("opacity-100", "translate-y-0");
@@ -184,30 +195,44 @@ function initBocchiWidget() {
 		bubbleTimer = window.setTimeout(() => {
 			bubbleEl.classList.add("opacity-0", "translate-y-2");
 			bubbleEl.classList.remove("opacity-100", "translate-y-0");
-		}, 3800);
+		}, duration);
 	}
 
-	function setExpression(exp: ExpKey, speak = true) {
-		currentExp = exp;
+	function setExpression(exp: ExpKey, speak = true, persistSelection = true) {
+		if (persistSelection) {
+			currentExp = exp;
+			chipButtons.forEach((btn) => {
+				btn.classList.toggle("is-active", btn.dataset.bocchiExp === exp);
+			});
+		}
 		expTargets = {
 			Guitar: exp === "guitar" ? 1 : 0,
 			Happy: exp === "happy" ? 1 : 0,
 			Scare: exp === "scare" ? 1 : 0,
 		};
-		chipButtons.forEach((btn) => {
-			btn.classList.toggle("is-active", btn.dataset.bocchiExp === exp);
-		});
 		if (speak) {
 			const pool = EXP_LINES[exp];
 			showBubble(pool[Math.floor(Math.random() * pool.length)]);
 		}
 	}
 
-	function applyHiddenState(hidden: boolean) {
+	function flashReaction(exp: ExpKey, line: string) {
+		if (isHidden) return;
+		if (tempExpTimer) window.clearTimeout(tempExpTimer);
+		setExpression(exp, false, false);
+		showBubble(line, 3600);
+		tempExpTimer = window.setTimeout(() => {
+			setExpression(currentExp, false, false);
+		}, 3200);
+	}
+
+	function applyHiddenState(hidden: boolean, savePref = false) {
 		isHidden = hidden;
-		try {
-			localStorage.setItem(STORAGE_KEY, hidden ? "1" : "0");
-		} catch {}
+		if (savePref) {
+			try {
+				localStorage.setItem(STORAGE_KEY, hidden ? "1" : "0");
+			} catch {}
+		}
 		if (stage && restoreBtn) {
 			stage.classList.toggle("hidden", hidden);
 			restoreBtn.classList.toggle("hidden", !hidden);
@@ -226,28 +251,68 @@ function initBocchiWidget() {
 		btn.addEventListener("click", (e) => {
 			e.stopPropagation();
 			const exp = (btn.dataset.bocchiExp as ExpKey) || "default";
-			setExpression(exp, true);
+			setExpression(exp, true, true);
 		});
 	});
 
 	canvasWrap?.addEventListener("click", () => {
 		const nextIdx = (EXP_ORDER.indexOf(currentExp) + 1) % EXP_ORDER.length;
-		setExpression(EXP_ORDER[nextIdx], true);
+		setExpression(EXP_ORDER[nextIdx], true, true);
 	});
 
 	hideBtn?.addEventListener("click", (e) => {
 		e.stopPropagation();
-		applyHiddenState(true);
+		applyHiddenState(true, true);
 	});
 
 	restoreBtn?.addEventListener("click", () => {
-		applyHiddenState(false);
+		applyHiddenState(false, true);
 		showBubble("那、那个……我又探出头来了……");
+	});
+
+	// Cross-component easter egg listeners
+	window.addEventListener("bocchi:toggle", () => {
+		const next = !isHidden;
+		applyHiddenState(next, true);
+		if (!next) showBubble("被快捷键召唤出来了……！");
+	});
+
+	let lastDark = document.documentElement.classList.contains("dark");
+	window.addEventListener("theme:change", (e: Event) => {
+		const detail = (e as CustomEvent)?.detail;
+		const nowDark = typeof detail?.isDark === "boolean"
+			? detail.isDark
+			: document.documentElement.classList.contains("dark");
+		if (nowDark === lastDark) return;
+		lastDark = nowDark;
+		if (nowDark) {
+			flashReaction("happy", "关灯了！进入社恐舒适区……（小声欢呼）");
+		} else {
+			flashReaction("scare", "哇啊好亮——！眼睛要适应一下……");
+		}
+	});
+
+	window.addEventListener("bocchi:react", (e: Event) => {
+		const type = (e as CustomEvent)?.detail?.type;
+		if (type === "copy-code") {
+			flashReaction("happy", "代码复制好了！祝你一次跑通不要报错♪");
+		} else if (type === "copy-link") {
+			flashReaction("happy", "链接复制好了，谢谢你愿意分享这篇手记！");
+		} else if (type === "bottom") {
+			showBubble("居然看到最底下了……谢谢你耐心读完♪", 4200);
+		}
 	});
 
 	async function mountLive2D() {
 		if (pixiStarted || !canvasWrap) return;
 		pixiStarted = true;
+
+		// Only show loading pill if loading takes >450ms to prevent flicker
+		const showLoaderTimer = window.setTimeout(() => {
+			if (loadingEl && loadingEl.isConnected) {
+				loadingEl.classList.remove("opacity-0");
+			}
+		}, 450);
 
 		try {
 			await loadScriptOnce(coreUrl);
@@ -276,7 +341,7 @@ function initBocchiWidget() {
 			pixiApp = app;
 
 			const view = app.view as HTMLCanvasElement;
-			view.className = "block w-full h-full drop-shadow-[0_12px_22px_rgba(15,23,42,0.22)]";
+			view.className = "block w-full h-full opacity-0 transition-opacity duration-300 drop-shadow-[0_12px_22px_rgba(15,23,42,0.22)]";
 			canvasWrap.appendChild(view);
 
 			const model = await (Live2DModel as any).from(modelUrl, {
@@ -286,7 +351,6 @@ function initBocchiWidget() {
 
 			const origW = model.width || 1000;
 			const origH = model.height || 1000;
-			// Closer upper-3/4 framing to remove empty moc3 headroom and highlight face + guitar
 			const baseScale = Math.min(W / origW, H / origH);
 			const scale = baseScale * 1.5;
 			model.scale.set(scale);
@@ -294,12 +358,13 @@ function initBocchiWidget() {
 			model.y = -18;
 			app.stage.addChild(model);
 
+			window.clearTimeout(showLoaderTimer);
+			requestAnimationFrame(() => view.classList.remove("opacity-0"));
 			if (loadingEl) {
 				loadingEl.style.opacity = "0";
-				window.setTimeout(() => loadingEl.remove(), 350);
+				window.setTimeout(() => loadingEl.remove(), 300);
 			}
 
-			// Map parameter indices once (supports both uppercase PARAM_* and camelCase Param*)
 			const core = model?.internalModel?.coreModel;
 			const paramIds: string[] = Array.isArray(core?._parameterIds) ? core._parameterIds : [];
 			const resolveIdx = (...candidates: string[]) => {
@@ -335,7 +400,6 @@ function initBocchiWidget() {
 				}
 			};
 
-			// Mouse tracking + scroll reaction state
 			const mouseTarget = { x: 0, y: 0 };
 			const mouseCur = { x: 0, y: 0 };
 			let scrollKick = 0;
@@ -374,7 +438,6 @@ function initBocchiWidget() {
 				const dt = Math.min(0.05, delta / 60);
 				const reduced = isReducedMotion();
 
-				// Smoothly blend expressions regardless of reduced-motion
 				expCurrent.Guitar += (expTargets.Guitar - expCurrent.Guitar) * Math.min(1, dt * 8);
 				expCurrent.Happy += (expTargets.Happy - expCurrent.Happy) * Math.min(1, dt * 8);
 				expCurrent.Scare += (expTargets.Scare - expCurrent.Scare) * Math.min(1, dt * 8);
@@ -409,7 +472,6 @@ function initBocchiWidget() {
 				setByIdx(idx.bodyZ, mouseCur.x * -3.5);
 				setByIdx(idx.breath, Math.sin(t * 1.45) * 0.5 + 0.5);
 
-				// Natural eye blink
 				blinkTimer -= dt;
 				if (blinkTimer <= 0 && !blinking) {
 					blinking = true;
@@ -435,27 +497,27 @@ function initBocchiWidget() {
 				}
 			});
 
-			// Subtle greeting bubble once model is ready
 			window.setTimeout(() => {
 				if (!isHidden) {
 					showBubble(EXP_LINES.default[0]);
 				}
 			}, 900);
 		} catch (err) {
+			window.clearTimeout(showLoaderTimer);
 			console.warn("[Live2D Bocchi] Failed to initialize:", err);
 			if (loadingEl) {
+				loadingEl.classList.remove("opacity-0");
 				loadingEl.textContent = "LIVE2D 离线";
 			}
 		}
 	}
 
-	applyHiddenState(isHidden);
+	applyHiddenState(isHidden, false);
 }
 
-// Defer slightly after initial paint so hero & main cards load first
 if (document.readyState === "complete") {
-	window.setTimeout(initBocchiWidget, 350);
+	window.setTimeout(initBocchiWidget, 300);
 } else {
-	window.addEventListener("load", () => window.setTimeout(initBocchiWidget, 350), { once: true });
+	window.addEventListener("load", () => window.setTimeout(initBocchiWidget, 300), { once: true });
 }
 </script>

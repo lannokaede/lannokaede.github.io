@@ -1,9 +1,11 @@
 ---
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
+import { Icon } from "astro-icon/components";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { url } from "../utils/url-utils";
 
 const aboutPost = await getEntry("spec", "about");
 
@@ -12,9 +14,49 @@ if (!aboutPost) {
 }
 
 const { Content } = await render(aboutPost);
+
+const activeProjects = [
+	{
+		name: "LanAgent",
+		badge: "Go · Agent",
+		desc: "自用本地 Agent 宿主，CLI 与 MCP 服务共用一套核心调度，重点解决权限控制、断点续跑与本地记忆同步。",
+		href: url("/posts/lanagent/00-roadmap/"),
+	},
+	{
+		name: "自用 AI 聊天站",
+		badge: "LibreChat · Docker",
+		desc: "VPS 上自建 LibreChat 接多条模型线路，把 API 余额与 Codex 用量直接塞进顶栏模型选择器旁。",
+		href: url("/posts/self-hosted-aichat/"),
+	},
+	{
+		name: "织课后端",
+		badge: "Go · RabbitMQ",
+		desc: "团队项目后端排坑笔记：RabbitMQ 削峰、singleflight 挡重复预览、OnlyOffice 集成踩坑记录。",
+		href: url("/posts/织课/00-roadmap/"),
+	},
+	{
+		name: "大肥鱼 QQ 机器人",
+		badge: "AstrBot · NapCat",
+		desc: "NapCat + AstrBot 组合部署、上下文插件和防封风控配置记录，附带真实踩坑与状态边界。",
+		href: url("/posts/dafeiyu-qq-bot/"),
+	},
+];
+
+const techStack = [
+	"Go",
+	"TypeScript",
+	"Astro",
+	"PostgreSQL",
+	"RabbitMQ",
+	"Docker",
+	"Linux / VPS",
+	"Agent / MCP",
+	"LibreChat",
+];
 ---
-<MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+<MainGridLayout title={i18n(I18nKey.about)} description="电子科大软件工程在读，平时写 Go 后端、本地 Agent 工具与自建服务排坑记录。">
+    <div class="flex flex-col gap-4 w-full">
+        <!-- Intro & Credits Window -->
         <div class="card-base z-10 overflow-hidden relative w-full">
             <div class="win-chrome">
                 <div class="flex items-center gap-2 min-w-0">
@@ -27,6 +69,60 @@ const { Content } = await render(aboutPost);
                 <Markdown class="mt-1" searchable={false}>
                     <Content />
                 </Markdown>
+            </div>
+        </div>
+
+        <!-- Active Projects Bento Window -->
+        <div class="card-base z-10 overflow-hidden relative w-full">
+            <div class="win-chrome">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <span class="font-mono-tech text-[0.68rem] text-50 truncate">~/projects</span>
+                </div>
+                <span class="font-mono-tech text-[0.64rem] text-50 shrink-0">{activeProjects.length} REPOS / LOGS</span>
+            </div>
+            <div class="p-5 md:p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {activeProjects.map((proj) => (
+                        <a
+                            href={proj.href}
+                            class="group rounded-xl border border-[var(--card-border)] bg-black/[0.015] dark:bg-white/[0.02] hover:border-[var(--primary)]/50 hover:bg-[var(--btn-plain-bg-hover)] p-4 transition flex flex-col justify-between gap-2.5"
+                        >
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-1.5">
+                                    <span class="font-display font-bold text-base text-90 group-hover:text-[var(--primary)] transition">
+                                        {proj.name}
+                                    </span>
+                                    <span class="font-mono-tech text-[0.65rem] px-2 py-0.5 rounded-md bg-[var(--btn-regular-bg)] text-[var(--btn-content)] shrink-0">
+                                        {proj.badge}
+                                    </span>
+                                </div>
+                                <p class="text-xs md:text-[0.84rem] text-75 leading-relaxed">
+                                    {proj.desc}
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center gap-1 font-mono-tech text-[0.7rem] text-[var(--primary)]">
+                                <span>查看记录</span>
+                                <Icon name="material-symbols:arrow-forward-rounded" class="text-sm transition-transform group-hover:translate-x-0.5" />
+                            </div>
+                        </a>
+                    ))}
+                </div>
+
+                <!-- Tech Stack Strip -->
+                <div class="mt-5 pt-4 border-t border-dashed border-[var(--line-divider)]">
+                    <div class="font-mono-tech text-[0.68rem] uppercase tracking-wider text-50 mb-2.5">
+                        常用技术栈 & 工具
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        {techStack.map((item) => (
+                            <span class="pill-tag">
+                                <span class="pill-tag-prefix">#</span>
+                                <span class="pill-tag-label">{item}</span>
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

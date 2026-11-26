@@ -43,6 +43,10 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
+const ogBannerPath = banner && typeof banner === "string" && banner.trim() !== ""
+	? banner.trim()
+	: siteConfig.banner.src;
+const ogImageUrl = Astro.site ? new URL(ogBannerPath, Astro.site).toString() : ogBannerPath;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
@@ -82,10 +86,12 @@ const siteLang = lang.replace("_", "-");
 		<meta name="description" content={description || pageTitle}>
 		<meta name="author" content={profileConfig.name}>
 
+		<link rel="canonical" href={Astro.url} />
 		<meta property="og:site_name" content={siteConfig.title}>
 		<meta property="og:url" content={Astro.url}>
 		<meta property="og:title" content={pageTitle}>
 		<meta property="og:description" content={description || pageTitle}>
+		<meta property="og:image" content={ogImageUrl}>
 		{setOGTypeArticle ? (
         <meta property="og:type" content="article" />
         ) : (
@@ -96,6 +102,7 @@ const siteLang = lang.replace("_", "-");
 		<meta property="twitter:url" content={Astro.url}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
+		<meta name="twitter:image" content={ogImageUrl}>
 
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
@@ -150,7 +157,17 @@ const siteLang = lang.replace("_", "-");
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" />
+		<link id="noto-serif-font" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" media="print" />
+		<script is:inline>
+			(() => {
+				const link = document.getElementById("noto-serif-font");
+				if (link instanceof HTMLLinkElement) {
+					link.addEventListener("load", () => { link.media = "all"; }, { once: true });
+					if (link.sheet) link.media = "all";
+				}
+			})();
+		</script>
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap" /></noscript>
 
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
@@ -275,8 +292,6 @@ function disableAnimation() {
 }
 */
 
-const bannerEnabled = !!document.getElementById('banner-wrapper')
-
 function setClickOutsideToClose(panel: string, ignores: string[]) {
 	document.addEventListener("click", event => {
 		let panelDom = document.getElementById(panel);
@@ -398,7 +413,7 @@ const setup = () => {
 		document.documentElement.style.setProperty('--content-delay', '0ms')
 
 		// prevent elements from overlapping the navbar
-		if (!bannerEnabled) {
+		if (!document.getElementById('banner-wrapper')) {
 			return
 		}
 		let threshold = window.innerHeight * (BANNER_HEIGHT / 100) - 72 - 16
@@ -412,13 +427,19 @@ const setup = () => {
 	})
 	window.swup.hooks.on('content:replace', initCustomScrollbar)
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+		// Close any open floating panels during navigation
+		['display-setting', 'nav-menu-panel', 'search-panel'].forEach((id) => {
+			document.getElementById(id)?.classList.add('float-panel-closed');
+		});
+
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
-		if (pathsEqual(visit.to.url, url('/'))) {
-			bodyElement!.classList.add('lg:is-home');
-		} else {
-			bodyElement!.classList.remove('lg:is-home');
+		const toHome = pathsEqual(visit.to.url, url('/'));
+		if (bodyElement) {
+			bodyElement.classList.toggle('lg:is-home', toHome);
+			bodyElement.classList.toggle('enable-banner', toHome);
 		}
+		document.getElementById('navbar-wrapper')?.classList.remove('navbar-hidden');
 
 		// increase the page height during page transition to prevent the scrolling animation from jumping
 		const heightExtend = document.getElementById('page-height-extend')
@@ -436,8 +457,9 @@ const setup = () => {
 		// hide the temp high element when the transition is done
 		const heightExtend = document.getElementById('page-height-extend')
 		if (heightExtend) {
-			heightExtend.classList.remove('hidden')
+			heightExtend.classList.add('hidden')
 		}
+		requestAnimationFrame(() => scrollFunction());
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
@@ -451,6 +473,7 @@ const setup = () => {
             if (toc) {
                 toc.classList.remove('toc-not-ready')
             }
+            scrollFunction();
         }, 200)
 	});
 }
@@ -460,11 +483,12 @@ if (window?.swup?.hooks) {
 	document.addEventListener('swup:enable', setup)
 }
 
-let backToTopBtn = document.getElementById('back-to-top-btn');
-let toc = document.getElementById('toc-wrapper');
-let navbar = document.getElementById('navbar-wrapper')
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
+	const backToTopBtn = document.getElementById('back-to-top-btn');
+	const toc = document.getElementById('toc-wrapper');
+	const navbar = document.getElementById('navbar-wrapper');
+	const hasBanner = !!document.getElementById('banner-wrapper');
 
 	if (backToTopBtn) {
 		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
@@ -474,15 +498,20 @@ function scrollFunction() {
 		}
 	}
 
-	if (bannerEnabled && toc) {
-		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
+	if (toc) {
+		if (!hasBanner) {
+			toc.classList.remove('toc-hide');
+		} else if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
 			toc.classList.remove('toc-hide')
 		} else {
 			toc.classList.add('toc-hide')
 		}
 	}
 
-	if (!bannerEnabled) return
+	if (!hasBanner) {
+		navbar?.classList.remove('navbar-hidden');
+		return;
+	}
 	if (navbar) {
 		const NAVBAR_HEIGHT = 72
 		const MAIN_PANEL_EXCESS_HEIGHT = MAIN_PANEL_OVERLAPS_BANNER_HEIGHT * 16			// The height the main panel overlaps the banner

@@ -37,14 +37,14 @@ export default defineConfig({
 			nesting: true,
 		}),
 		swup({
-			// Keep the instance for existing setup hooks, but use document navigation.
-			// Partial head replacement can mix cached pages with a newer persistent shell.
-			ignore: () => true,
+			ignore: (url, { el } = {}) => {
+				if (el?.hasAttribute?.("data-no-swup")) return true;
+				return /\.(xml|txt|json|pdf|zip|png|jpe?g|webp|svg)$/i.test(url);
+			},
 			theme: false,
 			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-			// the default value `transition-` cause transition delay
-			// when the Tailwind class `transition-all` is used
-			containers: ["main", "#toc"],
+			// Swap the banner+main stage and TOC while keeping Navbar, Kinetic BG, and Live2D Bocchi persistent.
+			containers: ["#swup-stage", "#toc"],
 			smoothScrolling: true,
 			cache: false,
 			preload: false,
