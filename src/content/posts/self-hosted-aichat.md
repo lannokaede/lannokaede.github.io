@@ -11,7 +11,7 @@ lang: zh_CN
 
 ## 部署与模型路由
 
-Docker Compose 部署 LibreChat `v0.8.9`（共 7 个容器），运行在原 [大肥鱼 QQ 机器人](/posts/dafeiyu-qq-bot/)所在服务器：MongoDB 存对话，Meilisearch 做全文检索，本机运行中文嵌入模型处理上传文件检索。拉取官方镜像通过本机切到美国 VPS 的代理完成。外层套 HTTPS，创建自用账号后关闭公开注册。
+Docker Compose 部署 LibreChat `v0.8.9`（共 7 个容器）：MongoDB 存对话，Meilisearch 做全文检索，本机运行中文嵌入模型处理上传文件检索。拉取官方镜像通过代理完成。外层套 HTTPS，创建自用账号后关闭公开注册。
 
 模型路由写在 `librechat.yaml`，密钥从环境变量读取：
 

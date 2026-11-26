@@ -55,4 +55,4 @@ journalctl -u personal-vpn-backup.service -n 30 --no-pager
 ## 后续补充
 
 - **Windows 游戏进程直连**：Clash Verge Rev 2.5.10（TUN 模式）配置《明日方舟》B 服 PC 端直连时，外层启动器为 `Games.exe`，游戏本体为子进程 `Arknights.exe`，需将两者完整路径一并写入 `prepend` 的 `PROCESS-PATH,...,DIRECT`。Mihomo API 确认规则已加载，未进游戏抓实时连接验证。
-- **跨服务器出口**：11 月 23 日另一台机器部署 [LibreChat](/posts/self-hosted-aichat/) 拉镜像受阻，将该机 `v2rayA`（本机 SOCKS5 `127.0.0.1:20170` / HTTP `20171`）切至本机 VLESS 节点，Cloudflare 与 IPinfo 实测出口均为美国。当天本机资源余量：50 GB 根分区剩 40 GB，可用内存约 1,283 MiB（总量 1,963 MiB，未开 swap）。
+- **跨服务器出口**：另一台服务器直连拉取 Docker 镜像受阻时，将该机 `v2rayA`（本机 SOCKS5 `127.0.0.1:20170` / HTTP `20171`）切至本机 VLESS 节点，Cloudflare 与 IPinfo 实测出口均为美国。当天本机资源余量：50 GB 根分区剩 40 GB，可用内存约 1,283 MiB（总量 1,963 MiB，未开 swap）。
