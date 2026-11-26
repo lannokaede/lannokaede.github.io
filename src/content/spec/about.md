@@ -1,10 +1,10 @@
 # 关于
 
-我是 **lannokaede**，电子科技大学软件工程在读。搭这个站主要就是拿来放项目复盘和排坑记录，免得过几个月又撞上同一个坑，还得重新翻半天日志。
+我是 **lannokaede**，电子科技大学软件工程在读。这里用来放平时做项目的笔记和踩坑记录，方便以后翻。
 
-平时写得比较多的是 **Go 后端**和**本地 Agent 工具**，偶尔也会顺手记点搭自用服务、折腾机器人或者查网络问题的过程。文章按实际踩过的写，跑通了写跑通，还没测完的也会直接标出来。
+平时写得比较多的是 **Go 后端**和 **Agent 工具**，也有一些自建服务、机器人和网络配置相关的记录。跑通的写跑通，没测完的会直接标出来。
 
-平时出没在 [GitHub](https://github.com/lannokaede) 和 [哔哩哔哩](https://space.bilibili.com/499115598)，有事也可以发邮件到 [lannokaede@gmail.com](mailto:lannokaede@gmail.com)。想跟更新的话直接订阅 [RSS](/rss.xml) 就行。
+平时在 [GitHub](https://github.com/lannokaede) 和 [哔哩哔哩](https://space.bilibili.com/499115598)，联系可以发邮件到 [lannokaede@gmail.com](mailto:lannokaede@gmail.com)，更新可以通过 [RSS](/rss.xml) 订阅。
 
 ## 图片来源
 

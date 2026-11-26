@@ -9,7 +9,7 @@ import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
 	title: "lannokaede 的手记",
-	subtitle: "写 Go、折腾 Agent 与服务器排坑",
+	subtitle: "Go 后端、Agent 与服务器记录",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 245,
