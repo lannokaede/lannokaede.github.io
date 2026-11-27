@@ -2,6 +2,7 @@
 interface AnimeItem {
 	id: string;
 	subjectId?: number;
+	seasonId?: number;
 	title: string;
 	originalTitle?: string;
 	status: "watching" | "watched" | "wish" | "on_hold" | "dropped";
@@ -15,6 +16,7 @@ interface AnimeItem {
 	url?: string;
 	updatedAt?: string;
 	source?: string;
+	order?: number;
 }
 
 interface Props {
@@ -27,8 +29,14 @@ interface Props {
 let { items, updatedAt, source }: Props = $props();
 
 type FilterKey = "all" | AnimeItem["status"];
+type SourceKey = "all" | "ani" | "bilibili";
+
+const PAGE_SIZE = 24;
+
 let activeTab = $state<FilterKey>("all");
+let activeSource = $state<SourceKey>("all");
 let keyword = $state("");
+let visibleCount = $state(PAGE_SIZE);
 
 const statusMeta: Record<
 	AnimeItem["status"],
@@ -74,38 +82,72 @@ const tabs: { key: FilterKey; label: string }[] = [
 	{ key: "on_hold", label: "搁置" },
 ];
 
+const sourceFiltered = $derived.by(() => {
+	if (activeSource === "all") return items;
+	if (activeSource === "ani") {
+		return items.filter((it) => it.source === "ani" || it.source === "manual");
+	}
+	return items.filter((it) => it.source === "bilibili");
+});
+
+const sourceCounts = $derived.by(() => {
+	let ani = 0;
+	let bili = 0;
+	for (const it of items) {
+		if (it.source === "bilibili") bili++;
+		else ani++;
+	}
+	return { all: items.length, ani, bilibili: bili };
+});
+
 const counts = $derived.by(() => {
 	const map: Record<FilterKey, number> = {
-		all: items.length,
+		all: sourceFiltered.length,
 		watching: 0,
 		watched: 0,
 		wish: 0,
 		on_hold: 0,
 		dropped: 0,
 	};
-	for (const it of items) {
+	for (const it of sourceFiltered) {
 		map[it.status] = (map[it.status] || 0) + 1;
 	}
 	return map;
 });
 
-const totalWatchedEpisodes = $derived(
-	items.reduce((sum, it) => sum + (it.watched || 0), 0),
-);
-
 const filtered = $derived.by(() => {
 	const q = keyword.trim().toLowerCase();
-	return items.filter((it) => {
+	return sourceFiltered.filter((it) => {
 		if (activeTab !== "all" && it.status !== activeTab) return false;
 		if (!q) return true;
-		const hay = `${it.title} ${it.originalTitle || ""} ${(it.tags || []).join(" ")} ${it.note || ""}`.toLowerCase();
+		const hay =
+			`${it.title} ${it.originalTitle || ""} ${(it.tags || []).join(" ")} ${it.note || ""}`.toLowerCase();
 		return hay.includes(q);
 	});
 });
 
+const displayed = $derived(filtered.slice(0, visibleCount));
+const remainingCount = $derived(Math.max(0, filtered.length - displayed.length));
+
+function selectTab(key: FilterKey) {
+	activeTab = key;
+	visibleCount = PAGE_SIZE;
+}
+
+function selectSource(key: SourceKey) {
+	activeSource = key;
+	visibleCount = PAGE_SIZE;
+}
+
 function progressPct(it: AnimeItem): number {
 	if (!it.total || it.total <= 0) return it.watched > 0 ? 100 : 0;
 	return Math.min(100, Math.round((it.watched / it.total) * 100));
+}
+
+function sourceLabel(src?: string): string {
+	if (src === "ani") return "Ani";
+	if (src === "bilibili") return "B站";
+	return "精选";
 }
 </script>
 
@@ -124,7 +166,11 @@ function progressPct(it: AnimeItem): number {
 
 		<div class="p-5 md:p-6 flex flex-col gap-4">
 			<!-- Stats Strip -->
-			<div class="grid grid-cols-3 gap-2.5">
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+				<div class="rounded-xl border border-[var(--card-border)] bg-black/[0.015] dark:bg-white/[0.02] px-3.5 py-2.5">
+					<div class="font-mono-tech text-[0.66rem] text-50">番剧总数</div>
+					<div class="font-display font-bold text-xl text-90 mt-0.5">{counts.all}</div>
+				</div>
 				<div class="rounded-xl border border-[var(--card-border)] bg-black/[0.015] dark:bg-white/[0.02] px-3.5 py-2.5">
 					<div class="font-mono-tech text-[0.66rem] text-50">正在追</div>
 					<div class="font-display font-bold text-xl text-90 mt-0.5">{counts.watching}</div>
@@ -134,54 +180,92 @@ function progressPct(it: AnimeItem): number {
 					<div class="font-display font-bold text-xl text-90 mt-0.5">{counts.watched}</div>
 				</div>
 				<div class="rounded-xl border border-[var(--card-border)] bg-black/[0.015] dark:bg-white/[0.02] px-3.5 py-2.5">
-					<div class="font-mono-tech text-[0.66rem] text-50">累计集数</div>
-					<div class="font-display font-bold text-xl text-90 mt-0.5">{totalWatchedEpisodes}</div>
+					<div class="font-mono-tech text-[0.66rem] text-50">想看</div>
+					<div class="font-display font-bold text-xl text-90 mt-0.5">{counts.wish}</div>
 				</div>
 			</div>
 
-			<!-- Filter Tabs + Search -->
+			<!-- Source Filter + Search -->
 			<div class="flex flex-wrap items-center justify-between gap-2.5">
-				<div class="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="追番状态筛选">
-					{#each tabs as tab}
-						{#if tab.key === "all" || counts[tab.key] > 0}
-							<button
-								type="button"
-								role="tab"
-								aria-selected={activeTab === tab.key}
-								onclick={() => (activeTab = tab.key)}
-								class={`px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer border ${
-									activeTab === tab.key
-										? "bg-[var(--primary)] text-white border-transparent shadow-sm"
-										: "bg-black/[0.02] dark:bg-white/[0.03] text-75 border-[var(--card-border)] hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
-								}`}
-							>
-								<span>{tab.label}</span>
-								<span class={`ml-1 font-mono-tech text-[0.66rem] ${activeTab === tab.key ? "opacity-85" : "opacity-55"}`}>
-									{counts[tab.key]}
-								</span>
-							</button>
-						{/if}
-					{/each}
+				<div class="flex flex-wrap items-center gap-1.5">
+					<button
+						type="button"
+						onclick={() => selectSource("all")}
+						class={`px-2.5 py-1 rounded-lg text-xs font-mono-tech transition cursor-pointer border ${
+							activeSource === "all"
+								? "bg-[var(--btn-regular-bg)] text-[var(--primary)] border-[var(--primary)]/40 font-semibold"
+								: "bg-transparent text-60 border-[var(--card-border)] hover:text-90"
+						}`}
+					>
+						全部来源 ({sourceCounts.all})
+					</button>
+					<button
+						type="button"
+						onclick={() => selectSource("ani")}
+						class={`px-2.5 py-1 rounded-lg text-xs font-mono-tech transition cursor-pointer border ${
+							activeSource === "ani"
+								? "bg-[var(--btn-regular-bg)] text-[var(--primary)] border-[var(--primary)]/40 font-semibold"
+								: "bg-transparent text-60 border-[var(--card-border)] hover:text-90"
+						}`}
+					>
+						Ani / 精选 ({sourceCounts.ani})
+					</button>
+					<button
+						type="button"
+						onclick={() => selectSource("bilibili")}
+						class={`px-2.5 py-1 rounded-lg text-xs font-mono-tech transition cursor-pointer border ${
+							activeSource === "bilibili"
+								? "bg-[var(--btn-regular-bg)] text-[var(--primary)] border-[var(--primary)]/40 font-semibold"
+								: "bg-transparent text-60 border-[var(--card-border)] hover:text-90"
+						}`}
+					>
+						B站追番 ({sourceCounts.bilibili})
+					</button>
 				</div>
 
 				<input
 					type="search"
 					bind:value={keyword}
-					placeholder="筛选番名或标签..."
-					class="w-full sm:w-48 rounded-xl border border-[var(--card-border)] bg-black/[0.02] dark:bg-white/[0.04] px-3 py-1.5 text-xs text-90 placeholder:text-50 focus:outline-none focus:border-[var(--primary)]/60 transition"
+					oninput={() => (visibleCount = PAGE_SIZE)}
+					placeholder="搜索番名或标签..."
+					class="w-full sm:w-56 rounded-xl border border-[var(--card-border)] bg-black/[0.02] dark:bg-white/[0.04] px-3 py-1.5 text-xs text-90 placeholder:text-50 focus:outline-none focus:border-[var(--primary)]/60 transition"
 				/>
+			</div>
+
+			<!-- Status Tabs -->
+			<div class="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="追番状态筛选">
+				{#each tabs as tab}
+					{#if tab.key === "all" || counts[tab.key] > 0}
+						<button
+							type="button"
+							role="tab"
+							aria-selected={activeTab === tab.key}
+							onclick={() => selectTab(tab.key)}
+							class={`px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer border ${
+								activeTab === tab.key
+									? "bg-[var(--primary)] text-white border-transparent shadow-sm"
+									: "bg-black/[0.02] dark:bg-white/[0.03] text-75 border-[var(--card-border)] hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
+							}`}
+						>
+							<span>{tab.label}</span>
+							<span class={`ml-1 font-mono-tech text-[0.66rem] ${activeTab === tab.key ? "opacity-85" : "opacity-55"}`}>
+								{counts[tab.key]}
+							</span>
+						</button>
+					{/if}
+				{/each}
 			</div>
 		</div>
 	</div>
 
 	<!-- Anime Grid -->
-	{#if filtered.length === 0}
+	{#if displayed.length === 0}
 		<div class="card-base p-8 text-center text-sm text-50">
 			没有找到匹配的番剧记录。
 		</div>
 	{:else}
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			{#each filtered as item (item.id)}
+			{#each displayed as item (item.id)}
 				{@const meta = statusMeta[item.status]}
 				{@const pct = progressPct(item)}
 				<article class="card-base overflow-hidden flex flex-row p-3.5 gap-3.5 hover:border-[var(--primary)]/40 transition group">
@@ -197,6 +281,7 @@ function progressPct(it: AnimeItem): number {
 								src={item.cover}
 								alt={item.title}
 								loading="lazy"
+								referrerpolicy="no-referrer"
 								class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
 							/>
 						{/if}
@@ -210,11 +295,11 @@ function progressPct(it: AnimeItem): number {
 									href={item.url || "#"}
 									target={item.url ? "_blank" : undefined}
 									rel={item.url ? "noopener noreferrer" : undefined}
-									class="font-display font-bold text-[0.98rem] leading-snug text-90 hover:text-[var(--primary)] transition line-clamp-2"
+									class="font-display font-bold text-[0.96rem] leading-snug text-90 hover:text-[var(--primary)] transition line-clamp-2"
 								>
 									{item.title}
 								</a>
-								<span class={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[0.66rem] font-medium border ${meta.badgeClass}`}>
+								<span class={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[0.65rem] font-medium border ${meta.badgeClass}`}>
 									<span class={`w-1.5 h-1.5 rounded-full ${meta.dotClass}`}></span>
 									{meta.label}
 								</span>
@@ -224,8 +309,11 @@ function progressPct(it: AnimeItem): number {
 								<div class="text-[0.72rem] text-50 truncate mt-0.5">{item.originalTitle}</div>
 							{/if}
 
-							<!-- Scores -->
-							<div class="flex flex-wrap items-center gap-2 mt-2 font-mono-tech text-[0.68rem]">
+							<!-- Meta badges -->
+							<div class="flex flex-wrap items-center gap-1.5 mt-2 font-mono-tech text-[0.66rem]">
+								<span class="px-1.5 py-0.5 rounded-md bg-black/[0.04] dark:bg-white/[0.06] text-60">
+									{sourceLabel(item.source)}
+								</span>
 								{#if item.score}
 									<span class="px-1.5 py-0.5 rounded-md bg-amber-500/12 text-amber-700 dark:text-amber-300">
 										自评 {item.score}
@@ -242,11 +330,11 @@ function progressPct(it: AnimeItem): number {
 							</div>
 
 							{#if item.note}
-								<p class="text-xs text-75 leading-relaxed mt-2 line-clamp-2">{item.note}</p>
+								<p class="text-xs text-75 leading-relaxed mt-1.5 line-clamp-2">{item.note}</p>
 							{/if}
 						</div>
 
-						<!-- Bottom progress + tags -->
+						<!-- Bottom tags + progress -->
 						<div class="flex flex-col gap-2">
 							{#if item.tags && item.tags.length > 0}
 								<div class="flex flex-wrap gap-1">
@@ -258,22 +346,46 @@ function progressPct(it: AnimeItem): number {
 								</div>
 							{/if}
 
-							<div>
-								<div class="flex items-center justify-between font-mono-tech text-[0.66rem] text-50 mb-1">
-									<span>进度 {item.watched} / {item.total || "?"} 话</span>
-									<span>{pct}%</span>
+							{#if item.total > 0 || item.watched > 0}
+								<div>
+									<div class="flex items-center justify-between font-mono-tech text-[0.66rem] text-50 mb-1">
+										<span>
+											{#if item.watched > 0}
+												进度 {item.watched} / {item.total || "?"} 话
+											{:else}
+												共 {item.total} 话
+											{/if}
+										</span>
+										{#if item.watched > 0}
+											<span>{pct}%</span>
+										{/if}
+									</div>
+									{#if item.watched > 0}
+										<div class="h-1.5 w-full rounded-full bg-black/[0.06] dark:bg-white/[0.08] overflow-hidden">
+											<div
+												class="h-full rounded-full bg-[var(--primary)] transition-all duration-300"
+												style={`width: ${pct}%`}
+											></div>
+										</div>
+									{/if}
 								</div>
-								<div class="h-1.5 w-full rounded-full bg-black/[0.06] dark:bg-white/[0.08] overflow-hidden">
-									<div
-										class="h-full rounded-full bg-[var(--primary)] transition-all duration-300"
-										style={`width: ${pct}%`}
-									></div>
-								</div>
-							</div>
+							{/if}
 						</div>
 					</div>
 				</article>
 			{/each}
 		</div>
+
+		{#if remainingCount > 0}
+			<div class="flex justify-center pt-1">
+				<button
+					type="button"
+					onclick={() => (visibleCount += PAGE_SIZE)}
+					class="btn-regular rounded-xl px-5 py-2.5 text-xs font-mono-tech font-medium cursor-pointer active:scale-95"
+				>
+					加载更多（还有 {remainingCount} 部）
+				</button>
+			</div>
+		{/if}
 	{/if}
 </div>

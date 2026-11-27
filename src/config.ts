@@ -55,10 +55,6 @@ export const navBarConfig: NavBarConfig = {
 			url: "/anime/",
 		},
 		{
-			name: "碎碎念",
-			url: "/moments/",
-		},
-		{
 			name: "收藏",
 			url: "/collection/",
 		},
