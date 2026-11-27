@@ -53,6 +53,15 @@ const quickActions: QuickAction[] = [
 		},
 	},
 	{
+		id: "bocchi-ai",
+		label: "打开波奇 AI 小助手",
+		hint: "AI",
+		icon: "material-symbols:smart-toy-outline-rounded",
+		run: () => {
+			window.dispatchEvent(new CustomEvent("bocchi:chat"));
+		},
+	},
+	{
 		id: "bocchi",
 		label: "展开 / 收起角落 Q 版波奇",
 		hint: "2D",

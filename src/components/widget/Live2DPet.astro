@@ -70,6 +70,14 @@ const sprites = {
 			<button type="button" data-bocchi-exp="box" class="bocchi-chip" title="躲进纸箱">纸箱</button>
 			<button
 				type="button"
+				id="bocchi-chat-btn"
+				title="打开波奇 AI 小助手"
+				class="bocchi-chip !text-[var(--primary)] font-semibold border border-[var(--primary)]/30 ml-0.5"
+			>
+				问答
+			</button>
+			<button
+				type="button"
 				id="bocchi-hide-btn"
 				aria-label="收起波奇"
 				title="收起波奇"
@@ -145,6 +153,7 @@ function initChibiBocchi() {
 	const bubbleEl = document.getElementById("bocchi-bubble");
 	const bubbleTextEl = document.getElementById("bocchi-bubble-text");
 	const hideBtn = document.getElementById("bocchi-hide-btn");
+	const chatBtn = document.getElementById("bocchi-chat-btn");
 	const restoreBtn = document.getElementById("bocchi-restore-btn");
 	const chipButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-bocchi-exp]"));
 
@@ -269,6 +278,12 @@ function initChibiBocchi() {
 		applyHiddenState(true, true);
 	});
 
+	chatBtn?.addEventListener("click", (e) => {
+		e.stopPropagation();
+		triggerHop();
+		window.dispatchEvent(new CustomEvent("bocchi:chat"));
+	});
+
 	restoreBtn?.addEventListener("click", () => {
 		applyHiddenState(false, true);
 		triggerHop();
@@ -321,6 +336,8 @@ function initChibiBocchi() {
 			flashReaction("happy", "链接复制好了，感谢分享！");
 		} else if (type === "bottom") {
 			showBubble("看到最底下了，谢谢耐心读完♪", 4000);
+		} else if (type === "ai-reply") {
+			triggerHop();
 		}
 	});
 
