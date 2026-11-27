@@ -10,4 +10,3 @@
 
 - 《孤独摇滚！》横幅与封面插画来自 [Wallhaven (1p2m2w)](https://wallhaven.cc/w/1p2m2w)、[Wallhaven (weee76)](https://wallhaven.cc/w/weee76)、[The Anime Rambler](https://benigmatica.wordpress.com/2022/12/25/bocchi-the-rock-episode-12/) 与 [Real Sound](https://realsound.jp/movie/2022/12/post-1219623.html)。
 - 《轻音少女》封面取自 [Ameba 的第 2 季剧照记录](https://ameblo.jp/sayaka198807/entry-12841918603.html)和[电影观影记录](https://imakokowoikiru.hatenablog.com/entry/2020/10/15/060000)。
-- 页面左下角的后藤一里 Live2D 模型基于 [@PaimaModels](https://github.com/Dharmamahesa/myporto) 的公开模型并做了贴图压缩与交互适配。

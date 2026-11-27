@@ -564,9 +564,31 @@ html.reduce-motion .scroll-reveal {
     color: #ffffff;
 }
 
+@keyframes bocchi-chibi-breathe {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    50% { transform: translateY(-3px) scale(1.015, 0.988); }
+}
+
+@keyframes bocchi-chibi-hop {
+    0% { transform: translateY(0) scale(1, 1); }
+    28% { transform: translateY(-13px) scale(0.95, 1.06); }
+    62% { transform: translateY(1px) scale(1.04, 0.95); }
+    100% { transform: translateY(0) scale(1, 1); }
+}
+
+.bocchi-chibi-float {
+    transform-origin: bottom center;
+    animation: bocchi-chibi-breathe 3.4s ease-in-out infinite;
+}
+
+.bocchi-chibi-hop {
+    animation: bocchi-chibi-hop 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+}
+
 html.reduce-motion .bg-marquee-track,
 html.reduce-motion .side-glyph,
-html.reduce-motion .animate-bob-y {
+html.reduce-motion .animate-bob-y,
+html.reduce-motion .bocchi-chibi-float {
     animation-play-state: paused !important;
 }
 
@@ -580,7 +602,8 @@ html.reduce-motion #banner-media {
 @media (prefers-reduced-motion: reduce) {
     .bg-marquee-track,
     .side-glyph,
-    .animate-bob-y {
+    .animate-bob-y,
+    .bocchi-chibi-float {
         animation-play-state: paused !important;
     }
     #banner-media {

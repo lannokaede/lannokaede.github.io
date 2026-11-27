@@ -54,8 +54,8 @@ const quickActions: QuickAction[] = [
 	},
 	{
 		id: "bocchi",
-		label: "展开 / 收起角落波奇看板娘",
-		hint: "Live2D",
+		label: "展开 / 收起角落 Q 版波奇",
+		hint: "2D",
 		icon: "material-symbols:music-note-rounded",
 		run: () => {
 			window.dispatchEvent(new CustomEvent("bocchi:toggle"));
