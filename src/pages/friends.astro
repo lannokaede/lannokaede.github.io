@@ -1,0 +1,117 @@
+---
+import { Icon } from "astro-icon/components";
+import { friends, mySiteInfo } from "../data/friends";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+const copyPayload = JSON.stringify(mySiteInfo, null, 2);
+---
+<MainGridLayout title="友链" description="友情链接与博客互换信息。">
+	<div class="flex flex-col gap-4 w-full">
+		<section class="card-base overflow-hidden">
+			<div class="win-chrome">
+				<div class="flex items-center gap-2 min-w-0">
+					<span class="win-dots win-dots-vivid" aria-hidden="true"><span></span><span></span><span></span></span>
+					<span class="font-mono-tech text-[0.68rem] text-50 truncate">~/friends</span>
+				</div>
+				<span class="font-mono-tech text-[0.64rem] text-50 shrink-0">{friends.length} LINKS</span>
+			</div>
+			<div class="p-5 md:p-6">
+				{friends.length > 0 ? (
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+						{friends.map((f) => (
+							<a
+								href={f.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="group rounded-xl border border-[var(--card-border)] bg-black/[0.015] dark:bg-white/[0.02] hover:border-[var(--primary)]/45 hover:bg-[var(--btn-plain-bg-hover)] p-4 transition flex items-center gap-3.5"
+							>
+								<img
+									src={f.avatar}
+									alt={f.name}
+									loading="lazy"
+									class="w-12 h-12 rounded-xl object-cover shrink-0 ring-1 ring-black/10 dark:ring-white/15"
+								/>
+								<div class="min-w-0 flex-1">
+									<div class="flex items-center gap-2">
+										<span class="font-display font-bold text-sm text-90 group-hover:text-[var(--primary)] truncate transition">
+											{f.name}
+										</span>
+										{f.tag && (
+											<span class="font-mono-tech text-[0.62rem] px-1.5 py-0.5 rounded bg-[var(--btn-regular-bg)] text-[var(--primary)] shrink-0">
+												{f.tag}
+											</span>
+										)}
+									</div>
+									<p class="text-xs text-75 line-clamp-2 mt-1 leading-relaxed">{f.desc}</p>
+								</div>
+							</a>
+						))}
+					</div>
+				) : (
+					<div class="rounded-xl border border-dashed border-[var(--line-divider)] p-6 text-center">
+						<p class="text-sm text-75">目前友链墙刚开张，欢迎技术同好或追番朋友交换链接。</p>
+						<p class="font-mono-tech text-xs text-50 mt-1.5">可以通过邮件或 GitHub Discussions 留言互换</p>
+					</div>
+				)}
+			</div>
+		</section>
+
+		<!-- Exchange Info Card -->
+		<section class="card-base overflow-hidden">
+			<div class="win-chrome">
+				<div class="flex items-center gap-2 min-w-0">
+					<span class="win-dots text-50" aria-hidden="true"><span></span><span></span><span></span></span>
+					<span class="font-mono-tech text-[0.68rem] text-50 truncate">~/friends/apply.json</span>
+				</div>
+				<button
+					type="button"
+					id="copy-friend-json"
+					data-payload={copyPayload}
+					class="font-mono-tech text-[0.66rem] text-[var(--primary)] hover:underline cursor-pointer"
+				>
+					复制本站信息
+				</button>
+			</div>
+			<div class="p-5 md:p-6 flex flex-col gap-3">
+				<pre class="rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-[var(--card-border)] p-4 text-xs font-mono-tech text-75 overflow-x-auto leading-relaxed">{copyPayload}</pre>
+				<div class="flex flex-wrap items-center gap-2 text-xs text-50">
+					<a
+						href="https://github.com/lannokaede/lannokaede.github.io/discussions"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn-regular inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium"
+					>
+						<Icon name="fa6-brands:github" class="text-sm" />
+						<span>去 Discussions 留言申请</span>
+					</a>
+					<a
+						href="mailto:lannokaede@gmail.com"
+						class="btn-regular inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium"
+					>
+						<Icon name="fa6-solid:envelope" class="text-sm" />
+						<span>邮件联系</span>
+					</a>
+				</div>
+			</div>
+		</section>
+	</div>
+</MainGridLayout>
+
+<script>
+const btn = document.getElementById("copy-friend-json");
+if (btn) {
+	btn.addEventListener("click", async () => {
+		const payload = btn.getAttribute("data-payload") || "";
+		try {
+			await navigator.clipboard.writeText(payload);
+			const orig = btn.textContent;
+			btn.textContent = "已复制";
+			setTimeout(() => {
+				btn.textContent = orig;
+			}, 1600);
+		} catch {
+			// ignore clipboard errors
+		}
+	});
+}
+</script>

@@ -1,0 +1,33 @@
+---
+import AnimeWall from "@components/AnimeWall.svelte";
+import animeData from "../data/anime.json";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+type AnimeItem = {
+	id: string;
+	subjectId?: number;
+	title: string;
+	originalTitle?: string;
+	status: "watching" | "watched" | "wish" | "on_hold" | "dropped";
+	watched: number;
+	total: number;
+	score: number | null;
+	bgmScore: number | null;
+	cover: string;
+	tags: string[];
+	note: string;
+	url?: string;
+	updatedAt?: string;
+	source?: string;
+};
+
+const items = animeData.items as AnimeItem[];
+---
+<MainGridLayout title="追番" description="从本地 Animeko (Ani) 同步的追番记录与番剧清单。">
+	<AnimeWall
+		client:only="svelte"
+		items={items}
+		updatedAt={animeData.updatedAt}
+		source={animeData.source}
+	/>
+</MainGridLayout>

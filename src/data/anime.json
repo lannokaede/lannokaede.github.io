@@ -1,0 +1,94 @@
+{
+  "updatedAt": "2026-11-27",
+  "source": "Animeko (Ani) 本地同步 + 手动整理",
+  "items": [
+    {
+      "id": "bgm-554779",
+      "subjectId": 554779,
+      "title": "学生会也有洞！",
+      "originalTitle": "生徒会にも穴はある！",
+      "status": "watching",
+      "watched": 3,
+      "total": 16,
+      "score": null,
+      "bgmScore": 7.8,
+      "cover": "/images/anime/covers/bgm-554779.jpg",
+      "tags": [
+        "校园",
+        "漫画改",
+        "喜剧",
+        "日常"
+      ],
+      "note": "",
+      "url": "https://bgm.tv/subject/554779",
+      "updatedAt": "2026-11-27",
+      "source": "ani"
+    },
+    {
+      "id": "bgm-568244",
+      "subjectId": 568244,
+      "title": "药屋少女的呢喃 第三季",
+      "originalTitle": "薬屋のひとりごと 第3期",
+      "status": "watching",
+      "watched": 7,
+      "total": 12,
+      "score": null,
+      "bgmScore": 7.4,
+      "cover": "/images/anime/covers/bgm-568244.jpg",
+      "tags": [
+        "推理",
+        "悬疑",
+        "轻小说改",
+        "OLM"
+      ],
+      "note": "",
+      "url": "https://bgm.tv/subject/568244",
+      "updatedAt": "2026-11-24",
+      "source": "ani"
+    },
+    {
+      "id": "bgm-622288",
+      "subjectId": 622288,
+      "title": "FX战士久留美",
+      "originalTitle": "FX戦士くるみちゃん",
+      "status": "watching",
+      "watched": 8,
+      "total": 14,
+      "score": null,
+      "bgmScore": 6.8,
+      "cover": "/images/anime/covers/bgm-622288.jpg",
+      "tags": [
+        "漫画改",
+        "赌博",
+        "Passione",
+        "投资"
+      ],
+      "note": "",
+      "url": "https://bgm.tv/subject/622288",
+      "updatedAt": "2026-11-24",
+      "source": "ani"
+    },
+    {
+      "id": "bgm-328609",
+      "subjectId": 328609,
+      "title": "孤独摇滚！",
+      "originalTitle": "ぼっち・ざ・ろっく！",
+      "status": "watched",
+      "watched": 12,
+      "total": 12,
+      "score": 9.5,
+      "bgmScore": 8.4,
+      "cover": "/images/anime/bocchi-stage-mobile.webp",
+      "tags": [
+        "音乐",
+        "日常",
+        "芳文社",
+        "CloverWorks"
+      ],
+      "note": "博客横幅和左下角看板娘的出处，演出和乐队曲百看不厌。",
+      "url": "https://bgm.tv/subject/328609",
+      "updatedAt": "2026-11-27",
+      "source": "manual"
+    }
+  ]
+}

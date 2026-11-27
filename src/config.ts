@@ -50,12 +50,23 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
-		LinkPreset.About,
 		{
-			name: "GitHub",
-			url: "https://github.com/lannokaede", // Internal links should not include the base path, as it is automatically added
-			external: true, // Show an external link icon and will open in a new tab
+			name: "追番",
+			url: "/anime/",
 		},
+		{
+			name: "碎碎念",
+			url: "/moments/",
+		},
+		{
+			name: "收藏",
+			url: "/collection/",
+		},
+		{
+			name: "友链",
+			url: "/friends/",
+		},
+		LinkPreset.About,
 	],
 };
 

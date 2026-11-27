@@ -29,13 +29,13 @@ let links: NavBarLink[] = navBarConfig.links.map(
                  class="shrink-0 w-7 h-7 rounded-lg object-cover ring-1 ring-black/10 dark:ring-white/15 shadow-sm transition-transform duration-300 group-hover:scale-105" />
             <span class="truncate font-display tracking-[-0.01em] text-[1.02rem]">{siteConfig.title}</span>
         </a>
-        <nav id="primary-nav" aria-label="站点导航" class="relative hidden md:flex items-center gap-1">
+        <nav id="primary-nav" aria-label="站点导航" class="relative hidden md:flex items-center gap-0.5 lg:gap-1">
             <span id="nav-hover-pill" aria-hidden="true"
                   class="pointer-events-none absolute left-0 top-0 h-9 rounded-xl opacity-0 bg-[var(--btn-regular-bg)] border border-[var(--card-border)]"></span>
             {links.map((l) => {
                 return <a aria-label={l.name} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
                           data-nav-path={l.external ? undefined : url(l.url)}
-                          class="relative z-10 btn-plain !bg-transparent hover:!bg-transparent rounded-xl h-9 text-[0.92rem] font-medium px-3.5 aria-[current=page]:!text-[var(--primary)] aria-[current=page]:font-semibold"
+                          class="relative z-10 btn-plain !bg-transparent hover:!bg-transparent rounded-xl h-9 text-[0.88rem] lg:text-[0.92rem] font-medium px-2.5 lg:px-3 whitespace-nowrap aria-[current=page]:!text-[var(--primary)] aria-[current=page]:font-semibold"
                 >
                     <div class="flex items-center">
                         {l.name}

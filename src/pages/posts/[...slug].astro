@@ -11,6 +11,8 @@ import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
+import Comments from "../../components/widget/Comments.svelte";
+import PostStats from "../../components/widget/PostStats.svelte";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
@@ -137,11 +139,9 @@ const jsonLd = {
                 <Content />
             </Markdown>
 
-            <!-- Quick share / copy link bar -->
+            <!-- Quick share / stats / copy link bar -->
             <div class="mb-5 pt-4 border-t border-dashed border-[var(--line-divider)] flex flex-wrap items-center justify-between gap-3 onload-animation">
-                <div class="font-mono-tech text-xs text-50">
-                    觉得有帮助的话，欢迎收藏或发给同在踩坑的朋友
-                </div>
+                <PostStats client:only="svelte" slug={entry.slug} />
                 <div class="flex items-center gap-2">
                     <button
                         type="button"
@@ -165,6 +165,8 @@ const jsonLd = {
 
         </div>
     </div>
+
+    <Comments client:only="svelte" />
 
     {(entry.data.nextSlug || entry.data.prevSlug) && (
         <div class="grid grid-cols-1 md:grid-cols-2 mb-4 gap-4 w-full">
