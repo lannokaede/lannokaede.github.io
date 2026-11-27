@@ -298,31 +298,21 @@ def sync_bilibili(by_id: dict[str, dict]) -> int:
 
 def sync() -> None:
     existing = load_existing()
-    # Keep manual + ani entries first; rebuild bilibili entries fresh while preserving notes
+    # Keep manual + ani entries; drop any old bilibili entries
     by_id: dict[str, dict] = {}
-    bili_prev: dict[str, dict] = {}
     for it in existing.get("items", []):
-        if it.get("source") == "bilibili":
-            bili_prev[str(it.get("id"))] = it
-        else:
+        if it.get("source") != "bilibili":
             by_id[str(it.get("id"))] = it
 
     ani_cnt = sync_ani(by_id)
-    # Pass previous bilibili notes through
-    for k, v in bili_prev.items():
-        if v.get("note") or v.get("score") or v.get("statusOverride"):
-            by_id[k] = v
-    bili_cnt = sync_bilibili(by_id)
 
-    # Sort: Ani & manual entries first, then Bilibili by follow recency
-    src_rank = {"ani": 0, "manual": 1, "bilibili": 2}
+    src_rank = {"ani": 0, "manual": 1}
     status_rank = {"watching": 0, "watched": 1, "wish": 2, "on_hold": 3, "dropped": 4}
     items = sorted(
         by_id.values(),
         key=lambda x: (
-            src_rank.get(x.get("source", "bilibili"), 9),
             status_rank.get(x.get("status", "watching"), 9),
-            int(x.get("order", 999999)) if x.get("source") == "bilibili" else 0,
+            src_rank.get(x.get("source", "ani"), 9),
             -(int(x.get("updatedAt", "0000-00-00").replace("-", "") or 0)),
         ),
     )
@@ -330,11 +320,11 @@ def sync() -> None:
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "updatedAt": datetime.now().strftime("%Y-%m-%d"),
-        "source": "Animeko (Ani) + B站追番",
+        "source": "Animeko (Ani) 本地同步",
         "items": items,
     }
     OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Synced {ani_cnt} Ani + {bili_cnt} Bilibili -> total {len(items)} entries in {OUT_JSON}")
+    print(f"Synced {ani_cnt} Ani -> total {len(items)} entries in {OUT_JSON}")
 
 
 if __name__ == "__main__":
